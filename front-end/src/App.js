@@ -6,7 +6,9 @@ import Index from './screens/Index';
 import Board from './screens/Board/Board';
 import Questions from './screens/Questions';
 import ReactsDoc from './screens/ReactsDoc';
+import Login from './screens/Login/login';
 import NavBarElements from './components/NavBar/NavBarElements';
+import SignUp from './screens/Login/SignUp';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path = "/Board" element = { <Board /> } />
         <Route path = "/Questions" element = { <Questions /> } />
         <Route path = "/ReactsDoc" element = { <ReactsDoc /> } />
+        <Route path = "/Login" element = { <Login /> } />
+        <Route path = "/signup" element = { <SignUp /> } />
       </Routes>
     </Router>
   );
