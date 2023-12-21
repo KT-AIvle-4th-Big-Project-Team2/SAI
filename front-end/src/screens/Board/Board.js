@@ -7,17 +7,51 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { Button } from '@mui/material';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import './Board.css'
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
 
 const rows = [          {name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birthYear: 1987, birthCity: 63},
 {name: 'Zerya Betül', surname: '글 제목입니다.', birthYear: 2017, birthCity: 34},
@@ -71,13 +105,13 @@ const rows = [          {name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birt
 
 export default function BasicTable() {
   return (
-    <>
+    <Paper className='Paper'>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>번호</TableCell>
-            <TableCell align="right">글 내용</TableCell>
+            <TableCell>글 내용</TableCell>
             <TableCell align="right">작성자</TableCell>
             <TableCell align="right">작성일</TableCell>
           </TableRow>
@@ -91,7 +125,7 @@ export default function BasicTable() {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.surname}</TableCell>
+              <TableCell>{row.surname}</TableCell>
               <TableCell align="right">{row.birthCity}</TableCell>
               <TableCell align="right">{row.birthYear}</TableCell>
             </TableRow>
@@ -100,6 +134,18 @@ export default function BasicTable() {
       </Table>
     </TableContainer>
     <Pagination count={10} showFirstButton showLastButton />
-    </>
+    <div align = 'right'>
+    <Button variant="contained">글쓰기</Button>
+    <Button variant="contained">글작성</Button>
+    </div>
+    <Search>
+      <SearchIconWrapper>
+      </SearchIconWrapper>
+      <StyledInputBase
+        placeholder="Search…"
+        inputProps={{ 'aria-label': 'search' }}
+      />
+    </Search>
+    </Paper>
   );
 }

@@ -9,6 +9,7 @@ import ReactsDoc from './screens/ReactsDoc';
 import Login from './screens/Login/login';
 import NavBarElements from './components/NavBar/NavBarElements';
 import SignUp from './screens/Login/SignUp';
+import BoardDetail from './screens/Board/BoardView';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path = "/ReactsDoc" element = { <ReactsDoc /> } />
         <Route path = "/Login" element = { <Login /> } />
         <Route path = "/signup" element = { <SignUp /> } />
+        <Route path = "/BoardView" element = { <BoardDetail /> } />
       </Routes>
     </Router>
   );
