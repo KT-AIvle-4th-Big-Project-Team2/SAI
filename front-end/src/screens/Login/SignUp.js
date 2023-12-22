@@ -1,77 +1,133 @@
-import React from 'react'
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import "@fortawesome/fontawesome-free/css/all.min.css";
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-  MDBCardImage,
-  MDBRow,
-  MDBCol,
-  MDBInput,
-  MDBRadio
-}
-from 'mdb-react-ui-kit';
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const SignUp = () => {
+function Copyright(props) {
   return (
-    <MDBContainer fluid className='bg-dark'>
-
-      <MDBRow className='d-flex justify-content-center align-items-center h-100'>
-        <MDBCol>
-
-          <MDBCard className='my-4'>
-
-            <MDBRow className='g-0'>
-
-              <MDBCol md='6' className="d-none d-md-block">
-                <MDBCardImage src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp' alt="Sample photo" className="rounded-start" fluid/>
-              </MDBCol>
-
-              <MDBCol md='6'>
-
-                <MDBCardBody className='text-black d-flex flex-column justify-content-center'>
-                  <h3 className="mb-5 text-uppercase fw-bold">Student registration form</h3>
-
-
-                  <MDBInput wrapperClass='mb-4' label='이름' size='lg' id='form1' type='text'/>
-
-
-                  <MDBInput wrapperClass='mb-4' label='생년월일' size='lg' id='form3' type='text'/>
-
-                  <div className='d-md-flex ustify-content-start align-items-center mb-4'>
-                    <h6 class="fw-bold mb-0 me-4">Gender: </h6>
-                    <MDBRadio name='inlineRadio' id='inlineRadio1' value='option1' label='Female' inline />
-                    <MDBRadio name='inlineRadio' id='inlineRadio2' value='option2' label='Male' inline />
-                    <MDBRadio name='inlineRadio' id='inlineRadio3' value='option3' label='Other' inline />
-                  </div>
-
-                  <MDBRow>
-
-                  </MDBRow>
-
-                  <MDBInput wrapperClass='mb-4' label='Email ID' size='lg' id='form6' type='text'/>
-                  <MDBInput wrapperClass='mb-4' label='Password' size="lg" id='form7' type='password' />
-                  <MDBInput wrapperClass='mb-4' label='전화번호' size="lg" id='form7' type='text' />
-
-                  <div className="d-flex justify-content-end pt-3">
-                    <MDBBtn color='light' size='lg'>Reset all</MDBBtn>
-                    <MDBBtn className='ms-2' color='warning' size='lg'>Submit form</MDBBtn>
-                  </div>
-
-                </MDBCardBody>
-
-              </MDBCol>
-            </MDBRow>
-
-          </MDBCard>
-
-        </MDBCol>
-      </MDBRow>
-
-    </MDBContainer>
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
   );
 }
 
-export default SignUp
+// TODO remove, this demo shouldn't need to reset the theme.
+
+const defaultTheme = createTheme();
+
+export default function SignUp() {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      email: data.get('email'),
+      password: data.get('password'),
+    });
+  };
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 5 }} />
+      </Container>
+    </ThemeProvider>
+  );
+}
