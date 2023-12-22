@@ -12,6 +12,8 @@ import NavBarElements from './components/NavBar/NavBarElements';
 import SignUp from './screens/Login/SignUp';
 import BoardDetail from './screens/Board/BoardView';
 import BoardWrite from './screens/Board/BoardWrite';
+import Notice from './screens/Notice/Notice';
+import FindID from './screens/Login/FindID';
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
       <NavBarElements />
         <Routes>
           <Route path = "/" element = { <Index /> } />
+          <Route path = "/Notice" element = { <Notice /> } />
           <Route path = "/Home" element = { <Home /> } />
           <Route path = "/Board" element = { <Board /> } />
           <Route path = "/Questions" element = { <Questions /> } />
@@ -27,6 +30,7 @@ function App() {
           <Route path = "/signup" element = { <SignUp /> } />
           <Route path = "/BoardView" element = { <BoardDetail /> } />
           <Route path = "/BoardWrite" element = { <BoardWrite /> } />
+          <Route path = "/FindID" element = { <FindID /> } />
       </Routes>
     </Router>
   );

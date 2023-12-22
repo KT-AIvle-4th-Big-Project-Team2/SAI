@@ -82,7 +82,7 @@ const rows = [          {name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birt
 {name: 'Merry', surname: '마지막 데이터입니다!!!!!!!', birthYear: 2017, birthCity: 11}
 ];
 
-export default function BasicTable() {
+export default function Notice() {
 
   const [searchQuery, setSearchQuery] = useState("");
 

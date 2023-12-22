@@ -36,10 +36,8 @@ const BoardWrite = () => {
             <TextField sx={{width: { sm: 500},"& .MuiInputBase-root": {height: 200}}} id='boardTitle' label='content' name='boardTitle'/>
         </div>
         <p></p>
-     <Box>
-      <Button variant="contained" herf="/Board">글쓰기</Button>
-      <Button variant="contained" sx={{m : 5}} herf="#Board">취소</Button>
-     </Box>
+      <Button variant="contained" href="/Board">글쓰기</Button>
+      <Button variant="contained" sx={{m : 5}} href="/Board">취소</Button>
     </div>
     </>
   );

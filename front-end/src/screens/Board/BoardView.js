@@ -1,5 +1,4 @@
-import React from 'react'
-import CssBaseline from '@mui/material/CssBaseline';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Button } from '@mui/material';
@@ -13,7 +12,7 @@ const BoardView = () => {
       <div>글 제목</div>
       <div>글 내용</div>
       <p></p>
-      <Button variant="contained">글 목록</Button>
+      <Button variant="contained" href="/Board">글 목록</Button>
       <hr />
       <p></p>
       <div>comment</div>

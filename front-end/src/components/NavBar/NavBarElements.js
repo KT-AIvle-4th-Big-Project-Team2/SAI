@@ -11,7 +11,7 @@ function NavBarElements() {
     <>
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand href="/">
               <img
                 src={imgLogo}
                 width="30"
@@ -21,10 +21,9 @@ function NavBarElements() {
               />
             </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
             <NavDropdown title="알림마당" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">공지사항</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">FAQ</NavDropdown.Item>
+                <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
+                <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="#action/3.3">개선의견</NavDropdown.Item>
             </NavDropdown>
@@ -37,14 +36,14 @@ function NavBarElements() {
                 <NavDropdown.Item href="#action/3.2">업종 분석</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="게시판" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">창업 정보</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">창업 게시판</NavDropdown.Item>
+                <NavDropdown.Item href="/Board">창업 정보</NavDropdown.Item>
+                <NavDropdown.Item href="/Board">창업 게시판</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="마이페이지" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">내 정보 수정</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">내가 쓴 글</NavDropdown.Item>
+                <NavDropdown.Item href="/Myinfo">내 정보 수정</NavDropdown.Item>
+                <NavDropdown.Item href="/Myboard">내가 쓴 글</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#home">Log out</Nav.Link>
+            <Nav.Link href="/login">Log out</Nav.Link>
             
           </Nav>
         </Container>
