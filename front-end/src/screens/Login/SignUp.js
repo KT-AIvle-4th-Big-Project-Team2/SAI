@@ -113,6 +113,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
+              href = '/login'
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up

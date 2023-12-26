@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Sectors = () => {
+const SectorsAnaly = () => {
   return (
     <div>Sectors</div>
   )
 }
 
-export default Sectors
+export default SectorsAnaly

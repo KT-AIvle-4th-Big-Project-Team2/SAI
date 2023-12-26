@@ -14,6 +14,14 @@ import BoardDetail from './screens/Board/BoardView';
 import BoardWrite from './screens/Board/BoardWrite';
 import Notice from './screens/Notice/Notice';
 import FindID from './screens/Login/FindID';
+import Simul from './screens/Simul/Simul';
+import Simul2 from './screens/Simul/Simul2';
+import SimulReport from './screens/Simul/SimulReport';
+import AreaAnaly from './screens/Analysis/AreaAnaly';
+import SectorsAnaly from './screens/Analysis/SectorsAnaly';
+import Myboard from './screens/Mypage/Myboard';
+import Myinfo from './screens/Mypage/Myinfo';
+import WithDrawal from './screens/Mypage/WithDrawal';
 
 function App() {
   return (
@@ -31,6 +39,15 @@ function App() {
           <Route path = "/BoardView" element = { <BoardDetail /> } />
           <Route path = "/BoardWrite" element = { <BoardWrite /> } />
           <Route path = "/FindID" element = { <FindID /> } />
+          <Route path = "/Simul" element = { <Simul /> } />
+          <Route path = "/Simul2" element = { <Simul2 /> } />
+          <Route path = "/SimulReport" element = { <SimulReport /> } />
+          <Route path = "/Area" element = { <AreaAnaly /> } />
+          <Route path = "/Sectors" element = { <SectorsAnaly /> } />
+          <Route path = "/Myboard" element = { <Myboard /> } />
+          <Route path = "/Myinfo" element = { <Myinfo /> } />
+          <Route path = "/WithDrawal" element = { <WithDrawal /> } />
+
       </Routes>
     </Router>
   );

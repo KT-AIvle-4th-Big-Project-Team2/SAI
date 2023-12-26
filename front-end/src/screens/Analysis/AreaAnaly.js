@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Area = () => {
+const AreaAnaly = () => {
   return (
     <div>Area</div>
   )
 }
 
-export default Area
+export default AreaAnaly

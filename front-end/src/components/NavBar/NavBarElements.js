@@ -11,7 +11,7 @@ function NavBarElements() {
     <>
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
-          <Navbar.Brand href="/">
+          <Navbar.Brand href="/Home">
               <img
                 src={imgLogo}
                 width="30"
@@ -28,12 +28,12 @@ function NavBarElements() {
                 <NavDropdown.Item href="#action/3.3">개선의견</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="시뮬레이션" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">시뮬레이션</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">시뮬레이션 리포트</NavDropdown.Item>
+                <NavDropdown.Item href="/Simul">시뮬레이션</NavDropdown.Item>
+                <NavDropdown.Item href="/SimulReport">시뮬레이션 리포트</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="창업분석" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">지역 분석</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">업종 분석</NavDropdown.Item>
+                <NavDropdown.Item href="/Area">지역 분석</NavDropdown.Item>
+                <NavDropdown.Item href="/Sectors">업종 분석</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="게시판" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Board">창업 정보</NavDropdown.Item>
