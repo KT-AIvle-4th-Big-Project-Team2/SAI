@@ -3,7 +3,9 @@ import { Container } from 'react-bootstrap'
 
 const Home = () => {
   return (
-    <Container><h1>Home</h1></Container>
+    <Container fluid style={{ padding: 0 }}>
+      <h1>Home</h1>
+    </Container>
   )
 }
 
