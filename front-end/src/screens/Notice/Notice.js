@@ -12,6 +12,7 @@ import { Button } from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
+import Box from '@mui/material/Box';
 
 const SearchBar = ({setSearchQuery}) => (
   <form>
@@ -88,6 +89,7 @@ export default function Notice() {
 
   return (
     <Paper className='Paper'>
+    <Box sx = {{mt : 3, mb : 5 }}><h2>공지사항</h2></Box>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>

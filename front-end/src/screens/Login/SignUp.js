@@ -12,6 +12,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 function Copyright(props) {
   return (
@@ -69,6 +73,29 @@ export default function SignUp() {
                   id="Name"
                   label="Name"
                   autoFocus
+                />
+              </Grid>
+              
+              <Grid item xs={12}>
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">Gender *</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                  >
+                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="Age"
+                  label="Age"
+                  name="Age"
                 />
               </Grid>
               <Grid item xs={12}>

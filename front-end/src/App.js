@@ -1,7 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Layout from './Layout'
 import Home from './screens/Home';
 import Index from './screens/Index';
 import Board from './screens/Board/Board';
@@ -22,14 +21,19 @@ import SectorsAnaly from './screens/Analysis/SectorsAnaly';
 import Myboard from './screens/Mypage/Myboard';
 import Myinfo from './screens/Mypage/Myinfo';
 import WithDrawal from './screens/Mypage/WithDrawal';
+import Container from 'react-bootstrap/Container'
+import FAQ from './screens/Notice/FAQ';
 
 function App() {
   return (
     <Router>
       <NavBarElements />
+      
+      <Container>
         <Routes>
           <Route path = "/" element = { <Index /> } />
           <Route path = "/Notice" element = { <Notice /> } />
+          <Route path = "/FAQ" element = { <FAQ /> } />
           <Route path = "/Home" element = { <Home /> } />
           <Route path = "/Board" element = { <Board /> } />
           <Route path = "/Questions" element = { <Questions /> } />
@@ -47,8 +51,8 @@ function App() {
           <Route path = "/Myboard" element = { <Myboard /> } />
           <Route path = "/Myinfo" element = { <Myinfo /> } />
           <Route path = "/WithDrawal" element = { <WithDrawal /> } />
-
       </Routes>
+      </Container>
     </Router>
   );
 }

@@ -4,7 +4,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import imgLogo from './logo.png';
-import "./NavBarElements.css";
 
 function NavBarElements() {
   return (
@@ -20,7 +19,8 @@ function NavBarElements() {
                 alt="React Bootstrap logo"
               />
             </Navbar.Brand>
-          <Nav className="me-auto">
+            
+          <Nav className="me-auto" style={{marginLeft : '50%', minWidth : '600px'}}>
             <NavDropdown title="알림마당" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
                 <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
@@ -44,7 +44,6 @@ function NavBarElements() {
                 <NavDropdown.Item href="/Myboard">내가 쓴 글</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="/login">Log out</Nav.Link>
-            
           </Nav>
         </Container>
       </Navbar>
@@ -53,29 +52,3 @@ function NavBarElements() {
 }
 
 export default NavBarElements;
-
-function NavBarElements2() {
-  return (
-    <>
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">
-              <img
-                src={imgLogo}
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-                alt="React Bootstrap logo"
-              />
-            </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Index</Nav.Link>
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#home">Login</Nav.Link>
-            
-          </Nav>
-        </Container>
-      </Navbar>
-    </>
-  );
-}

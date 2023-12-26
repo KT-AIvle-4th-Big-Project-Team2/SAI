@@ -1,7 +1,4 @@
-import styled,  { css } from 'styled-components'
+import Container from 'react-bootstrap/Container'
+import React from 'react'
 
-export const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    background-color: aqua;
-`
+<Container />

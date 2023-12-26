@@ -104,10 +104,10 @@ export default function BasicTable() {
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" >
                 {row.name}
               </TableCell>
-              <TableCell>{row.surname}</TableCell>
+              <TableCell numeric component="a" href="/BoardView " >{row.surname}</TableCell>
               <TableCell align="right">{row.birthCity}</TableCell>
               <TableCell align="right">{row.birthYear}</TableCell>
             </TableRow>
