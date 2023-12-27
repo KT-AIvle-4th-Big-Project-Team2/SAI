@@ -4,8 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './screens/Home';
 import Index from './screens/Index';
 import Board from './screens/Board/Board';
-import Questions from './screens/Questions';
-import ReactsDoc from './screens/ReactsDoc';
 import Login from './screens/Login/login';
 import NavBarElements from './components/NavBar/NavBarElements';
 import SignUp from './screens/Login/SignUp';
@@ -23,6 +21,7 @@ import Myinfo from './screens/Mypage/Myinfo';
 import WithDrawal from './screens/Mypage/WithDrawal';
 import Container from 'react-bootstrap/Container'
 import FAQ from './screens/Notice/FAQ';
+import MyinfoCheck from './screens/Mypage/MyinfoCheck';
 
 function App() {
   return (
@@ -36,8 +35,6 @@ function App() {
           <Route path = "/FAQ" element = { <FAQ /> } />
           <Route path = "/Home" element = { <Home /> } />
           <Route path = "/Board" element = { <Board /> } />
-          <Route path = "/Questions" element = { <Questions /> } />
-          <Route path = "/ReactsDoc" element = { <ReactsDoc /> } />
           <Route path = "/Login" element = { <Login /> } />
           <Route path = "/signup" element = { <SignUp /> } />
           <Route path = "/BoardView" element = { <BoardDetail /> } />
@@ -51,6 +48,7 @@ function App() {
           <Route path = "/Myboard" element = { <Myboard /> } />
           <Route path = "/Myinfo" element = { <Myinfo /> } />
           <Route path = "/WithDrawal" element = { <WithDrawal /> } />
+          <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
       </Routes>
       </Container>
     </Router>

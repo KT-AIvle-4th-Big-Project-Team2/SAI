@@ -8,7 +8,7 @@ import imgLogo from './logo.png';
 function NavBarElements() {
   return (
     <>
-      <Navbar bg="dark" data-bs-theme="dark">
+      <Navbar bg="dark" data-bs-theme="dark" style={{display: 'flex', justifyContent : 'space-between'}}>
         <Container>
           <Navbar.Brand href="/Home">
               <img
@@ -40,7 +40,7 @@ function NavBarElements() {
                 <NavDropdown.Item href="/Board">창업 게시판</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="마이페이지" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Myinfo">내 정보 수정</NavDropdown.Item>
+                <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
                 <NavDropdown.Item href="/Myboard">내가 쓴 글</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="/login">Log out</Nav.Link>

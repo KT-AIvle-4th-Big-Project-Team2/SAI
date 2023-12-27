@@ -1,21 +1,24 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  Radio,
+  RadioGroup,
+  FormLabel,
+} from '@mui/material/';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 function Copyright(props) {
   return (
@@ -35,13 +38,73 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+
+  
+  const [checked, setChecked] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordState, setPasswordState] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [registerError, setRegisterError] = useState('');
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const joinData = {
       email: data.get('email'),
+      name: data.get('name'),
       password: data.get('password'),
-    });
+      rePassword: data.get('rePassword'),
+      age: data.get('age')
+    };
+    const { email, name, password, rePassword, age } = joinData;
+
+    const emailRegex =
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    if (!emailRegex.test(email)) {
+      setEmailError('올바른 이메일 형식이 아닙니다.');
+    } else {
+      setEmailError('');
+    }
+    // 비밀번호 유효성 체크
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    if (!passwordRegex.test(password)) {
+      setPasswordState('숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!');
+    } else {
+      setPasswordState('');
+    }
+
+    // 비밀번호 같은지 체크
+    if (password !== rePassword) {
+      setPasswordError('비밀번호가 일치하지 않습니다.');
+    } else {
+      setPasswordError('');
+    }
+
+    // 이름 유효성 검사
+      const nameRegex = /^[가-힣a-zA-Z]+$/;
+      if (!nameRegex.test(name) || name.length < 1) {
+        setNameError('올바른 이름을 입력해주세요.');
+      } else {
+        setNameError('');
+      }
+
+      const ageRegex = /^(?=.*[0-9])/;
+      if (!ageRegex.test(age) || age.length < 1) {
+        setNameError('올바른 이름을 입력해주세요.');
+      } else {
+        setNameError('');
+      }
+
+      // 회원가입 동의 체크
+      if (!checked) alert('회원가입 약관에 동의해주세요.');
+
+    };
+
+  // 동의 체크
+  const handleAgree = (event) => {
+    setChecked(event.target.checked);
   };
 
   return (
@@ -67,12 +130,13 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="Name"
+                  name="name"
                   required
                   fullWidth
-                  id="Name"
-                  label="Name"
+                  id="name"
+                  label="name"
                   autoFocus
+                  error={nameError !== '' || false}
                 />
               </Grid>
               
@@ -93,9 +157,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="Age"
-                  label="Age"
-                  name="Age"
+                  id="age"
+                  label="age"
+                  name="age"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -106,6 +170,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  error={emailError !== '' || false}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -113,25 +178,27 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Password (숫자 + 영문자 + 특수문자 8자리 이상)"
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  error={passwordState !== '' || false}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
+                  name="repassword"
                   label="PasswordCheck"
                   type="password"
-                  id="password"
+                  id="repassword"
+                  error={passwordError !== '' || false}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  control={<Checkbox onChange={handleAgree} color="primary" />}
                   label="이용약관에 동의합니다."
                 />
               </Grid>
