@@ -36,11 +36,12 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const joinData = {
       email: data.get('email'),
       password: data.get('password'),
-    });
-  };
+    };
+    const { email, password} = joinData;
+    }
 
   return (
     <ThemeProvider theme={defaultTheme}>
