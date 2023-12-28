@@ -86,6 +86,7 @@ export default function AreaAnaly() {
 
   
   const handleChange = (event) => {
+    setGu('')
     setGu(event.target.value);
   };
 
@@ -93,31 +94,19 @@ export default function AreaAnaly() {
     setDong(event.target.value);
   };
 
-  function Seljonglo() {
-    return(
-      <div>
-          {
-              Gu === 'jonglo'
-              ? jonglo.map((dong, idx) => {
-                return <Button onClick={handleChange2}>{dong}</Button>
-              })
-              : null
-          }
-      </div>
-  )
-  }
+  console.log({Gu})
 
   return (
     <>
     <Box sx = {{mt : 3, mb : 5 }}><h2>지역 선택</h2></Box>
     <Grid container spacing={2}>
-      <Grid xs={2}>
+      <Grid>
       {Gu_SELECT.map((Gu, idx) => {
-        return <Button onClick={handleChange}>{Gu}</Button>
+        return <Button key={Gu} value={Gu} onClick={handleChange}>{Gu}</Button>
       })}
       </Grid>
-      <Grid xs={4}>
-      <Seljonglo />
+      <Grid>
+      <h2>현재 선택 지역 : {Gu}</h2>
       </Grid>
     </Grid>
     <br></br>      

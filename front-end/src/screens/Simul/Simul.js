@@ -104,9 +104,7 @@ export default function SelectVariants() {
       })}
       </Grid>
       <Grid xs={4}>
-      {jonglo.map((dong, idx) => {
-        return <Button onClick={handleChange2}>{dong}</Button>
-      })}
+        <h2>안녕</h2>
       </Grid>
     </Grid>
     <KakaoMap />
