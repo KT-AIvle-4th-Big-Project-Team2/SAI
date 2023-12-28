@@ -39,8 +39,8 @@ class Comments(models.Model):
     comment_id = models.AutoField(primary_key=True)
     contents = models.TextField()
     creationdate = models.DateTimeField()
-    user_user = models.ForeignKey(User, models.DO_NOTHING)
-    board_board = models.ForeignKey(Board, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    board = models.ForeignKey(Board, models.DO_NOTHING)
 
     class Meta:
         managed = False
