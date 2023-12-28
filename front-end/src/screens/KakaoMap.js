@@ -120,7 +120,7 @@ class KakaoMap extends Component {
 
     render() {
         const mapStyle = {
-            width: '65vw',
+            width: '100%',
             height: '80vh'
         };
 

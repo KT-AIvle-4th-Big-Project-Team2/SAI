@@ -90,11 +90,21 @@ export default function AreaAnaly() {
     setGu(event.target.value);
   };
 
+
   const handleChange2 = (event) => {
     setDong(event.target.value);
   };
 
-  console.log({Gu})
+  function Component() {
+    if ( Gu === "용산구") {
+      {jonglo.map((Dong, idx) => {
+        return <Button key={Dong} value={Dong} onClick={handleChange2}>{Dong}</Button>
+      })}
+    } else {
+      return 1; 
+    }
+  } 
+
 
   return (
     <>
@@ -107,6 +117,7 @@ export default function AreaAnaly() {
       </Grid>
       <Grid>
       <h2>현재 선택 지역 : {Gu}</h2>
+      <Component />
       </Grid>
     </Grid>
     <br></br>      
