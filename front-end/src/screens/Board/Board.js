@@ -1,22 +1,22 @@
-import * as React from 'react';
-import { useState } from "react";
-import 
-{Table,
-TableBody,
-TableContainer,
-TableHead,
-TableRow,
-TableCell,
-Paper,
-Pagination,
-Button,
-IconButton,
-TextField,
-}
-from '@mui/material/';
-import SearchIcon from "@mui/icons-material/Search";
+import React, { useState, useEffect } from 'react';
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  Paper,
+  Pagination,
+  Button,
+  IconButton,
+  TextField,
+} from '@mui/material/';
+import SearchIcon from '@mui/icons-material/Search';
 
-const SearchBar = ({setSearchQuery}) => (
+const ITEMS_PER_PAGE = 10;
+
+const SearchBar = ({ setSearchQuery }) => (
   <form>
     <TextField
       id="search-bar"
@@ -30,112 +30,100 @@ const SearchBar = ({setSearchQuery}) => (
       size="small"
     />
     <IconButton type="submit" aria-label="search">
-      <SearchIcon style={{ fill: "blue" }} />
+      <SearchIcon style={{ fill: 'blue' }} />
     </IconButton>
   </form>
 );
 
-const rows = [          {name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birthYear: 1987, birthCity: 63},
-{name: 'Zerya Betül', surname: '글 제목입니다.', birthYear: 2017, birthCity: 34},
-{name: 'Bread', surname: '게시판 테스트', birthYear: 2011, birthCity: 34},
-{name: 'Jonny', surname: 'Material-table 이용하기', birthYear: 2012, birthCity: 17},
-{name: 'Sera', surname: '페이징 처리 이용하기', birthYear: 2007, birthCity: 17},
-{name: 'Simson', surname: '테스트 데이터 5-2', birthYear: 1999, birthCity: 8},
-{name: 'Cerry', surname: '야호 ㅋㅋ!!', birthYear: 1997, birthCity: 53},
-{name: 'Zebra', surname: '잘 넘어가나요?', birthYear: 1987, birthCity: 15},
-{name: 'M.J.', surname: '오키오키 ', birthYear: 1999, birthCity: 54},
-{name: 'K.Son', surname: 'ㅋ아니..', birthYear: 2002, birthCity: 37},
-{name: 'Json', surname: '넵 열심히 하겠습니다 5-3', birthYear: 2015, birthCity: 98},
-{name: 'Merry', surname: 'MacBook Pro 팔아요', birthYear: 2017, birthCity: 11},
-{name: 'Mehmet', surname: '안녕하세요 ^^', birthYear: 1987, birthCity: 63},
-{name: 'Zerya Betül', surname: '글 제목입니다.', birthYear: 2017, birthCity: 34},
-{name: 'Bread', surname: '게시판 테스트', birthYear: 2011, birthCity: 34},
-{name: 'Jonny', surname: 'Material-table 이용하기 5-4', birthYear: 2012, birthCity: 17},
-{name: 'Sera', surname: '페이징 처리 이용하기', birthYear: 2007, birthCity: 17},
-{name: 'Simson', surname: '테스트 데이터', birthYear: 1999, birthCity: 8},
-{name: 'Cerry', surname: '야호 ㅋㅋ!!', birthYear: 1997, birthCity: 53},
-{name: 'Zebra', surname: '잘 넘어가나요?', birthYear: 1987, birthCity: 15},
-{name: 'M.J.', surname: '오키오키 5-5', birthYear: 1999, birthCity: 54},
-{name: 'K.Son', surname: 'ㅋ아니..', birthYear: 2002, birthCity: 37},
-{name: 'Json', surname: '넵 열심히 하겠습니다', birthYear: 2015, birthCity: 98},
-{name: 'Merry', surname: 'MacBook Pro 팔아요', birthYear: 2017, birthCity: 11},
-{name: 'Mehmet', surname: '안녕하세요 ^^', birthYear: 1987, birthCity: 63},
-{name: 'Zerya Betül', surname: '글 제목입니다. 5-6', birthYear: 2017, birthCity: 34},
-{name: 'Bread', surname: '게시판 테스트', birthYear: 2011, birthCity: 34},
-{name: 'Jonny', surname: 'Material-table 이용하기', birthYear: 2012, birthCity: 17},
-{name: 'Sera', surname: '페이징 처리 이용하기', birthYear: 2007, birthCity: 17},
-{name: 'Simson', surname: '테스트 데이터', birthYear: 1999, birthCity: 8},
-{name: 'Cerry', surname: '야호 ㅋㅋ!! 5-7', birthYear: 1997, birthCity: 53},
-{name: 'Zebra', surname: '잘 넘어가나요?', birthYear: 1987, birthCity: 15},
-{name: 'M.J.', surname: '오키오키 ', birthYear: 1999, birthCity: 54},
-{name: 'K.Son', surname: 'ㅋ아니..', birthYear: 2002, birthCity: 37},
-{name: 'Json', surname: '넵 열심히 하겠습니다', birthYear: 2015, birthCity: 98},
-{name: 'Merry', surname: 'MacBook Pro 팔아요 5-8', birthYear: 2017, birthCity: 11},
-{name: 'Mehmet', surname: '안녕하세요 ^^', birthYear: 1987, birthCity: 63},
-{name: 'Zerya Betül', surname: '글 제목입니다.', birthYear: 2017, birthCity: 34},
-{name: 'Bread', surname: '게시판 테스트', birthYear: 2011, birthCity: 34},
-{name: 'Jonny', surname: 'Material-table 이용하기', birthYear: 2012, birthCity: 17},
-{name: 'Sera', surname: '페이징 처리 이용하기 5-9', birthYear: 2007, birthCity: 17},
-{name: 'Simson', surname: '테스트 데이터', birthYear: 1999, birthCity: 8},
-{name: 'Cerry', surname: '야호 ㅋㅋ!!', birthYear: 1997, birthCity: 53},
-{name: 'Zebra', surname: '잘 넘어가나요?', birthYear: 1987, birthCity: 15},
-{name: 'M.J.', surname: '오키오키 ', birthYear: 1999, birthCity: 54},
-{name: 'K.Son', surname: 'ㅋ아니.. 5-10', birthYear: 2002, birthCity: 37},
-{name: 'Json', surname: '넵 열심히 하겠습니다', birthYear: 2015, birthCity: 98},
-{name: 'Merry', surname: '마지막 데이터입니다!!!!!!!', birthYear: 2017, birthCity: 11}
-];
-
 export default function BasicTable() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [rows, setRows] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [searchQuery, setSearchQuery] = useState("");
+  useEffect(() => {
+    // Replace this URL with your actual API endpoint
+    const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        // You may need to map the data structure from your actual API
+        const formattedData = data.map((item) => ({
+          name: item.id,
+          surname: item.title,
+          birthCity: item.userId,
+          birthYear: item.id,
+        }));
+        setRows(formattedData);
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+
+  // Calculate the index range for the current page
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  // Get the current page items using the slice method
+  const currentItems = rows.slice(startIndex, endIndex);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
 
   return (
-    <Paper className='Paper'>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>번호</TableCell>
-            <TableCell>글 내용</TableCell>
-            <TableCell align="right">작성자</TableCell>
-            <TableCell align="right">작성일</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" >
-                {row.name}
-              </TableCell>
-              <TableCell numeric component="a" href="/BoardView " >{row.surname}</TableCell>
-              <TableCell align="right">{row.birthCity}</TableCell>
-              <TableCell align="right">{row.birthYear}</TableCell>
+    <Paper className="Paper" style={{ height: '100%', overflow: 'auto' }}>
+      <TableContainer component={Paper} style={{ height: '100%' }}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>번호</TableCell>
+              <TableCell>글 내용</TableCell>
+              <TableCell align="right">작성자</TableCell>
+              <TableCell align="right">작성일</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    <Pagination count={10} showFirstButton showLastButton />
-    <div align = 'right'>
-    <Button variant="contained" href = '/BoardWrite'>글쓰기</Button>
-    </div>
-    <div
-      style={{
-        display: "flex",
-        alignSelf: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        padding: 20
-      }}
-    >
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <div style={{ padding: 3 }}>
+          </TableHead>
+          <TableBody>
+            {currentItems.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell numeric component="a" href="/BoardView ">
+                  {row.surname}
+                </TableCell>
+                <TableCell align="right">{row.birthCity}</TableCell>
+                <TableCell align="right">{row.birthYear}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={(event, value) => setCurrentPage(value)}
+        showFirstButton
+        showLastButton
+      />
+      <div align="right">
+        <Button variant="contained" href="/BoardWrite">
+          글쓰기
+        </Button>
       </div>
-    </div>
-
+      <div
+        style={{
+          display: 'flex',
+          alignSelf: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          padding: 20,
+        }}
+      >
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <div style={{ padding: 3 }}></div>
+      </div>
     </Paper>
   );
 }

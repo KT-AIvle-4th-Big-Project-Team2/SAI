@@ -28,30 +28,19 @@ const SectorsAnaly = () => {
     const handleChange = (event) => {
       setSector(event.target.value);
     };
-    function chicken() {
-      return(
-          <div>
-              {
-                  sector === '치킨전문점'
-                  ? <p> HTML~ </p>
-                  : null
-              }
-          </div>
-      )
-    }
-    
 
   return (
     <>
     <Box sx = {{mt : 3, mb : 5 }}><h2>업종 선택</h2></Box>
     <Grid container spacing={2}>
-      <Grid xs={2}>
-      <item>
-      {sectors.map((sector, idx) => {
-        return <Button onClick={handleChange}>{sector}</Button>
-      })}
-      </item>
+      <Grid>
+      {sectors.map((sector, idx) => (
+            <Button key={sector} value={sector} onClick={handleChange}>
+              {sector}
+            </Button>
+      ))}
       </Grid>
+      <h2>현재 선택 업종 : {sector}</h2>
     </Grid>
     <Button href = '#Report' size='large' variant="contained">분석 보기</Button>
     </>
