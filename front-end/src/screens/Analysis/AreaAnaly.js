@@ -2,9 +2,8 @@ import React, {useState} from 'react'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import KakaoMap from '../KakaoMap';
 
-export default function SelectVariants() {
+export default function AreaAnaly() {
   const [Gu, setGu] = useState('');
   const [Dong, setDong] = useState('');
   const Gu_SELECT = ['종로구',
@@ -94,6 +93,20 @@ export default function SelectVariants() {
     setDong(event.target.value);
   };
 
+  function Seljonglo() {
+    return(
+      <div>
+          {
+              Gu === 'jonglo'
+              ? jonglo.map((dong, idx) => {
+                return <Button onClick={handleChange2}>{dong}</Button>
+              })
+              : null
+          }
+      </div>
+  )
+  }
+
   return (
     <>
     <Box sx = {{mt : 3, mb : 5 }}><h2>지역 선택</h2></Box>
@@ -104,16 +117,11 @@ export default function SelectVariants() {
       })}
       </Grid>
       <Grid xs={4}>
-      {jonglo.map((dong, idx) => {
-        return <Button onClick={handleChange2}>{dong}</Button>
-      })}
+      <Seljonglo />
       </Grid>
     </Grid>
-    <KakaoMap />
-      
-      <br></br>
-          
-      <Button href = '/SimulReport' size='large' variant="contained">리포트 보기</Button>
+    <br></br>      
+    <Button href = '/SimulReport' size='large' variant="contained">리포트 보기</Button>
     </>
   );
 }
