@@ -10,7 +10,7 @@ jsonData.forEach(item => {
 
 const uniqueGuArray = Array.from(uniqueGu);
 
-const DongArray = []; // Rename the array to avoid conflict with state variable
+const DongArray = [];
 
 for (let i = 0; i < 25; i++) {
   DongArray[i] = jsonData
@@ -20,11 +20,11 @@ for (let i = 0; i < 25; i++) {
 
 export default function AreaAnaly() {
   const [Gu, setGu] = useState('');
-  const [selectedDong, setSelectedDong] = useState(''); // Rename to avoid conflict
+  const [selectedDong, setSelectedDong] = useState('');
 
   const handleChange = (event) => {
     setGu(event.target.value);
-    setSelectedDong(''); // Reset selectedDong when Gu changes
+    setSelectedDong('');
   };
 
   const handleChange2 = (event) => {
@@ -34,42 +34,48 @@ export default function AreaAnaly() {
   function SelectDong() {
     for (let i = 0; i < 25; i++) {
       if (Gu === uniqueGuArray[i]) {
-        // Check if DongArray[i] exists before calling map
         return DongArray[i] ? (
           DongArray[i].map((dong, idx) => (
-            <Button key={dong} value={dong} onClick={handleChange2}>
+            <Button key={dong} value={dong} variant="outlined" sx={{mr : 2, mb : 1}} onClick={handleChange2}>
               {dong}
             </Button>
           ))
         ) : null;
       }
     }
-    return null; // Return null if no matching Gu is found
+    return null;
   }
 
   return (
-    <>
-      <Box sx={{ mt: 3, mb: 5 }}>
-        <h2>지역 선택</h2>
-      </Box>
-      <Grid container spacing={2}>
-        <Grid>
-          {uniqueGuArray.map((gu, idx) => (
-            <Button key={gu} value={gu} onClick={handleChange}>
-              {gu}
-            </Button>
-          ))}
+    <Box sx={{ mt: 3, mb: 5 }}>
+      <h2>지역 선택</h2>
+      <Grid container spacing={2} sx={{ height: '100%' }}>
+        <Grid item xs={3}>
+          <Box border={1} p={2} borderRadius={8} sx={{ height: '100%' }}>
+          <h5>지역구 : {Gu}</h5>
+            {uniqueGuArray.map((gu, idx) => (
+              <Button key={gu} value={gu} variant="outlined" onClick={handleChange} sx={{mr : 2, mb : 1}}>
+                {gu}
+              </Button>
+            ))}
+          </Box>
         </Grid>
-        <Grid>
-          <h2>현재 선택 지역 : {Gu}</h2>
-          <SelectDong />
+        <Grid item xs={3}>
+          <Box border={1} p={2} borderRadius={8} sx={{ height: '100%' }}>
+            <h5>행정동 : {selectedDong}</h5>
+            <SelectDong />
+          </Box>
+        </Grid>
+        <Grid item xs={6} container justifyContent="flex-end" sx={{ height: '100%' }}>
+          <Box border={1} p={2} borderRadius={8} sx={{ height: '100%', width: '100%' }}>
+            <h4>현재 선택 지역 : {selectedDong}</h4>
+            <br />
+            <Button href="#report" size="large" variant="contained">
+              리포트 보기
+            </Button>
+          </Box>
         </Grid>
       </Grid>
-      <h2>현재 선택 지역 : {selectedDong}</h2>
-      <br />
-      <Button href="#report" size="large" variant="contained">
-        리포트 보기
-      </Button>
-    </>
+    </Box>
   );
 }

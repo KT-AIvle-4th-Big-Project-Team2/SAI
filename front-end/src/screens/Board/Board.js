@@ -11,6 +11,7 @@ import {
   Button,
   IconButton,
   TextField,
+  Box
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -70,6 +71,10 @@ export default function BasicTable() {
   const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
 
   return (
+    <>
+    <Box sx={{ mt: 3, mb: 3 }}>
+    <h2>창업 게시판</h2>
+    </Box>
     <Paper className="Paper" style={{ height: '100%', overflow: 'auto' }}>
       <TableContainer component={Paper} style={{ height: '100%' }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -100,6 +105,8 @@ export default function BasicTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      
+    </Paper>
       <Pagination
         count={totalPages}
         page={currentPage}
@@ -107,23 +114,16 @@ export default function BasicTable() {
         showFirstButton
         showLastButton
       />
-      <div align="right">
-        <Button variant="contained" href="/BoardWrite">
-          글쓰기
-        </Button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+        <div>
+          <SearchBar setSearchQuery={setSearchQuery} />
+        </div>
+        <div>
+          <Button variant="contained" href="/BoardWrite">
+            글쓰기
+          </Button>
+        </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          alignSelf: 'center',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          padding: 20,
-        }}
-      >
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        <div style={{ padding: 3 }}></div>
-      </div>
-    </Paper>
+    </>
   );
 }
