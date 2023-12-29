@@ -12,7 +12,7 @@ class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=75)
     password = models.CharField(max_length=75)
-    email = models.CharField(max_length=254)
+    email = models.EmailField (max_length=254)
     phonenumber = models.CharField(max_length=11)
     age = models.PositiveIntegerField()
     gender = models.CharField(max_length=1)
