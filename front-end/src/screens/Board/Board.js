@@ -46,7 +46,10 @@ export default function BasicTable() {
     const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
 
     fetch(apiUrl)
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response)
+        response.json()
+      })
       .then((data) => {
         // You may need to map the data structure from your actual API
         const formattedData = data.map((item) => ({

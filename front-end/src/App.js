@@ -27,7 +27,6 @@ function App() {
   return (
     <Router>
       <NavBarElements />
-      
       <Container>
         <Routes>
           <Route path = "/" element = { <Index /> } />
