@@ -1,5 +1,7 @@
+import { drawPolygons } from './DrawPolygons.js';
 import React, { Component } from 'react';
-import geoJsonData from './converted_geojson_file.json';
+import geoJsonData from './geometry.json';
+
 
 class KakaoMap extends Component {
     state = {
@@ -8,65 +10,9 @@ class KakaoMap extends Component {
 
     componentDidMount() {
         this.initializeMap();
-        this.drawPolygons();
-    }
-
-    drawPolygons = () => {
-        const map = this.map; // KakaoMap 인스턴스
-    
-        geoJsonData.features.forEach(feature => {
-            const { geometry: { type, coordinates }, properties } = feature; // properties를 feature에서 직접 추출
-    
-            if (type === "Polygon" || type === "MultiPolygon") {
-                // 상권 영역의 좌표를 LatLng 객체로 변환
-                const paths = this.convertCoordinatesToLatLng(coordinates, type);
-    
-                const polygon = new window.kakao.maps.Polygon({
-                    map: map,
-                    path: paths,
-                    // 상권 폴리곤 스타일 설정
-                    strokeWeight: 3,
-                    strokeColor: '#FFA500', // 상권 폴리곤의 선 색상
-                    strokeOpacity: 0.8,
-                    fillColor: '#FFA500', // 상권 폴리곤의 채움 색상
-                    fillOpacity: 0.3 // 상권 폴리곤의 채움 투명도
-                });
-    
-                // 마우스 오버 이벤트 핸들러
-                window.kakao.maps.event.addListener(polygon, 'mouseover', () => {
-                    polygon.setOptions({ fillColor: '#0000FF' }); // 마우스 오버 시 색상 변경
-                    if (properties && properties.TRDAR_CD_N) {
-                        this.displayMessage(`상권 이름: ${properties.TRDAR_CD_N}`); // 상권 이름 표시
-                    }
-                });
-    
-                // 마우스 아웃 이벤트 핸들러
-                window.kakao.maps.event.addListener(polygon, 'mouseout', () => {
-                    polygon.setOptions({ fillColor: '#FFA500' }); // 원래 색상으로 변경
-                    this.displayMessage(''); // 메시지 지우기
-                });
-            }
-        });
+        drawPolygons(this.map, geoJsonData, this.displayMessage);
     }
     
-    
-    
-    // 좌표를 LatLng 객체로 변환
-    convertCoordinatesToLatLng = (coordinates, type) => {
-        let paths = [];
-
-        if (type === "Polygon") {
-            paths = coordinates[0].map(coord => new window.kakao.maps.LatLng(coord[1], coord[0]));
-        } else if (type === "MultiPolygon") {
-            coordinates.forEach(polygon => {
-                const path = polygon[0].map(coord => new window.kakao.maps.LatLng(coord[1], coord[0]));
-                paths.push(path);
-            });
-        }
-
-        return paths;
-    }
-
     initializeMap = () => {
         const mapContainer = this.mapContainer;
         const mapOption = {
