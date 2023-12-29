@@ -95,12 +95,29 @@ export default function BasicTable() {
   useEffect(() => {
     axios.get('http://localhost:8000/board')
       .then(response => {
+        
+        console.log(response.data)
         setboarddata(response.data);
       })
       .catch(error => {
         console.error('Error fetching posts', error);
       });
   }, []);  
+
+  // useEffect(() => {
+  //   // Replace this URL with your actual API endpoint
+  //   //const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+  //   const apiUrl = 'http://localhost:8000/board';
+ 
+  //   fetch(apiUrl)
+  //     .then((response) => {
+  //       console.log(response)
+  //       response.json()
+  //     })
+  //       // You may need to map the data structure from your actual API
+  //     .catch((error) => console.error('Error fetching data:', error));
+  // }, []);
+
 
   
   console.log(boarddata)
@@ -118,17 +135,17 @@ export default function BasicTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((rows) => (
+          {boarddata.map((boarddata) => (
             <TableRow
-              key={rows.board_id}
+              key={boarddata.board_id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" >
-                {rows.board_id}
+                {boarddata.board_id}
               </TableCell>
-              <TableCell numeric component="a" href="/BoardView " >{rows.title}</TableCell>
-              <TableCell align="right">{rows.contents}</TableCell>
-              <TableCell align="right">{rows.tag}</TableCell>
+              <TableCell numeric component="a" href="/BoardView " >{boarddata.title}</TableCell>
+              <TableCell align="right">{boarddata.contents}</TableCell>
+              <TableCell align="right">{boarddata.tag}</TableCell>
             </TableRow>
           ))}
         </TableBody>
