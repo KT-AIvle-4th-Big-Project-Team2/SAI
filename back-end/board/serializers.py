@@ -31,14 +31,21 @@ class BoardPostListSerializer(serializers.Serializer):
 class BoardPostSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
     title = serializers.CharField()
+    tag = serializers.CharField()
     contents = serializers.CharField()
     date = serializers.DateTimeField()
-    # name = serializers.CharField()
+    name = serializers.CharField()
     
-    def ChangeFieldName(self, instance):
+    def to_representation(self, instance):
         return {
             'post_id': instance['board_id'],
             'title': instance['title'],
+            'tag': instance['tag'],
             'contents': instance['contents'],
-            'date': instance['creationdate']
+            'date': instance['creationdate'],
+            'name': instance['user__name']
         }
+
+class BoardPostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Board
