@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('C:/bigproject/sensitiveDatas/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/2023_big/data/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -58,6 +58,9 @@ INSTALLED_APPS = [
     # rest API
     "rest_framework",
     "corsheaders",
+
+    # test API (custom api)
+    #"testapi"
 ]
 
 REST_FRAMEWORK = {
@@ -66,7 +69,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/2023_big/data/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -110,7 +113,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('C:/bigproject/sensitiveDatas/DB_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/2023_big/data/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
@@ -207,3 +210,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ORIGIN_WHITELIST = ('http://127.0.0.1:3000', 'http://localhost:3000')
+CORS_ALLOW_CREDENTIALS = True

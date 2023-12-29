@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import 
 {Table,
 TableBody,
@@ -15,25 +15,27 @@ TextField,
 }
 from '@mui/material/';
 import SearchIcon from "@mui/icons-material/Search";
+import axios from "axios";
 
-const SearchBar = ({setSearchQuery}) => (
-  <form>
-    <TextField
-      id="search-bar"
-      className="text"
-      onInput={(e) => {
-        setSearchQuery(e.target.value);
-      }}
-      label="Search"
-      variant="outlined"
-      placeholder="Search..."
-      size="small"
-    />
-    <IconButton type="submit" aria-label="search">
-      <SearchIcon style={{ fill: "blue" }} />
-    </IconButton>
-  </form>
-);
+
+// const SearchBar = ({setSearchQuery}) => (
+//   <form>
+//     <TextField
+//       id="search-bar"
+//       className="text"
+//       onInput={(e) => {
+//         setSearchQuery(e.target.value);
+//       }}
+//       label="Search"
+//       variant="outlined"
+//       placeholder="Search..."
+//       size="small"
+//     />
+//     <IconButton type="submit" aria-label="search">
+//       <SearchIcon style={{ fill: "blue" }} />
+//     </IconButton>
+//   </form>
+// );
 
 const rows = [          {name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birthYear: 1987, birthCity: 63},
 {name: 'Zerya Betül', surname: '글 제목입니다.', birthYear: 2017, birthCity: 34},
@@ -87,7 +89,21 @@ const rows = [          {name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birt
 
 export default function BasicTable() {
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const [boarddata, setboarddata] = useState([]);
+//  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/board')
+      .then(response => {
+        setboarddata(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching posts', error);
+      });
+  }, []);  
+
+  
+  console.log(boarddata)
 
   return (
     <Paper className='Paper'>
@@ -102,17 +118,17 @@ export default function BasicTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((rows) => (
             <TableRow
-              key={row.name}
+              key={rows.board_id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" >
-                {row.name}
+                {rows.board_id}
               </TableCell>
-              <TableCell numeric component="a" href="/BoardView " >{row.surname}</TableCell>
-              <TableCell align="right">{row.birthCity}</TableCell>
-              <TableCell align="right">{row.birthYear}</TableCell>
+              <TableCell numeric component="a" href="/BoardView " >{rows.title}</TableCell>
+              <TableCell align="right">{rows.contents}</TableCell>
+              <TableCell align="right">{rows.tag}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -131,7 +147,7 @@ export default function BasicTable() {
         padding: 20
       }}
     >
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      
       <div style={{ padding: 3 }}>
       </div>
     </div>

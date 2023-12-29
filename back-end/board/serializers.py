@@ -7,7 +7,6 @@ class BoardSerializer(serializers.ModelSerializer):
             'title',
             'contents',
             'tag',
-            'date',
             'user',
         )
         model = Board
