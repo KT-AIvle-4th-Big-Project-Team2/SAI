@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Board
+from .models import Board, User
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -30,14 +30,28 @@ class BoardPostListSerializer(serializers.Serializer):
 class BoardPostSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
     title = serializers.CharField()
+    tag = serializers.CharField()
     contents = serializers.CharField()
     date = serializers.DateTimeField()
-    # name = serializers.CharField()
+    name = serializers.CharField()
     
-    def ChangeFieldName(self, instance):
+    def to_representation(self, instance):
         return {
             'post_id': instance['board_id'],
             'title': instance['title'],
+            'tag': instance['tag'],
             'contents': instance['contents'],
-            'date': instance['creationdate']
+            'date': instance['creationdate'],
+            'name': instance['user__name']
         }
+
+class BoardPostCreateSerializer(serializers.ModelSerializer):
+
+    title = serializers.CharField()
+    tag = serializers.CharField()
+    contents = serializers.CharField()
+    name = serializers.CharField()
+    
+    class Meta:
+        model = Board
+        fields = ('title', 'tag', 'contents', 'name')
