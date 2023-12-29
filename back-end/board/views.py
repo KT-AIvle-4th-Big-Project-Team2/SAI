@@ -5,6 +5,7 @@ from rest_framework import generics, status
 from .models import Board
 from .serializers import *
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 
 class ListPost(generics.ListCreateAPIView):
     queryset = Board.objects.all()
@@ -50,15 +51,16 @@ class CustomSerializer2(generics.ListAPIView):
     serializer_class = BoardPostSerializer
     
 class CustomSerializer3(generics.CreateAPIView):
-    
+    parser_classes = [JSONParser]
     serializer_class = BoardPostCreateSerializer
-    
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
+        
     def perform_create(self, serializer):
-        serializer.save()
+        user_instance = User.objects.get(name=serializer.validated_data.get('name', ''))
+        
+        Board.objects.create(
+            title=serializer.validated_data['title'],
+            tag=serializer.validated_data['tag'],
+            contents=serializer.validated_data['contents'],
+            user=user_instance
+        )
+    

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Board
+from .models import Board, User
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -47,5 +47,12 @@ class BoardPostSerializer(serializers.Serializer):
         }
 
 class BoardPostCreateSerializer(serializers.ModelSerializer):
+
+    title = serializers.CharField()
+    tag = serializers.CharField()
+    contents = serializers.CharField()
+    name = serializers.CharField()
+    
     class Meta:
         model = Board
+        fields = ('title', 'tag', 'contents', 'name')

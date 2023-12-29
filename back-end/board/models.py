@@ -27,7 +27,7 @@ class Board(models.Model):
     title = models.CharField(max_length=75)
     contents = models.TextField()
     tag = models.CharField(max_length=75)
-    creationdate = models.DateTimeField()
+    creationdate = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, models.DO_NOTHING)
 
     class Meta:
