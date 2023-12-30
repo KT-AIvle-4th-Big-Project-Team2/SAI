@@ -46,6 +46,19 @@ class BoardPostSerializer(serializers.Serializer):
             'name': instance['user__name']
         }
 
+class BoardSearchSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        return {
+            'post_id': instance['board_id'],
+            'title': instance['title'],
+            'tag': instance['tag'],
+            'date': instance['creationdate'],
+            'name': instance['user__name']
+        }
+    class Meta:
+        model = Board
+        fields = ['post_id', 'title', 'tag', 'creationdate', 'user__name']
+
 class BoardPostCreateSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField()

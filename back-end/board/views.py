@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-# Create your views here.
-
+from django.http import HttpResponse
 from .models import Board
 from .serializers import *
 from rest_framework.response import Response
@@ -15,7 +14,7 @@ class DetailPost(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
     
     
-class CustomSerializer1(generics.ListAPIView):
+class BoardPostListView(generics.ListAPIView):
     def get_queryset(self):
         board_contents = Board.objects.values(
             'board_id',
@@ -24,14 +23,13 @@ class CustomSerializer1(generics.ListAPIView):
             'creationdate',
             'user__name',
         )
-        print(board_contents)
         
         queryset = board_contents
         return queryset
     
     serializer_class = BoardPostListSerializer
     
-class CustomSerializer2(generics.ListAPIView):
+class BoardPostView(generics.ListAPIView):
     
     def get_queryset(self):
 
@@ -49,9 +47,53 @@ class CustomSerializer2(generics.ListAPIView):
         return queryset
 
     serializer_class = BoardPostSerializer
+
+class BoardSearchView(generics.ListAPIView):
     
-class CustomSerializer3(generics.CreateAPIView):
-    parser_classes = [JSONParser]
+    def get_queryset(self):
+        print(self.kwargs['searchfield'])
+        board_id = self.kwargs['searchfield']
+        if self.kwargs['searchfield'] == 'title':
+            
+            queryset = Board.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
+                'board_id',
+                'title',
+                'tag',
+                'creationdate',
+                'user__name',
+            )
+            
+        elif self.kwargs['searchfield'] == 'contents':
+            
+            queryset = Board.objects.filter(contents__contains=self.kwargs['searchkeyword']).values(
+                'board_id',
+                'title',
+                'tag',
+                'creationdate',
+                'user__name',
+            )
+            
+        elif self.kwargs['searchfield'] == 'name':
+            
+            queryset = Board.objects.filter(user__name__contains=self.kwargs['searchkeyword']).values(
+                'board_id',
+                'title',
+                'tag',
+                'creationdate',
+                'user__name',
+            )
+            
+        else:
+            return HttpResponse("ERROR")
+        
+        
+        print(queryset)
+        return queryset
+
+    serializer_class = BoardSearchSerializer
+
+class BoardPostCreateView(generics.CreateAPIView):
+    #parser_classes = [JSONParser]
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
@@ -63,4 +105,5 @@ class CustomSerializer3(generics.CreateAPIView):
             contents=serializer.validated_data['contents'],
             user=user_instance
         )
+        
     
