@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status
 from django.http import HttpResponse
-from .models import Board
+from .models import *
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -43,15 +43,29 @@ class BoardPostView(generics.ListAPIView):
             'user__name',
         )
         
-        print(queryset)
         return queryset
 
     serializer_class = BoardPostSerializer
 
+class BoardPostCommentView(generics.ListAPIView):
+    
+    def get_queryset(self):
+
+        board_id = self.kwargs['pk']
+        queryset = Comments.objects.filter(board=board_id).values(
+            'contents',
+            'creationdate',
+            'user__name',
+            'comment_id',
+        )
+        
+        return queryset
+
+    serializer_class = BoardPostCommentSerializer
+
 class BoardSearchView(generics.ListAPIView):
     
     def get_queryset(self):
-        print(self.kwargs['searchfield'])
         board_id = self.kwargs['searchfield']
         if self.kwargs['searchfield'] == 'title':
             
@@ -93,7 +107,6 @@ class BoardSearchView(generics.ListAPIView):
     serializer_class = BoardSearchSerializer
 
 class BoardPostCreateView(generics.CreateAPIView):
-    #parser_classes = [JSONParser]
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
@@ -106,4 +119,41 @@ class BoardPostCreateView(generics.CreateAPIView):
             user=user_instance
         )
         
+class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
+    serializer_class = BoardPostUpdateSerializer
+    queryset = Board.objects.all()
+    def perform_update(self, serializer):    
+        instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
+
+        instance.title = serializer.validated_data['title']
+        instance.tag = serializer.validated_data['tag']
+        instance.contents = serializer.validated_data['contents']
+
+        instance.save()
+        
+class BoardPostCommentCreateView(generics.CreateAPIView):
+
+    serializer_class = BoardPostcommentCreateSerializer
+        
+    def perform_create(self, serializer):
+        user_instance = User.objects.get(name=serializer.validated_data.get('name', ''))
+        board_id = Board.objects.get(board_id=self.kwargs['pk'])
+        
+        Comments.objects.create(
+            contents=serializer.validated_data['contents'],
+            user=user_instance,
+            board=board_id,
+        )
+
+class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
+    serializer_class = BoardPostCommentUpdateSerializer
+    
+    queryset = Comments.objects.all()
+    
+    def perform_update(self, serializer):    
+        instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
+
+        instance.contents = serializer.validated_data['contents']
+
+        instance.save()
     

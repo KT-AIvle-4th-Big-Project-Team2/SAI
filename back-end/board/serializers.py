@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Board, User
+from .models import Board, Comments
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -45,6 +45,16 @@ class BoardPostSerializer(serializers.Serializer):
             'date': instance['creationdate'],
             'name': instance['user__name']
         }
+        
+class BoardPostCommentSerializer(serializers.Serializer):
+
+    def to_representation(self, instance):
+        return {
+            'contents': instance['contents'],
+            'date': instance['creationdate'],
+            'name': instance['user__name'],
+            'comment_id': instance['comment_id']
+        }
 
 class BoardSearchSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
@@ -69,3 +79,28 @@ class BoardPostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ('title', 'tag', 'contents', 'name')
+
+class BoardPostUpdateSerializer(serializers.Serializer):
+
+    title = serializers.CharField()
+    tag = serializers.CharField()
+    contents = serializers.CharField()
+
+        
+class BoardPostcommentCreateSerializer(serializers.ModelSerializer):
+
+    contents = serializers.CharField()
+    name = serializers.CharField()
+    
+    class Meta:
+        model = Comments
+        fields = ('contents', 'name')
+
+
+class BoardPostCommentUpdateSerializer(serializers.ModelSerializer):
+
+    contents = serializers.CharField()
+    
+    class Meta:
+        model = Comments
+        fields = ('contents',)
