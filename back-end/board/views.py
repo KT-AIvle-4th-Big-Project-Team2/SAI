@@ -1,17 +1,18 @@
 from django.shortcuts import render
-from rest_framework import generics, status
 from django.http import HttpResponse
+
+from rest_framework import generics
+
 from .models import *
 from .serializers import *
-from rest_framework.response import Response
-from rest_framework.parsers import JSONParser
 
-class ListPost(generics.ListCreateAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
-class DetailPost(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardSerializer
+# 연습 및 테스트용
+# class ListPost(generics.ListCreateAPIView):
+#     queryset = Board.objects.all()
+#     serializer_class = BoardSerializer
+# class DetailPost(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Board.objects.all()
+#     serializer_class = BoardSerializer
     
     
 class BoardPostListView(generics.ListAPIView):

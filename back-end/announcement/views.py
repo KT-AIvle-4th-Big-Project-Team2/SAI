@@ -24,7 +24,7 @@ class AnnouncementListView(generics.ListAPIView):
 class AnnouncementView(generics.ListAPIView):
     
     def get_queryset(self):
-        print('test')
+        print(self.kwargs['pk'])
         announcement_id = self.kwargs['pk']
         
         queryset = Announcements.objects.filter(announcement_id=announcement_id).values(
@@ -34,6 +34,7 @@ class AnnouncementView(generics.ListAPIView):
             'creationdate',
             'admin__name',
         )
+        return queryset
 
     serializer_class = AnnouncementSerializer
 
@@ -83,3 +84,15 @@ class AnnouncementCreateView(generics.CreateAPIView):
             contents=serializer.validated_data['contents'],
             admin=admin_instance
         )
+        
+class AnnouncementUpdateView(generics.UpdateAPIView):
+    serializer_class = AnnouncementUpdateSerializer
+    queryset = Announcements.objects.all()
+    
+    def perform_update(self, serializer):    
+        instance = self.get_object()
+
+        instance.title = serializer.validated_data['title']
+        instance.contents = serializer.validated_data['contents']
+
+        instance.save()

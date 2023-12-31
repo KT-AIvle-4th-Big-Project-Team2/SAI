@@ -27,7 +27,7 @@ class Suggestions(models.Model):
     title = models.CharField(max_length=75)
     content = models.TextField()
     creationdate = models.DateTimeField()
-    user_user = models.ForeignKey(User, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
 
     class Meta:
         managed = False

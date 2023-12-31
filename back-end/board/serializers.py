@@ -1,16 +1,18 @@
 from rest_framework import serializers
 from .models import Board, Comments
-class BoardSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = (
-            'board_id',
-            'title',
-            'contents',
-            'tag',
-            'date',
-            'user',
-        )
-        model = Board
+
+# 연습 및 테스트용
+# class BoardSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         fields = (
+#             'board_id',
+#             'title',
+#             'contents',
+#             'tag',
+#             'date',
+#             'user',
+#         )
+#         model = Board
         
 class BoardPostListSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()

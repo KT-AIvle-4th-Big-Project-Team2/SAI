@@ -43,3 +43,8 @@ class AnnouncementCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcements
         fields = ('title', 'contents', 'name')
+
+class AnnouncementUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcements
+        fields = ('title', 'contents')
