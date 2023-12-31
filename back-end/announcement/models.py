@@ -8,6 +8,18 @@
 from django.db import models
 
 
+class Announcements(models.Model):
+    announcement_id = models.AutoField(primary_key=True)
+    creationdate = models.DateTimeField(db_column='creationDate', auto_now_add=True)  # Field name made lowercase.
+    title = models.CharField(max_length=50)
+    contents = models.CharField(max_length=45)
+    admin = models.ForeignKey('Admin', models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'announcements'
+
+
 class Admin(models.Model):
     admin_id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=75)
