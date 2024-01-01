@@ -93,7 +93,7 @@ const SectorsAnaly = () => {
               ))}
             </Box>
           </Grid>
-          <Grid item xs={4} container justifyContent="flex-end">
+          <Grid item xs={4} container justifyContent="flex-end" style={{ display: sector ? 'block' : 'none' }}>
             <Box border={1} p={2} borderRadius={8} sx={{ height: '100%', width: '100%' }}>
               <h5>현재 선택 업종: {sector}</h5>
               <Button href="#Report" size="large" variant="contained">

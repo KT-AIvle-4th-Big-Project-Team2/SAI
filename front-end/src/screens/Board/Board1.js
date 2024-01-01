@@ -21,6 +21,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 const ITEMS_PER_PAGE = 10;
 
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -87,7 +88,7 @@ export default function BasicTable() {
       <CssBaseline />
       <>
         <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-          <h2 >공지사항</h2>
+          <h2 >창업 게시판</h2>
         </Box>
         <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
         <Paper className="Paper" border={1} p={2} borderColor="lime" style={{ height: '100%', overflow: 'auto' }}>
@@ -129,7 +130,6 @@ export default function BasicTable() {
           onChange={(event, value) => setCurrentPage(value)}
           showFirstButton
           showLastButton
-          color = 'primary'
         />
         
         <div>

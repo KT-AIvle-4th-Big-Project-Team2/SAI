@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Button, Paper, Typography, Divider } from '@mui/material';
 
 const BoardView = () => {
   return (
@@ -7,7 +7,7 @@ const BoardView = () => {
       <Typography variant="h4" sx={{ mb: 2 }}>
         게시판
       </Typography>
-      <hr />
+      <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
 
       <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 500 }}>
         <Typography variant="h4" sx={{ mb: 2 }}>
