@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from .models import *
 
+from rest_framework import serializers
+from .models import *
+
 class LoginSerializer(serializers.Serializer):
     name = serializers.CharField()
     password = serializers.CharField()
