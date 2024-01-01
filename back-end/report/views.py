@@ -20,7 +20,7 @@ def inquire(request):
         business = inputs['업종']
         seedMoney = int(inputs['seedMoney'])
         
-        apikey_encoded = "공공데이터 API 키 입력"
+        apikey_encoded = "API키"
         recommendList = brandrecommendation.RecommendBrand(apikey_encoded, 2022, seedMoney, business)
         #print(recommendList)
         rank = 1

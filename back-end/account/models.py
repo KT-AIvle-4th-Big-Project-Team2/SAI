@@ -212,7 +212,7 @@ class User(models.Model):
     email = models.CharField(max_length=254)
     phonenumber = models.CharField(max_length=11)
     age = models.PositiveIntegerField()
-    gender = models.CharField(max_length=1)
+    gender = models.CharField(max_length = 1)
 
     class Meta:
         managed = False
