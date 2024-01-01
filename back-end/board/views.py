@@ -152,9 +152,8 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
     queryset = Comments.objects.all()
     
     def perform_update(self, serializer):    
-        instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
+        instance = self.get_object()
 
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
-    
