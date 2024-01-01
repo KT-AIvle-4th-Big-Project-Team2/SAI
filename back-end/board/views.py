@@ -13,7 +13,11 @@ from .serializers import *
 # class DetailPost(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Board.objects.all()
 #     serializer_class = BoardSerializer
-    
+
+
+#******************************************************************************************************************************************************************
+# 게시글 기능
+#******************************************************************************************************************************************************************
     
 class BoardPostListView(generics.ListAPIView):
     def get_queryset(self):
@@ -131,7 +135,15 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
-        
+
+class BoardPostDeleteView(generics.DestroyAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardPostSerializer
+    
+
+#******************************************************************************************************************************************************************
+# 댓글 기능
+#******************************************************************************************************************************************************************
 class BoardPostCommentCreateView(generics.CreateAPIView):
 
     serializer_class = BoardPostcommentCreateSerializer
@@ -157,3 +169,7 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
+
+class BoardPostDeleteView(generics.DestroyAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardPostSerializer

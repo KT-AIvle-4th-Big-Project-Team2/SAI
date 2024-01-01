@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     'report',
     'suggestions',
     'announcement',
+    'reviewBoard',
+    'concernBoard',
+    'consultBoard',
     
     # rest API
     "rest_framework",
