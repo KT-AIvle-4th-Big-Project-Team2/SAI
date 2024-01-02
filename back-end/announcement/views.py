@@ -70,7 +70,7 @@ class AnnouncementSearchView(generics.ListAPIView):
                 'admin__name',
             )
 
-    serializer_class = BoardSearchSerializer
+    serializer_class = AnnouncementSearchSerializer
 
 class AnnouncementCreateView(generics.CreateAPIView):
 
@@ -96,3 +96,7 @@ class AnnouncementUpdateView(generics.UpdateAPIView):
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
+        
+class AnnouncementdeleteView(generics.DestroyAPIView):
+    queryset = Announcements.objects.all()
+    serializer_class = AnnouncementSerializer

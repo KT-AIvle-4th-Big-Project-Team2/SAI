@@ -22,10 +22,10 @@ class AnnouncementSerializer(serializers.Serializer):
             'name': instance['admin__name']
         }
 
-class BoardSearchSerializer(serializers.ModelSerializer):
+class AnnouncementSearchSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
-            'post_id': instance['board_id'],
+            'announcement_id': instance['announcement_id'],
             'title': instance['title'],
             'date': instance['creationdate'],
             'name': instance['admin__name'],

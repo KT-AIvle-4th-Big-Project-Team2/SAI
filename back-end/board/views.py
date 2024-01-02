@@ -52,22 +52,6 @@ class BoardPostView(generics.ListAPIView):
 
     serializer_class = BoardPostSerializer
 
-class BoardPostCommentView(generics.ListAPIView):
-    
-    def get_queryset(self):
-
-        board_id = self.kwargs['pk']
-        queryset = Comments.objects.filter(board=board_id).values(
-            'contents',
-            'creationdate',
-            'user__name',
-            'comment_id',
-        )
-        
-        return queryset
-
-    serializer_class = BoardPostCommentSerializer
-
 class BoardSearchView(generics.ListAPIView):
     
     def get_queryset(self):
@@ -144,6 +128,21 @@ class BoardPostDeleteView(generics.DestroyAPIView):
 #******************************************************************************************************************************************************************
 # 댓글 기능
 #******************************************************************************************************************************************************************
+class BoardPostCommentView(generics.ListAPIView):
+    
+    def get_queryset(self):
+
+        board_id = self.kwargs['pk']
+        queryset = Comments.objects.filter(board=board_id).values(
+            'contents',
+            'creationdate',
+            'user__name',
+            'comment_id',
+        )
+        
+        return queryset
+
+    serializer_class = BoardPostCommentSerializer
 class BoardPostCommentCreateView(generics.CreateAPIView):
 
     serializer_class = BoardPostcommentCreateSerializer
