@@ -7,7 +7,7 @@ import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2DB400'
+      main: '#8398CA'
     },
   },
   typography: {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Grid, Divider } from '@mui/material';
 import Data from '../../assets/서울시 행정동.json';
+import DivLine from '../../components/Styles/DivLine'
 
 const jsonData = Data;
 const uniqueGu = new Set();
@@ -56,11 +57,11 @@ export default function AreaAnaly() {
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
       <h2 >지역 선택</h2>
     </Box>
-  <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
+    <DivLine />
       <Grid container spacing={2} sx={{ height: '100%' }}>
         {/* First Grid */}
         <Grid item xs={3}>
-          <Box border={1} p={2} borderRadius={8} sx={{height: '100%', fontWeight: 'bold' }}>
+          <Box border={1} p={2} borderRadius={4} sx={{height: '100%', fontWeight: 'bold' }}>
             <h5>지역구 : {Gu}</h5>
             {uniqueGuArray.map((gu, idx) => (
               <Button
@@ -78,7 +79,7 @@ export default function AreaAnaly() {
 
         {/* Second Grid */}
         <Grid item xs={3} style={{ display: Gu ? 'block' : 'none' }}>
-          <Box border={1} p={2} borderRadius={8} sx={{height: '100%', fontWeight: 'bold' }}>
+          <Box border={1} p={2} borderRadius={4} sx={{height: '100%', fontWeight: 'bold' }}>
             <h5>행정동 : {selectedDong}</h5>
             <SelectDongButtons />
           </Box>
@@ -92,7 +93,7 @@ export default function AreaAnaly() {
           justifyContent="flex-end"
           style={{ display: selectedDong ? 'block' : 'none' }}
         >
-          <Box border={1} p={2} borderRadius={8} sx={{ height: '100%', width: '100%' }}>
+          <Box border={1} p={2} borderRadius={4} sx={{ height: '100%', width: '100%' }}>
             <h4>현재 선택 지역 : {selectedDong}</h4>
             <br />
             <Button href="#report" size="large" variant="contained">

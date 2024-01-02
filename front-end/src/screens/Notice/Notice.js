@@ -13,21 +13,12 @@ import {
   TextField,
   Box,
   Divider,
-  createTheme,
   CssBaseline,
-  ThemeProvider,
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
+import DivLine from '../../components/Styles/DivLine';
 
 const ITEMS_PER_PAGE = 10;
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#32cd32'
-    },
-  },
-});
 
 const SearchBar = ({ setSearchQuery }) => (
   <form>
@@ -83,13 +74,11 @@ export default function BasicTable() {
   const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
       <>
         <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
           <h2 >공지사항</h2>
         </Box>
-        <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
+        <DivLine />
         <Paper className="Paper" border={1} p={2} borderColor="lime" style={{ height: '100%', overflow: 'auto' }}>
           <TableContainer component={Paper} style={{ height: '100%' }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -142,6 +131,5 @@ export default function BasicTable() {
             <SearchBar setSearchQuery={setSearchQuery} />
           </div>
       </>
-      </ThemeProvider>
   );
 }

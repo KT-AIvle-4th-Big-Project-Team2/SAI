@@ -123,7 +123,7 @@ export default function BasicTable() {
           </TableContainer>
         </Paper>
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 3, marginTop: 10}}>
         <Pagination 
           count={totalPages}
           page={currentPage}
@@ -133,7 +133,7 @@ export default function BasicTable() {
         />
         
         <div>
-            <Button variant="outlined" href="/BoardWrite"  style={{ color: 'black' }}>
+            <Button variant="outlined" href="/BoardWrite"  style={{ color: 'black' }} >
               글쓰기
             </Button>
           </div>
