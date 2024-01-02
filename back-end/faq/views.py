@@ -16,7 +16,7 @@ class FaqListView(generics.ListAPIView):
             'faq_id',
             'title',
             'creationdate',
-            'admin__admin_id',
+            'admin__name',
         )
         
         queryset = board_contents
@@ -34,7 +34,7 @@ class FaqView(generics.ListAPIView):
             'title',
             'contents',
             'creationdate',
-            'admin__admin_id',
+            'admin__name',
         )
         
         return queryset
@@ -51,7 +51,7 @@ class FaqSearchView(generics.ListAPIView):
                 'faq_id',
                 'title',
                 'creationdate',
-                'admin__admin_id',
+                'admin__name',
             )
             
         elif self.kwargs['searchfield'] == 'contents':
@@ -60,7 +60,7 @@ class FaqSearchView(generics.ListAPIView):
                 'faq_id',
                 'title',
                 'creationdate',
-                'admin__admin_id',
+                'admin__name',
             )
             
         else:
@@ -76,12 +76,11 @@ class FaqCreateView(generics.CreateAPIView):
     serializer_class = FaqCreateSerializer
         
     def perform_create(self, serializer):
-        # admin_instance = Admin.objects.get(admin_id=serializer.validated_data.get('admin_id', ''))
-        #print(admin_instance)
+        admin_instance = Admin.objects.get(name=serializer.validated_data.get('name', ''))
         Faq.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin_id = serializer.validated_data['admin_id'],
+            admin = admin_instance,
         )
         
 class FaqUpdateView(generics.UpdateAPIView):#PATCH method

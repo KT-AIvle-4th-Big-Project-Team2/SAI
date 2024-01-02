@@ -27,7 +27,7 @@ class BoardReview(models.Model):
     title = models.CharField(max_length=75)
     contents = models.TextField()
     tag = models.CharField(max_length=75)
-    creationdate = models.DateTimeField()
+    creationdate = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, models.DO_NOTHING)
 
     class Meta:
@@ -38,7 +38,7 @@ class BoardReview(models.Model):
 class CommentsReview(models.Model):
     comment_id = models.IntegerField(primary_key=True)
     contents = models.TextField()
-    creationdate = models.DateTimeField()
+    creationdate = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, models.DO_NOTHING)
     board = models.ForeignKey(BoardReview, models.DO_NOTHING)
 
