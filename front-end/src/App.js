@@ -4,12 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './screens/Home';
 import Index from './screens/Index';
 import Board1 from './screens/Board/Board1';
+import Board1View from './screens/Board/Board1View';
+import Board1Write from './screens/Board/Board1Write';
 import Board2 from './screens/Board/Board2';
+
 import Login from './screens/Login/login';
 import NavBarElements from './components/NavBar/NavBarElements';
 import SignUp from './screens/Login/SignUp';
-import BoardDetail from './screens/Board/BoardView';
-import BoardWrite from './screens/Board/BoardWrite';
 import Notice from './screens/Notice/Notice';
 import FindID from './screens/Login/FindID';
 import Simul from './screens/Simul/Simul';
@@ -40,8 +41,8 @@ function App() {
           <Route path = "/Board2" element = { <Board2 /> } />
           <Route path = "/Login" element = { <Login /> } />
           <Route path = "/signup" element = { <SignUp /> } />
-          <Route path = "/BoardView" element = { <BoardDetail /> } />
-          <Route path = "/BoardWrite" element = { <BoardWrite /> } />
+          <Route path = "/BoardWrite" element = { <Board1Write /> } />
+          <Route path = "/BoardView/:post_num" element={<Board1View />} />
           <Route path = "/FindID" element = { <FindID /> } />
           <Route path = "/Simul" element = { <Simul /> } />
           <Route path = "/Simul2" element = { <Simul2 /> } />
