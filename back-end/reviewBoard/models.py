@@ -26,8 +26,9 @@ class BoardReview(models.Model):
     board_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=75)
     contents = models.TextField()
-    creationdate = models.DateTimeField()
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
+    tag = models.CharField(max_length=75)
+    creationdate = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -35,11 +36,11 @@ class BoardReview(models.Model):
 
 
 class CommentsReview(models.Model):
-    comment_id = models.AutoField(primary_key=True)
+    comment_id = models.IntegerField(primary_key=True)
     contents = models.TextField()
-    creationdate = models.DateTimeField()
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
-    board = models.ForeignKey(BoardReview, models.CASCADE)
+    creationdate = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    board = models.ForeignKey(BoardReview, models.DO_NOTHING)
 
     class Meta:
         managed = False

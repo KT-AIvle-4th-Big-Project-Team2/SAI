@@ -30,7 +30,7 @@ function NavBarElements() {
 
   return (
       <>
-        <Navbar style={{ background: '#FFBE98' }} data-bs-theme="light">
+        <Navbar style={{ background: '#3e91b5' }} data-bs-theme="dark">
           <Container className="justify-content-between">
             <Navbar.Brand href="/Home">
               <img

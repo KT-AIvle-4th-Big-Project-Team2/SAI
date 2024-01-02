@@ -11,6 +11,7 @@ class BoardPostListView(generics.ListAPIView):
         board_contents = BoardReview.objects.values(
             'board_id',
             'title',
+            'tag',
             'creationdate',
             'user__name',
         )
@@ -28,6 +29,7 @@ class BoardPostView(generics.ListAPIView):
         queryset = BoardReview.objects.filter(board_id=board_id).values(
             'board_id',
             'title',
+            'tag',
             'contents',
             'creationdate',
             'user__name',
@@ -62,6 +64,7 @@ class BoardSearchView(generics.ListAPIView):
             queryset = BoardReview.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
                 'board_id',
                 'title',
+                'tag',
                 'creationdate',
                 'user__name',
             )
@@ -71,6 +74,7 @@ class BoardSearchView(generics.ListAPIView):
             queryset = BoardReview.objects.filter(contents__contains=self.kwargs['searchkeyword']).values(
                 'board_id',
                 'title',
+                'tag',
                 'creationdate',
                 'user__name',
             )
@@ -80,6 +84,7 @@ class BoardSearchView(generics.ListAPIView):
             queryset = BoardReview.objects.filter(user__name__contains=self.kwargs['searchkeyword']).values(
                 'board_id',
                 'title',
+                'tag',
                 'creationdate',
                 'user__name',
             )
@@ -101,6 +106,7 @@ class BoardPostCreateView(generics.CreateAPIView):
         
         BoardReview.objects.create(
             title=serializer.validated_data['title'],
+            tag=serializer.validated_data['tag'],
             contents=serializer.validated_data['contents'],
             user=user_instance
         )
@@ -112,6 +118,7 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
         instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
 
         instance.title = serializer.validated_data['title']
+        instance.tag = serializer.validated_data['tag']
         instance.contents = serializer.validated_data['contents']
 
         instance.save()

@@ -26,8 +26,9 @@ class BoardConsult(models.Model):
     board_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=75)
     contents = models.TextField()
-    creationdate = models.DateTimeField()
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
+    tag = models.CharField(max_length=75)
+    creationdate = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -35,11 +36,11 @@ class BoardConsult(models.Model):
 
 
 class CommentsConsult(models.Model):
-    comment_id = models.AutoField(primary_key=True)
+    comment_id = models.IntegerField(primary_key=True)
     contents = models.TextField()
-    creationdate = models.DateTimeField()
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
-    board = models.ForeignKey(BoardConsult, models.CASCADE)
+    creationdate = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    board = models.ForeignKey(BoardConsult, models.DO_NOTHING)
 
     class Meta:
         managed = False

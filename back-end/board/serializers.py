@@ -25,6 +25,7 @@ class BoardPostListSerializer(serializers.Serializer):
         return {
             'post_id': instance['board_id'],
             'title': instance['title'],
+            'post_tag' : instance['tag'],
             'date': instance['creationdate'],
             'name': instance['user__name']
         }
@@ -32,6 +33,7 @@ class BoardPostListSerializer(serializers.Serializer):
 class BoardPostSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
     title = serializers.CharField()
+    tag = serializers.CharField()
     contents = serializers.CharField()
     date = serializers.DateTimeField()
     name = serializers.CharField()
@@ -40,6 +42,7 @@ class BoardPostSerializer(serializers.Serializer):
         return {
             'post_id': instance['board_id'],
             'title': instance['title'],
+            'tag': instance['tag'],
             'contents': instance['contents'],
             'date': instance['creationdate'],
             'name': instance['user__name']
@@ -60,26 +63,29 @@ class BoardSearchSerializer(serializers.ModelSerializer):
         return {
             'post_id': instance['board_id'],
             'title': instance['title'],
+            'tag': instance['tag'],
             'date': instance['creationdate'],
             'name': instance['user__name']
         }
     class Meta:
         model = Board
-        fields = ['post_id', 'title', 'creationdate', 'user__name']
+        fields = ['post_id', 'title', 'tag', 'creationdate', 'user__name']
 
 class BoardPostCreateSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField()
+    tag = serializers.CharField()
     contents = serializers.CharField()
     name = serializers.CharField()
     
     class Meta:
         model = Board
-        fields = ('title', 'contents', 'name')
+        fields = ('title', 'tag', 'contents', 'name')
 
 class BoardPostUpdateSerializer(serializers.Serializer):
 
     title = serializers.CharField()
+    tag = serializers.CharField()
     contents = serializers.CharField()
 
         
