@@ -17,6 +17,7 @@ import {
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
+import axios from 'axios'
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,30 +40,29 @@ const SearchBar = ({ setSearchQuery }) => (
   </form>
 );
 
+
 export default function BasicTable() {
   const [searchQuery, setSearchQuery] = useState('');
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [boardList, setBoardList] = useState([]);
+
+  function getNotice() {
+    axios.get("http://127.0.0.1:8000/board/postlist/")
+      .then((response) => {
+        setBoardList([...response.data]);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
-    // Replace this URL with your actual API endpoint
-    const apiUrl = 'https://jsonplaceholder.typicode.com/posts';
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        // You may need to map the data structure from your actual API
-        const formattedData = data.map((item) => ({
-          name: item.id,
-          surname: item.title,
-          birthCity: item.userId,
-          birthYear: item.id,
-        }));
-        setRows(formattedData);
-      })
-      .catch((error) => console.error('Error fetching data:', error));
+    getNotice(); // 1) 게시글 목록 조회 함수 호출
   }, []);
 
+  console.log(boardList)
   // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -72,14 +72,19 @@ export default function BasicTable() {
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
-
+  console.log(boardList)
   return (
       <>
         <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
           <h2 >공지사항</h2>
         </Box>
         <DivLine />
-        <Paper className="Paper" border={1} p={2} borderColor="lime" style={{ height: '100%', overflow: 'auto' }}>
+        {boardList.map((e) => (
+          <div>
+            {e.title} {e.post_id}
+          </div>
+        ))}
+        <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
           <TableContainer component={Paper} style={{ height: '100%' }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -91,16 +96,16 @@ export default function BasicTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {currentItems.map((row) => (
+                {boardList.map((row) => (
                   <TableRow
                     key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.post_id}
                     </TableCell>
                     <TableCell numeric component="a" href="/BoardView ">
-                      {row.surname}
+                      {boardList.title}
                     </TableCell>
                     <TableCell align="right">{row.birthCity}</TableCell>
                     <TableCell align="right">{row.birthYear}</TableCell>

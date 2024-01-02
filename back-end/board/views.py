@@ -170,6 +170,6 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
 
         instance.save()
 
-class BoardPostDeleteView(generics.DestroyAPIView):
-    queryset = Board.objects.all()
-    serializer_class = BoardPostSerializer
+class BoardPostCommentDeleteView(generics.DestroyAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = BoardPostCommentSerializer

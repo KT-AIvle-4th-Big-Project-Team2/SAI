@@ -33,7 +33,7 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -80,7 +80,7 @@ frontURL = sensitiveData.readline()
 sensitiveData.close()
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL[:-1],
+    frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
 ]
 
 MIDDLEWARE = [
