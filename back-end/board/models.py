@@ -12,7 +12,7 @@ class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     name = models.CharField(unique=True, max_length=75)
     password = models.CharField(max_length=75)
-    email = models.EmailField (max_length=254)
+    email = models.CharField(max_length=254)
     phonenumber = models.CharField(max_length=11)
     age = models.PositiveIntegerField()
     gender = models.CharField(max_length=1)
@@ -26,9 +26,8 @@ class Board(models.Model):
     board_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=75)
     contents = models.TextField()
-    tag = models.CharField(max_length=75)
-    creationdate = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, models.DO_NOTHING)
+    creationdate = models.DateTimeField(auto_now_add = True)
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -38,9 +37,9 @@ class Board(models.Model):
 class Comments(models.Model):
     comment_id = models.AutoField(primary_key=True)
     contents = models.TextField()
-    creationdate = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, models.DO_NOTHING)
-    board = models.ForeignKey(Board, models.DO_NOTHING)
+    creationdate = models.DateTimeField(auto_now_add = True)
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True)
+    board = models.ForeignKey(Board, models.CASCADE)
 
     class Meta:
         managed = False
