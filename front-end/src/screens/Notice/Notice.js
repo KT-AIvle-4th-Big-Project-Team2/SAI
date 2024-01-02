@@ -12,12 +12,11 @@ import {
   IconButton,
   TextField,
   Box,
-  Divider,
-  CssBaseline,
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -46,7 +45,7 @@ export default function BasicTable() {
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
-
+  const [post_num, setPost_num] = useState('');
   function getNotice() {
     axios.get("http://127.0.0.1:8000/board/postlist/")
       .then((response) => {
@@ -67,6 +66,11 @@ export default function BasicTable() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
+  
+  const handleLinkClick = (postId) => {
+    setPost_num(postId);
+  };
+
   // Get the current page items using the slice method
   const currentItems = rows.slice(startIndex, endIndex);
 
@@ -79,11 +83,6 @@ export default function BasicTable() {
           <h2 >공지사항</h2>
         </Box>
         <DivLine />
-        {boardList.map((e) => (
-          <div>
-            {e.title} {e.post_id}
-          </div>
-        ))}
         <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
           <TableContainer component={Paper} style={{ height: '100%' }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -98,17 +97,17 @@ export default function BasicTable() {
               <TableBody>
                 {boardList.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row.post_id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
                       {row.post_id}
                     </TableCell>
-                    <TableCell numeric component="a" href="/BoardView ">
-                      {boardList.title}
+                    <TableCell numeric='true'>
+                    <Link to={`/BoardView/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
                     </TableCell>
-                    <TableCell align="right">{row.birthCity}</TableCell>
-                    <TableCell align="right">{row.birthYear}</TableCell>
+                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="right">{row.date}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
