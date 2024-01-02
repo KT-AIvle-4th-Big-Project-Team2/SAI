@@ -30,8 +30,8 @@ function App() {
   return (
     <Router>
       <NavBarElements />
-      <Container>
         <Routes>
+          
           <Route path = "/" element = { <Index /> } />
           <Route path = "/Notice" element = { <Notice /> } />
           <Route path = "/FAQ" element = { <FAQ /> } />
@@ -53,7 +53,6 @@ function App() {
           <Route path = "/WithDrawal" element = { <WithDrawal /> } />
           <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
       </Routes>
-      </Container>
     </Router>
   );
 }
