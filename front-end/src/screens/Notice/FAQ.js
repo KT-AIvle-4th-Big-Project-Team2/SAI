@@ -1,11 +1,13 @@
 import React from 'react'
 import Accordion from 'react-bootstrap/Accordion';
 import Box from '@mui/material/Box';
+import { Divider } from '@mui/material';
 
 const FAQ = () => {
   return (
     <>
-    <Box sx = {{mt : 3, mb : 5 }}><h2>자주 묻는 질문</h2></Box>
+    <Box sx = {{mt : 3, mb : 3 }}><h2>자주 묻는 질문</h2></Box>
+    <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
     <Accordion>
       <Accordion.Item eventKey="0">
         <Accordion.Header>FAQ #1</Accordion.Header>

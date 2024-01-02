@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './screens/Home';
 import Index from './screens/Index';
-import Board from './screens/Board/Board';
+import Board1 from './screens/Board/Board1';
+import Board2 from './screens/Board/Board2';
 import Login from './screens/Login/login';
 import NavBarElements from './components/NavBar/NavBarElements';
 import SignUp from './screens/Login/SignUp';
@@ -23,18 +24,20 @@ import Container from 'react-bootstrap/Container'
 import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
 
+
+
 function App() {
   return (
     <Router>
       <NavBarElements />
-      
       <Container>
         <Routes>
           <Route path = "/" element = { <Index /> } />
           <Route path = "/Notice" element = { <Notice /> } />
           <Route path = "/FAQ" element = { <FAQ /> } />
           <Route path = "/Home" element = { <Home /> } />
-          <Route path = "/Board" element = { <Board /> } />
+          <Route path = "/Board1" element = { <Board1 /> } />
+          <Route path = "/Board2" element = { <Board2 /> } />
           <Route path = "/Login" element = { <Login /> } />
           <Route path = "/signup" element = { <SignUp /> } />
           <Route path = "/BoardView" element = { <BoardDetail /> } />
