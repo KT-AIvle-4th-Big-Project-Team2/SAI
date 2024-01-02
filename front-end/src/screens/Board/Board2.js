@@ -40,7 +40,7 @@ const SearchBar = ({ setSearchQuery }) => (
 );
 
 
-export default function BasicTable() {
+export default function Board2() {
   const [searchQuery, setSearchQuery] = useState('');
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -80,7 +80,7 @@ export default function BasicTable() {
   return (
       <>
         <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-          <h2 >창업 정보</h2>
+          <h2 >창업 게시판</h2>
         </Box>
         <DivLine />
         <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
@@ -104,7 +104,7 @@ export default function BasicTable() {
                       {row.post_id}
                     </TableCell>
                     <TableCell numeric='true'>
-                    <Link to={`/BoardView/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
+                    <Link to={`/Board2View/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
                     </TableCell>
                     <TableCell align="right">{row.name}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
@@ -126,7 +126,7 @@ export default function BasicTable() {
         />
         
         <div>
-            <Button variant="outlined" href="/BoardWrite"  style={{ color: 'black' }}>
+            <Button variant="outlined" href="/Board2Write"  style={{ color: 'black' }}>
               글쓰기
             </Button>
           </div>

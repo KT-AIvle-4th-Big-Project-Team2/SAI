@@ -33,7 +33,7 @@ const Board1 = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get("http://127.0.0.1:8000/board/postlist/")
+    axios.get(`http://127.0.0.1:8000/board1/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);

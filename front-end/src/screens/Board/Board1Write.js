@@ -16,7 +16,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const BoardWrite = () => {
+const Board1Write = () => {
   const [text, setText] = useState({ title: '', content: '' });
 
   const handleFileUpload = () => {
@@ -27,7 +27,7 @@ const BoardWrite = () => {
   const handleTextInput = () => {
     const { title, content } = text;
 
-    axios.post("http://127.0.0.1:8000/board/postlist/", {
+    axios.post("http://127.0.0.1:8000/board1/postlist/", {
       title,
       content,
     })
@@ -69,9 +69,9 @@ const BoardWrite = () => {
             fullWidth
             multiline
             rows={20} // Adjust the number of rows as needed
-            id='boardContent'
+            id='board1Content'
             label='Content'
-            name='boardContent'
+            name='board1Content'
             value={text.content}
             onChange={(e) => setText((prevText) => ({ ...prevText, content: e.target.value }))}
           />
@@ -92,4 +92,4 @@ const BoardWrite = () => {
   );
 };
 
-export default BoardWrite;
+export default Board1Write;

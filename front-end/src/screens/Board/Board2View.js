@@ -4,12 +4,12 @@ import { Box, Button, Paper, Typography, Divider, Link } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
 
-const Board1View = () => {
+const Board2View = () => {
   const { post_num } = useParams();
   const [boardContent, setBoardContent] = useState({}); // Change to object
 
   function getBoardContent() {
-    axios.get(`http://127.0.0.1:8000/board/postlist/${post_num}`)
+    axios.get(`http://127.0.0.1:8000/board2/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);
@@ -49,7 +49,7 @@ const Board1View = () => {
         </Typography>
       </Paper>
 
-      <Button variant="contained" href="/Board" sx={{ mb: 2 }}>
+      <Button variant="contained" href="/Board2" sx={{ mb: 2 }}>
         글 목록
       </Button>
       <DivLine />
@@ -65,4 +65,4 @@ const Board1View = () => {
   );
 };
 
-export default Board1View;
+export default Board2View;

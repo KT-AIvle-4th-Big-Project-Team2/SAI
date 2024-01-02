@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { styled } from '@mui/system';
 import { Button, TextField, Box, Link } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
-const Board1Mod = () => {
+const NoticeMod = () => {
   const [text, setText] = useState({ title: '', content: '' });
   const { post_num } = useParams();
-  const [boardContent, setBoardContent] = useState({});
-
-  const handleFileUpload = () => {
-    // Implement file upload functionality here
-    console.log('File upload functionality to be implemented.');
-  };
+  const [NoticeContent, setNoticeContent] = useState({});
 
   const handleTextInput = () => {
     const { title, content } = text;
@@ -37,7 +44,7 @@ const Board1Mod = () => {
     // Fetch existing post content when the component mounts
     axios.get(`http://127.0.0.1:8000/board1/postlist/${post_num}`)
       .then((response) => {
-        setBoardContent(response.data);
+        setNoticeContent(response.data);
         setText({
           title: response.data.title,
           content: response.data.content,
@@ -53,20 +60,13 @@ const Board1Mod = () => {
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 정보</h2>
       </Box>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
-            Upload file
-            {/* ... (VisuallyHiddenInput remains the same) */}
-          </Button>
-        </div>
         <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>
           <TextField
             fullWidth
-            id='board1Title'
+            id='NoticeTitle'
             label='Title'
-            name='board1Title'
+            name='NoticeTitle'
             value={text.title}
             onChange={(e) => setText((prevText) => ({ ...prevText, title: e.target.value }))}
           />
@@ -76,27 +76,26 @@ const Board1Mod = () => {
             fullWidth
             multiline
             rows={20}
-            id='board1Content'
+            id='NoticeContent'
             label='Content'
-            name='board1Content'
+            name='NoticeContent'
             value={text.content}
             onChange={(e) => setText((prevText) => ({ ...prevText, content: e.target.value }))}
           />
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          <Link to='/Board1'>
+          <Link to='/Notice'>
             <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
               수정
             </Button>
           </Link>
-          <Button variant="contained" href="/Board">
+          <Button variant="contained" href="/Notice">
             취소
           </Button>
         </div>
-      </div>
     </>
   )
 }
 
-export default Board1Mod
+export default NoticeMod

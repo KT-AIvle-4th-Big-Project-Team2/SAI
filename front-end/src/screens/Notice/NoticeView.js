@@ -4,14 +4,14 @@ import { Box, Button, Paper, Typography, Divider, Link } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
 
-const Board1View = () => {
+const NoticeView = () => {
   const { post_num } = useParams();
-  const [boardContent, setBoardContent] = useState({}); // Change to object
+  const [NoticeContent, setNoticeContent] = useState({}); // Change to object
 
-  function getBoardContent() {
-    axios.get(`http://127.0.0.1:8000/board1/postlist/${post_num}`)
+  function getNoticeContent() {
+    axios.get(`http://127.0.0.1:8000/Notice/postlist/${post_num}`)
       .then((response) => {
-        setBoardContent(response.data); // Update state with fetched data
+        setNoticeContent(response.data); // Update state with fetched data
         console.log(response.data);
       })
       .catch(function (error) {
@@ -19,37 +19,37 @@ const Board1View = () => {
       });
   }
   useEffect(() => {
-    getBoardContent();
+    getNoticeContent();
   }, [post_num]); // Include post_num as a dependency
 
   return (
     <>
     <Box sx={{ p: 2, height: '100%' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
-        게시판
+        공지사항
       </Typography>
       <Divider sx={{ mt: 3, mb: 3 }} />
-      <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={boardContent.post_id}>
+      <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={NoticeContent.post_id}>
         <Typography variant="h4" >
-          {boardContent.length > 0 ? boardContent[0].title || "Loading..." : "Loading..."}
+          {NoticeContent.length > 0 ? NoticeContent[0].title || "Loading..." : "Loading..."}
         </Typography>
         <DivLine />
       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
       <Typography variant="h8">
-       작성자 : {boardContent.length > 0 ?  boardContent[0].name || "Loading..." : "Loading..."}
+       작성자 : {NoticeContent.length > 0 ?  NoticeContent[0].name || "Loading..." : "Loading..."}
           </Typography>
         <Typography variant="h8">
-         작성일시 : {boardContent.length > 0 ? boardContent[0].date || "Loading..." : "Loading..."}
+         작성일시 : {NoticeContent.length > 0 ? NoticeContent[0].date || "Loading..." : "Loading..."}
         </Typography>
         </Box>
         
         <DivLine />
         <Typography variant="body1" sx={{ height: 'auto' }}>
-          {boardContent.length > 0 ? boardContent[0].contents : ""}
+          {NoticeContent.length > 0 ? NoticeContent[0].contents : ""}
         </Typography>
       </Paper>
 
-      <Button variant="contained" href="/Board1" sx={{ mb: 2 }}>
+      <Button variant="contained" href="/Notice" sx={{ mb: 2 }}>
         글 목록
       </Button>
       <DivLine />
@@ -65,4 +65,4 @@ const Board1View = () => {
   );
 };
 
-export default Board1View;
+export default NoticeView;

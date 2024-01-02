@@ -40,16 +40,16 @@ const SearchBar = ({ setSearchQuery }) => (
 );
 
 
-export default function BasicTable() {
+export default function Notice() {
   const [searchQuery, setSearchQuery] = useState('');
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [boardList, setBoardList] = useState([]);
+  const [NoticeList, setNoticeList] = useState([]);
   const [post_num, setPost_num] = useState('');
   function getNotice() {
     axios.get("http://127.0.0.1:8000/board/postlist/")
       .then((response) => {
-        setBoardList([...response.data]);
+        setNoticeList([...response.data]);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -61,7 +61,6 @@ export default function BasicTable() {
     getNotice(); // 1) 게시글 목록 조회 함수 호출
   }, []);
 
-  console.log(boardList)
   // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -76,7 +75,6 @@ export default function BasicTable() {
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
-  console.log(boardList)
   return (
       <>
         <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
@@ -95,7 +93,7 @@ export default function BasicTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {boardList.map((row) => (
+                {NoticeList.map((row) => (
                   <TableRow
                     key={row.post_id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -104,7 +102,7 @@ export default function BasicTable() {
                       {row.post_id}
                     </TableCell>
                     <TableCell numeric='true'>
-                    <Link to={`/BoardView/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
+                    <Link to={`/NoticeView/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
                     </TableCell>
                     <TableCell align="right">{row.name}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
@@ -126,7 +124,7 @@ export default function BasicTable() {
         />
         
         <div>
-            <Button variant="outlined" href="/BoardWrite"  style={{ color: 'black' }}>
+            <Button variant="outlined" href="/NoticeWrite"  style={{ color: 'black' }}>
               글쓰기
             </Button>
           </div>
