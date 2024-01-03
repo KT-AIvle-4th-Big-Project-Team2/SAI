@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 
-from .models import Admin
+from .models import Admin, UserCustom
 from .serializers import *
 
 from django.utils.decorators import method_decorator
@@ -28,26 +28,38 @@ class GetCSRFToken(APIView):
         return Response({'success' : 'CSRF Cookie set'})
 
 @method_decorator(csrf_protect, name='dispatch')
+class CheckAuthenticatedView(APIView):
+    def get(self, request, format = None):
+        try:
+            isAuthenticated = request.user.is_authenticated
+            
+            if isAuthenticated:
+                return Response({'isAuthenticated':'sucess'})
+            else:
+                return Response({'isAuthenticated':'error'})
+        except:
+            return Response({'error': 'Something went wrong during checking authentication status'})
+
+@method_decorator(csrf_protect, name='dispatch')
 class SignInView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = SignInSerializer
     
     def perform_create(self, serializer):
-        
         try:
-            username = serializer.validated_data['name']
+            username = serializer.validated_data['username']
             password = serializer.validated_data['password']
             email = serializer.validated_data['email']
             phonenumber = serializer.validated_data['phonenumber']
             age = serializer.validated_data['age']
             gender = serializer.validated_data['gender']
         except:
-            return Response({'error':'Value missing'})
+            raise ValidationError({'error':'Value missing'})
         
-        if User.objects.filter(name=username).exists() or Admin.objects.filter(name=username).exists():
+        if UserCustom.objects.filter(username=username).exists() or Admin.objects.filter(name=username).exists():
             return Response({'error':'Username already exists'})
         
-        user = User.objects.create_user(username = username, password = password, email = email, 
+        user = UserCustom.objects.create_user(username = username, password = password, email = email, 
                                         phonenumber = phonenumber, age = age, gender = gender)
         user.save()
         return Response({'success': "User created successfully"})
@@ -55,22 +67,42 @@ class SignInView(generics.CreateAPIView):
 @method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
-    serializers = LoginSerializer
+    serializer_class = LoginSerializer
     
-    def post(self, request):
-        serializer = self.serializers(data=request.data)
+    def post(self, request, format = None):
         
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        print(serializer.is_valid())
         if serializer.is_valid():
-            username = serializer.validated_data['name']
+            username = serializer.validated_data['username']
             password = serializer.validated_data['password']
-            
             user = auth.authenticate(username = username, password=password)
             if user is not None:
                 auth.login(request, user)
-                return Response({'success' : 'u'})
+                return Response({'success' : 'user login successs'})
+            else:
+                return Response({'error':'user login failed'})
+        else:
+            return Response({"error":"login data error"})
 
 
+@method_decorator(csrf_protect, name='dispatch')
+class UpdateUserView(generics.UpdateAPIView):
+    serializer_class = UpdateUserSerializer
+    def patch(self, request, *args, **kwargs):
 
+        return self.partial_update(request, *args, **kwargs)
+
+@method_decorator(csrf_protect, name='dispatch')
+class LogoutView(APIView):
+    def post(self, request, format = None):
+        try:
+            auth.logout(request)
+            return Response({'success':'logout success'})
+        except:
+            return Response({'error':'logout fail'})
+        
 # class SignInView(generics.CreateAPIView):
 #     serializer_class = SignInSerializer
     

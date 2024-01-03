@@ -49,15 +49,15 @@ INSTALLED_APPS = [
     
     # 사이트 기능
     "account",
-    'analysis',
-    'board',
-    'faq',
-    'report',
-    'suggestions',
-    'announcement',
-    'reviewBoard',
-    'concernBoard',
-    'consultBoard',
+    # 'analysis',
+    # 'board',
+    # 'faq',
+    # 'report',
+    # 'suggestions',
+    # 'announcement',
+    # 'reviewBoard',
+    # 'concernBoard',
+    # 'consultBoard',
     
     # rest API
     "rest_framework",
@@ -184,7 +184,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'account.UserCustom'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
