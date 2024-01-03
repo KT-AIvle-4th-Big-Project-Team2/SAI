@@ -19,12 +19,16 @@ import {
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
+import isKorean from '../../components/Board/iskorean';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
 const Board1 = () => {
+
+  const navigate = useNavigate();
+
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
@@ -32,7 +36,7 @@ const Board1 = () => {
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  function getNotice() {
+  function getBoard() {
     axios.get("http://127.0.0.1:8000/board/postlist/")
       .then((response) => {
         setBoardList([...response.data]);
@@ -44,7 +48,7 @@ const Board1 = () => {
   };
 
   useEffect(() => {
-    getNotice(); // 1) 게시글 목록 조회 함수 호출
+    getBoard(); // 1) 게시글 목록 조회 함수 호출
   }, []);
 
   console.log(boardList);
@@ -57,8 +61,19 @@ const Board1 = () => {
     // Perform search based on searchTarget and searchKeyword
     console.log("Search Target:", searchTarget);
     console.log("Search Keyword:", searchKeyword);
-
-    // You can call the setSearchQuery function here if needed
+  
+    // URL 인코딩 적용
+    const encodedSearchTarget = encodeURIComponent(searchTarget);
+    const encodedSearchKeyword = encodeURIComponent(searchKeyword);
+  
+    // URL을 동적으로 생성하여 이동
+    const searchUrl = `/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`;
+  
+    console.log("Encoded Search Target:", encodedSearchTarget);
+    console.log("Encoded Search Keyword:", encodedSearchKeyword);
+  
+    // React Router의 history 객체를 사용하여 페이지 이동
+    navigate(searchUrl);
   };
 
   // Calculate the index range for the current page
@@ -71,8 +86,14 @@ const Board1 = () => {
   // Calculate the total number of pages
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
+
+
   return (
-    <>
+    <>      
+    <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
+        <h2>창업 정보 게시판</h2>
+    </Box>
+    <DivLine />
 
       <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
         <TableContainer component={Paper} style={{ height: '100%' }}>

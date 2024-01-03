@@ -17,7 +17,8 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Board1Write = () => {
-  const [text, setText] = useState({ title: '', content: '' });
+  const name = 'Marie85'
+  const [text, setText] = useState({ title: '', contents: '' });
 
   const handleFileUpload = () => {
     // Implement file upload functionality here
@@ -25,11 +26,12 @@ const Board1Write = () => {
   };
 
   const handleTextInput = () => {
-    const { title, content } = text;
+    const { title, contents } = text;
 
-    axios.post("http://127.0.0.1:8000/board1/postlist/", {
+    axios.post("http://127.0.0.1:8000/board/postlist/createpost", {
       title,
-      content,
+      name,
+      contents,
     })
       .then(function (response) {
         console.log(response);
@@ -69,20 +71,18 @@ const Board1Write = () => {
             fullWidth
             multiline
             rows={20} // Adjust the number of rows as needed
-            id='board1Content'
-            label='Content'
-            name='board1Content'
-            value={text.content}
-            onChange={(e) => setText((prevText) => ({ ...prevText, content: e.target.value }))}
+            id='board1Contents'
+            label='Contents'
+            name='board1Contents'
+            value={text.contents}
+            onChange={(e) => setText((prevText) => ({ ...prevText, contents: e.target.value }))}
           />
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          <Link to='/Board1'>
-            <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
+            <Button variant="contained" sx={{ mr: 2 }} href='/board1' onClick={handleTextInput}>
               글쓰기
             </Button>
-          </Link>
           <Button variant="contained" href="/Board">
             취소
           </Button>
