@@ -1,15 +1,45 @@
 import { drawPolygons } from './DrawPolygons.js';
+import { drawSelectedPolygon } from './DrawPolygons_jachigu.js';
 import React, { Component } from 'react';
 import geoJsonData from './geometry.json';
+import geoJsonData_jachigu from './jachigugeojson.json'
 import './KakaoMap.css'; // 스타일을 위한 CSS 파일을 가정합니다
+import Data from '../assets/서울시 행정동.json';
 
+function calculatePolygonCenter(geometry) {
+    let latSum = 0, lngSum = 0, pointsCount = 0;
+
+    // MultiPolygon의 모든 좌표를 순회
+    geometry.coordinates.forEach(polygon => {
+        polygon.forEach(ring => {
+            ring.forEach(coord => {
+                lngSum += coord[0]; // 경도 누적
+                latSum += coord[1]; // 위도 누적
+                pointsCount += 1;
+            });
+        });
+    });
+    
+    // 평균 좌표 계산
+    return {
+        lat: latSum / pointsCount,
+        lng: lngSum / pointsCount
+    };
+}
 
 class KakaoMap extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isMenuOpen: false, // 메뉴 모달이 열려있는지 여부를 관리
+            isMenuOpen: false,
+            Gu: '',
+            selectedDong: '',
+            // ... 기타 상태 변수 ...
         };
+        this.polygons = []; // 폴리곤 객체를 저장할 배열 초기화
+        // 지역구 및 행정동 데이터 처리
+        this.uniqueGuArray = Array.from(new Set(Data.map(item => item.시군구명)));
+        this.dongData = Data;
     }
 
     toggleMenuModal = () => {
@@ -20,7 +50,8 @@ class KakaoMap extends Component {
 
     componentDidMount() {
         this.initializeMap();
-        drawPolygons(this.map, geoJsonData, this.displayMessage);
+        //drawPolygons(this.map, geoJsonData, this.displayMessage);
+        //drawSelectedPolygon(this.map, geoJsonData_jachigu, this.displayMessage, '종로구','사직동')
     }
 
     initializeMap = () => {
@@ -43,6 +74,8 @@ class KakaoMap extends Component {
         window.kakao.maps.event.addListener(this.map, 'click', this.handleMapClick);
         window.kakao.maps.event.addListener(this.map, 'dragend', this.handleMapDragEnd);
         window.kakao.maps.event.addListener(this.map, 'zoom_changed', this.handleMapZoomChanged);
+
+        
     }
 
     handleMapClick = (mouseEvent) => {
@@ -65,55 +98,92 @@ class KakaoMap extends Component {
         this.setState({ message });
     };
 
+    handleGuChange = (event) => {
+        this.setState({
+            Gu: event.target.value,
+            selectedDong: '',
+        });
+        // 선택한 지역구에 따라 지도 업데이트 로직 추가
+    };
+
+    handleDongChange = (event) => {
+        this.setState({ selectedDong: event.target.value });
+        // 선택한 행정동에 따라 지도 업데이트 로직 추가
+    };
+
+    componentDidUpdate(prevProps, prevState) {
+
+        if (prevState.Gu !== this.state.Gu || prevState.selectedDong !== this.state.selectedDong) {
+            // features 배열에서 해당 지역구 및 행정동에 해당하는 폴리곤 찾기
+            const fullAddress = `서울특별시 ${this.state.Gu} ${this.state.selectedDong}`;
+            const polygonFeature = geoJsonData_jachigu.features.find(feature => feature.properties.adm_nm === fullAddress);
+            console.log("Current State - Gu:", this.state.Gu, "selectedDong:", this.state.selectedDong);
+            console.log("Sample feature data:", geoJsonData_jachigu.features.slice(0, 5));
+
+            if (polygonFeature) {
+
+                // 기존 폴리곤 제거
+                this.polygons.forEach(polygon => polygon.setMap(null));
+                this.polygons = [];
+                const polygonGeometry = polygonFeature.geometry;
+                const polygonCenter = calculatePolygonCenter(polygonGeometry);
+                console.log("Polygon Center:", polygonCenter);
+                
+                // 지도의 중심을 폴리곤의 중심으로 이동
+                this.map.setCenter(new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng));
+
+                // 마커가 표시될 위치입니다 
+var markerPosition  = new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng); 
+
+// 마커를 생성합니다
+var marker = new window.kakao.maps.Marker({
+    position: markerPosition
+});
+
+// 마커가 지도 위에 표시되도록 설정합니다
+marker.setMap(this.map);
+
+    
+                // 폴리곤 그리기 함수 호출 (이 함수가 지도에 폴리곤을 그리는 로직을 포함한다고 가정)
+                // 수정된 drawSelectedPolygon 호출
+                drawSelectedPolygon(this.map, geoJsonData_jachigu, this.displayMessage, this.state.Gu, this.state.selectedDong, this.polygons);
+               
+                console.log("componentDidUpdate called_draw");
+                this.map.setCenter(new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng));
+
+            }
+        }
+        
+    }
+    
+    
     render() {
-        // 메뉴의 상태에 따라 메뉴 클래스를 동적으로 추가/제거
-        const menuClass = this.state.isMenuOpen ? 'menu-popup open' : 'menu-popup';
+        // ... 기존 렌더링 코드 ...
 
         return (
             <div className="map-container">
                 <nav className="sidebar">
-                    <text className="title">뜨는 상권</text>
-                    <div className="menu-container">
-                        <div className="menu-button" onClick={this.toggleMenu}>
-                            메뉴 1
-                        </div>
-                        <div className={menuClass} id="menu-popup">
-                            {/* 스크롤바를 활용하기 위한 스타일 추가 */}
-                            <div className="menu-items" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                <button className="menu-item">메뉴 항목 1</button>
-                                <button className="menu-item">메뉴 항목 2</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-                                <button className="menu-item">메뉴 항목 3</button>
-
-
-                                {/* 더 많은 메뉴 항목을 추가하세요 */}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="status">
-                        <p>{this.state.message}</p>
-                    </div>
+                    {/* 기존 사이드바 코드 */}
+                    {/* 지역구 선택 드롭다운 */}
+                    <select value={this.state.Gu} onChange={this.handleGuChange}>
+                        <option value="">지역구 선택</option>
+                        {this.uniqueGuArray.map((gu) => (
+                            <option key={gu} value={gu}>{gu}</option>
+                        ))}
+                    </select>
+                    {/* 행정동 선택 드롭다운 */}
+                    {this.state.Gu && (
+                        <select value={this.state.selectedDong} onChange={this.handleDongChange}>
+                            <option value="">행정동 선택</option>
+                            {this.dongData
+                                .filter(item => item.시군구명 === this.state.Gu)
+                                .map(item => (
+                                    <option key={item.읍면동명} value={item.읍면동명}>{item.읍면동명}</option>
+                                ))
+                            }
+                        </select>
+                    )}
+                    {/* 기타 사이드바 요소 */}
                 </nav>
                 <div className="map" ref={(ref) => { this.mapContainer = ref; }}></div>
             </div>
