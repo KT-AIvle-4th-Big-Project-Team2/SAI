@@ -24,7 +24,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
-const Board1 = () => {
+const Board2 = () => {
 
   const navigate = useNavigate();
 
@@ -66,7 +66,7 @@ const Board1 = () => {
     const encodedSearchKeyword = encodeURIComponent(searchKeyword);
   
     // URL을 동적으로 생성하여 이동
-    const searchUrl = `/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`;
+    const searchUrl = `/board2Search/${encodedSearchTarget}/${encodedSearchKeyword}`;
   
     console.log("Encoded Search Target:", encodedSearchTarget);
     console.log("Encoded Search Keyword:", encodedSearchKeyword);
@@ -90,7 +90,7 @@ const Board1 = () => {
   return (
     <>      
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보 게시판</h2>
+        <h2>창업 게시판</h2>
     </Box>
     <DivLine />
 
@@ -115,7 +115,7 @@ const Board1 = () => {
                     {row.post_id}
                   </TableCell>
                   <TableCell numeric='true'>
-                    <Link to={`/Board1View/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
+                    <Link to={`/board2View/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
                   </TableCell>
                   <TableCell align="right">{row.name}</TableCell>
                   <TableCell align="right">{row.date}</TableCell>
@@ -137,7 +137,7 @@ const Board1 = () => {
         />
 
         <div>
-          <Button variant="outlined" href="/Board1Write" style={{ color: 'black' }}>
+          <Button variant="outlined" href="/board2Write" style={{ color: 'black' }}>
             글쓰기
           </Button>
         </div>
@@ -165,7 +165,7 @@ const Board1 = () => {
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
     <IconButton type="submit" aria-label="search" onClick={handleSearch} >
-    <Link to={`/Board1Search/${searchTarget}/${searchKeyword}`}>
+    <Link to={`/board2Search/${searchTarget}/${searchKeyword}`}>
       <SearchIcon />
       </Link>
     </IconButton>
@@ -174,4 +174,4 @@ const Board1 = () => {
   );
 }
 
-export default Board1;
+export default Board2;

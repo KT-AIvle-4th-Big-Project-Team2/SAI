@@ -17,7 +17,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const NoticeWrite = () => {
-  const name = 'Marie85'
+  const name = 'admin'
   const [text, setText] = useState({ title: '', contents: '' });
 
   const handleFileUpload = () => {

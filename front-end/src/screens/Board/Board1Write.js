@@ -3,6 +3,7 @@ import { styled } from '@mui/system';
 import { Button, TextField, Box, Link } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
+import DivLine from '../../components/Styles/DivLine';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -46,6 +47,7 @@ const Board1Write = () => {
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 정보</h2>
       </Box>
+      <DivLine />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>

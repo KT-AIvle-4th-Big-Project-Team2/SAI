@@ -24,7 +24,7 @@ import { Link } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
-const Board1 = () => {
+const Board1Search = () => {
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
@@ -154,4 +154,4 @@ const Board1 = () => {
   );
 }
 
-export default Board1;
+export default Board1Search;

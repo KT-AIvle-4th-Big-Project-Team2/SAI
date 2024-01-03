@@ -63,7 +63,7 @@ const Board2Mod = () => {
   return (
     <>
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보</h2>
+        <h2>창업 게시판 수정</h2>
       </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>

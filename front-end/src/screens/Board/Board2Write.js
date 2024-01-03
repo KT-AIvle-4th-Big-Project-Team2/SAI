@@ -17,7 +17,8 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Board2Write = () => {
-  const [text, setText] = useState({ title: '', content: '' });
+  const name = 'Marie85'
+  const [text, setText] = useState({ title: '', contents: '' });
 
   const handleFileUpload = () => {
     // Implement file upload functionality here
@@ -25,11 +26,11 @@ const Board2Write = () => {
   };
 
   const handleTextInput = () => {
-    const { title, content } = text;
-
-    axios.post("http://127.0.0.1:8000/board2/postlist/", {
+    const { title, contents } = text;
+    axios.post("http://127.0.0.1:8000/board/postlist/createpost", {
       title,
-      content,
+      name,
+      contents,
     })
       .then(function (response) {
         console.log(response);
@@ -43,7 +44,7 @@ const Board2Write = () => {
   return (
     <>
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보</h2>
+        <h2>창업 게시판 글 작성</h2>
       </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
@@ -57,9 +58,9 @@ const Board2Write = () => {
         <div style={{ width: '100%', marginBottom: '10px' }}>
           <TextField
             fullWidth
-            id='board2Title'
+            id='boardTitle'
             label='Title'
-            name='board2Title'
+            name='boardTitle'
             value={text.title}
             onChange={(e) => setText((prevText) => ({ ...prevText, title: e.target.value }))}
           />
@@ -69,21 +70,19 @@ const Board2Write = () => {
             fullWidth
             multiline
             rows={20} // Adjust the number of rows as needed
-            id='board2Content'
-            label='Content'
-            name='board2Content'
-            value={text.content}
-            onChange={(e) => setText((prevText) => ({ ...prevText, content: e.target.value }))}
+            id='Board2Contents'
+            label='Contents'
+            name='Board2Contents'
+            value={text.contents}
+            onChange={(e) => setText((prevText) => ({ ...prevText, contents: e.target.value }))}
           />
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          <Link to='/Board2'>
-            <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
+            <Button variant="contained" sx={{ mr: 2 }} href='/Board2' onClick={handleTextInput}>
               글쓰기
             </Button>
-          </Link>
-          <Button variant="contained" href="/Board2">
+          <Button variant="contained" href="/Board">
             취소
           </Button>
         </div>

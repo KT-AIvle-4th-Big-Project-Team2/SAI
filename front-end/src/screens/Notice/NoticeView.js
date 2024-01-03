@@ -27,7 +27,7 @@ const NoticeView = () => {
 
 
   const handleDelete = () => {
-    axios.delete(`http://127.0.0.1:8000/announcements/announcementlist/${post_num}/deletepost`)
+    axios.delete(`http://127.0.0.1:8000/announcements/announcementlist/deletepost/${post_num}`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
@@ -43,7 +43,7 @@ const NoticeView = () => {
     <>
     <Box sx={{ p: 2, height: '100%' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
-        게시판
+        공지사항
       </Typography>
       <Divider sx={{ mt: 3, mb: 3 }} />
       <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={boardContent.post_id}>
