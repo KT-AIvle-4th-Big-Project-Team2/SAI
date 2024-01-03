@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
-SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
+SELECT_DATABASE = 1 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('C:/bigproject/sensitiveDatas/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -74,7 +74,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -118,7 +118,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('C:/bigproject/sensitiveDatas/DB_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
