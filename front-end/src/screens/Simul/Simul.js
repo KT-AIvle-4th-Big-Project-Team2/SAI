@@ -21,10 +21,12 @@ for (let i = 0; i < 25; i++) {
 export default function AreaAnaly() {
   const [Gu, setGu] = useState('');
   const [selectedDong, setSelectedDong] = useState('');
+  const [showGuSelection, setShowGuSelection] = useState(true); // 지역구 선택 컴포넌트 표시 여부 상태
 
   const handleChange = (event) => {
     setGu(event.target.value);
     setSelectedDong('');
+    setShowGuSelection(false); // 지역구 선택 시 컴포넌트 숨김
   };
 
   const handleChange2 = (event) => {
@@ -54,14 +56,13 @@ export default function AreaAnaly() {
 
   return (
     <>
-    <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-      <h2 >지역 선택</h2>
-    </Box>
-  <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
-      <Grid container spacing={2} sx={{ height: '100%', mb : 5 }}>
-        {/* First Grid */}
-        <Grid item xs={3}>
-          <Box border={1} p={2} borderRadius={8} sx={{height: '100%', fontWeight: 'bold' }}>
+      <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
+        <h2>지역 선택</h2>
+      </Box>
+      <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
+      <Grid container spacing={2} sx={{ height: '100%', mb: 5 }}>
+        <Grid item xs={3} style={{ display: showGuSelection ? 'block' : 'none' }}>
+          <Box border={1} p={2} borderRadius={8} sx={{ height: '100%', fontWeight: 'bold' }}>
             <h5>지역구 : {Gu}</h5>
             {uniqueGuArray.map((gu, idx) => (
               <Button
@@ -69,12 +70,12 @@ export default function AreaAnaly() {
                 value={gu}
                 variant="outlined"
                 onClick={handleChange}
-                sx={{ mr: 2, mb: 1, }}
+                sx={{ mr: 2, mb: 1 }}
               >
                 {gu}
               </Button>
             ))}
-            </Box>
+          </Box>
         </Grid>
 
         {/* Second Grid */}

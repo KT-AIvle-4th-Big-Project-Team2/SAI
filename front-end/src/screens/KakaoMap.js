@@ -40,6 +40,24 @@ class KakaoMap extends Component {
         // 지역구 및 행정동 데이터 처리
         this.uniqueGuArray = Array.from(new Set(Data.map(item => item.시군구명)));
         this.dongData = Data;
+        this.markers = [];  // 마커를 저장할 배열
+    }
+
+    addMarker = (position) => {
+        // 기존 마커 제거
+        this.markers.forEach(marker => marker.setMap(null));
+        this.markers = [];
+
+        // 새로운 마커 생성
+        const marker = new window.kakao.maps.Marker({
+            position: position
+        });
+
+        // 새로운 마커 지도에 표시
+        marker.setMap(this.map);
+
+        // 마커 배열에 새로운 마커 추가
+        this.markers.push(marker);
     }
 
     toggleMenuModal = () => {
@@ -58,7 +76,7 @@ class KakaoMap extends Component {
         const mapContainer = this.mapContainer;
         const mapOption = {
             center: new window.kakao.maps.LatLng(37.566535, 126.977969), // 서울의 좌표
-            level: 3
+            level: 7
         };
 
         this.map = new window.kakao.maps.Map(mapContainer, mapOption);
@@ -69,7 +87,7 @@ class KakaoMap extends Component {
         this.marker = new window.kakao.maps.Marker({
             position: this.map.getCenter()
         });
-        this.marker.setMap(this.map);
+        
 
         window.kakao.maps.event.addListener(this.map, 'click', this.handleMapClick);
         window.kakao.maps.event.addListener(this.map, 'dragend', this.handleMapDragEnd);
@@ -80,7 +98,7 @@ class KakaoMap extends Component {
 
     handleMapClick = (mouseEvent) => {
         const latlng = mouseEvent.latLng;
-        this.marker.setPosition(latlng);
+        //this.marker.setPosition(latlng);
         this.displayMessage(`클릭한 위치: 위도 ${latlng.getLat()}, 경도 ${latlng.getLng()}`);
     };
 
@@ -133,16 +151,16 @@ class KakaoMap extends Component {
                 this.map.setCenter(new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng));
 
                 // 마커가 표시될 위치입니다 
-var markerPosition  = new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng); 
+                var markerPosition  = new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng); 
 
-// 마커를 생성합니다
-var marker = new window.kakao.maps.Marker({
-    position: markerPosition
-});
+                // 마커를 생성합니다
+                var marker = new window.kakao.maps.Marker({
+                position: markerPosition
+                });
 
-// 마커가 지도 위에 표시되도록 설정합니다
-marker.setMap(this.map);
-
+                // 마커가 지도 위에 표시되도록 설정합니다
+                //marker.setMap(this.map);
+                this.addMarker(markerPosition);
     
                 // 폴리곤 그리기 함수 호출 (이 함수가 지도에 폴리곤을 그리는 로직을 포함한다고 가정)
                 // 수정된 drawSelectedPolygon 호출
@@ -150,6 +168,7 @@ marker.setMap(this.map);
                
                 console.log("componentDidUpdate called_draw");
                 this.map.setCenter(new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng));
+                this.map.setLevel(4); // 지도 레벨을 3으로 설정
 
             }
         }
