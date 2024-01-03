@@ -19,7 +19,6 @@ import {
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
-import isKorean from '../../components/Board/iskorean';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 

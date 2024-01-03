@@ -27,7 +27,6 @@ const Board1Write = () => {
 
   const handleTextInput = () => {
     const { title, contents } = text;
-
     axios.post("http://127.0.0.1:8000/board/postlist/createpost", {
       title,
       name,

@@ -1,19 +1,36 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import { Button, TextField, Box, Link } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 const NoticeWrite = () => {
-  const [text, setText] = useState({ title: '', content: '' });
+  const name = 'Marie85'
+  const [text, setText] = useState({ title: '', contents: '' });
 
+  const handleFileUpload = () => {
+    // Implement file upload functionality here
+    console.log('File upload functionality to be implemented.');
+  };
 
   const handleTextInput = () => {
-    const { title, content } = text;
-
-    axios.post("http://127.0.0.1:8000/Notice/postlist/", {
+    const { title, contents } = text;
+    axios.post("http://127.0.0.1:8000/announcements/announcementlist/createpost", {
       title,
-      content,
+      name,
+      contents,
     })
       .then(function (response) {
         console.log(response);
@@ -27,14 +44,23 @@ const NoticeWrite = () => {
   return (
     <>
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보</h2>
+        <h2>공지사항</h2>
       </Box>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
+            Upload file
+            <VisuallyHiddenInput type="file" />
+          </Button>
+          {/* Add your picture upload button here */}
+        </div>
+        <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>
           <TextField
             fullWidth
-            id='NoticeTitle'
+            id='noticeTitle'
             label='Title'
-            name='NoticeTitle'
+            name='noticeTitle'
             value={text.title}
             onChange={(e) => setText((prevText) => ({ ...prevText, title: e.target.value }))}
           />
@@ -44,24 +70,23 @@ const NoticeWrite = () => {
             fullWidth
             multiline
             rows={20} // Adjust the number of rows as needed
-            id='NoticeContent'
-            label='Content'
-            name='NoticeContent'
-            value={text.content}
-            onChange={(e) => setText((prevText) => ({ ...prevText, content: e.target.value }))}
+            id='noticeContents'
+            label='Contents'
+            name='noticeContents'
+            value={text.contents}
+            onChange={(e) => setText((prevText) => ({ ...prevText, contents: e.target.value }))}
           />
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          <Link to='/Notice'>
-            <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
+            <Button variant="contained" sx={{ mr: 2 }} href='/notice' onClick={handleTextInput}>
               글쓰기
             </Button>
-          </Link>
-          <Button variant="contained" href="/Notice">
+          <Button variant="contained" href="/notice">
             취소
           </Button>
         </div>
+      </div>
     </>
   );
 };

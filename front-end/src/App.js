@@ -20,6 +20,7 @@ import Notice from './screens/Notice/Notice';
 import NoticeMod from './screens/Notice/NoticeMod';
 import NoticeView from './screens/Notice/NoticeView';
 import NoticeWrite from './screens/Notice/NoticeWrite';
+import NoticeSearch from './screens/Notice/NoticeSearch';
 import FindID from './screens/Login/FindID';
 import Simul from './screens/Simul/Simul';
 import Simul2 from './screens/Simul/Simul2';
@@ -46,6 +47,7 @@ function App() {
           <Route path = "/NoticeWrite" element = { <NoticeWrite /> } />
           <Route path = "/NoticeView/:post_num" element={<NoticeView />} />
           <Route path = "/NoticeMod/:post_num" element={<NoticeMod />} />
+          <Route path = "/NoticeSearch/:searchTarget/:searchKeyword" element={<NoticeSearch />} />
           <Route path = "/FAQ" element = { <FAQ /> } />
           <Route path = "/Home" element = { <Home /> } />
           <Route path = "/Board1" element = { <Board1 /> } />

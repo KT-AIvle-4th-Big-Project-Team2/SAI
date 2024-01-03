@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
-import Comment1 from '../../components/Comment/Comment1';
 
 const Board1View = () => {
   const name = 'tester1'
@@ -41,11 +40,11 @@ const Board1View = () => {
   }, [post_num]); // Include post_num as a dependency
 
   const handleCommentInput = () => {
-    const {contents} = comment;
     console.log(comment)
+    const {contents} = comment;
     axios.post(`http://127.0.0.1:8000/board/postlist/${post_num}/createcomment`, {
       contents,
-      name
+      name,
     })
       .then(function (response) {
         console.log(response);
@@ -54,6 +53,19 @@ const Board1View = () => {
       })
       .catch(function (error) {
         console.log(error);
+      });
+  };
+
+  const handleCommentDelete = (commentId) => {
+    axios.delete(`http://127.0.0.1:8000/board/postlist/deletecomment/${commentId}`)
+      .then((response) => {
+        console.log(response.data);
+        // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
+        navigate('/Board1');
+      })
+      .catch((error) => {
+        console.error(error);
+        // 오류 발생 시 처리
       });
   };
 
@@ -109,24 +121,33 @@ const Board1View = () => {
       </Box>
       <DivLine />
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
+      <Typography variant="h4" sx={{ mb: 2 }}>
         Comment
       </Typography>
-      {comments.map((c, index) => (
-        <Typography key={index} variant="body1" fontSize={15} sx={{ mb: 3, display: 'flex', justifyContent: 'space-between' }}>
+      <DivLine />
+      {comments.map((c) => (
+        <div key={c.comment_id}>
+        <Typography variant="body1" fontSize={15} sx={{ mb: 3, display: 'flex', justifyContent: 'space-between' }}>
           <span>ㄴ {c.contents}</span>
-          <span>{c.name} {c.date} </span>
+          <span>{c.name} {c.date} 
+            <Button size='small' onClick={() => handleCommentDelete(c.comment_id)} href={`/Board1View/${post_num}`} sx={{ ml: 1 }}>
+              X
+            </Button>
+          </span>
         </Typography>
+      </div>
       ))}
       <TextField
         fullWidth
         multiline
         rows={4}
         label="Add a comment"
+        value={comment.contents}
         sx={{ mb: 2 }}
+        onChange={(e) => setComment((prevText) => ({ ...prevText, contents: e.target.value }))}
       />
-      <Button variant="contained" onClick={handleCommentInput}>
-        Add Comment
+      <Button  variant="contained" onClick={handleCommentInput} href={`/Board1View/${post_num}` }>
+        댓글 달기
       </Button>
     </Paper>
 

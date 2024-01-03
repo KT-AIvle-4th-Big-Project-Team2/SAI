@@ -34,20 +34,19 @@ const SearchBar = ({ setSearchQuery }) => (
       size="small"
     />
     <IconButton type="submit" aria-label="search">
-      <SearchIcon style={{ fill: 'lime' }} />
+      <SearchIcon />
     </IconButton>
   </form>
 );
 
-
-export default function Notice() {
+const Notice = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [NoticeList, setNoticeList] = useState([]);
   const [post_num, setPost_num] = useState('');
   function getNotice() {
-    axios.get("http://127.0.0.1:8000/board/postlist/")
+    axios.get("http://127.0.0.1:8000/announcements/announcementlist/")
       .then((response) => {
         setNoticeList([...response.data]);
         console.log(response.data);
@@ -95,14 +94,14 @@ export default function Notice() {
               <TableBody>
                 {NoticeList.map((row) => (
                   <TableRow
-                    key={row.post_id}
+                    key={row.announcement_id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.post_id}
+                      {row.announcement_id}
                     </TableCell>
                     <TableCell numeric='true'>
-                    <Link to={`/NoticeView/${row.post_id}`} onClick={() => handleLinkClick(row.post_id)}>{row.title}</Link>
+                    <Link to={`/NoticeView/${row.announcement_id}`} onClick={() => handleLinkClick(row.announcement_id)}>{row.title}</Link>
                     </TableCell>
                     <TableCell align="right">{row.name}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
@@ -114,15 +113,15 @@ export default function Notice() {
         </Paper>
         
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
-        <Pagination 
-          count={totalPages}
-          page={currentPage}
-          onChange={(event, value) => setCurrentPage(value)}
-          showFirstButton
-          showLastButton
-          color = 'primary'
-        />
-        
+          <Pagination 
+            count={totalPages}
+            page={currentPage}
+            onChange={(event, value) => setCurrentPage(value)}
+            showFirstButton
+            showLastButton
+            color="primary"
+          />
+                
         <div>
             <Button variant="outlined" href="/NoticeWrite"  style={{ color: 'black' }}>
               글쓰기
@@ -135,3 +134,5 @@ export default function Notice() {
       </>
   );
 }
+
+export default Notice;
