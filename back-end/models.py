@@ -12,7 +12,7 @@ class Admin(models.Model):
 
 class User(AbstractUser):
     user_id = models.AutoField(primary_key=True)
-    username = models.CharField(unique=True, max_length=75)
+    name = models.CharField(unique=True, max_length=75)
     password = models.CharField(max_length=75)
     email = models.CharField(max_length=254)
     phonenumber = models.CharField(max_length=11)

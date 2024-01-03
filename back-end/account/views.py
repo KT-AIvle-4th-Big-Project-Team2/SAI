@@ -3,48 +3,71 @@
 # from django.http import HttpResponse
 # from .forms import signinForm
 
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 
-from .models import *
+from .models import Admin
 from .serializers import *
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+
+from django.contrib.auth.models import User
+from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-# ... (your other imports)
+@method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
+class GetCSRFToken(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self, request, format = None):
+        return Response({'success' : 'CSRF Cookie set'})
 
+@method_decorator(csrf_protect, name='dispatch')
 class SignInView(generics.CreateAPIView):
+    permission_classes = (permissions.AllowAny,)
     serializer_class = SignInSerializer
     
     def perform_create(self, serializer):
-        new_user_data = serializer.validated_data
-        username = new_user_data['name']
-
-        if User.objects.filter(name=username).exists() or Admin.objects.filter(name=username).exists():
-            raise ValidationError({'message': "That username is already used!"})
         
-        serializer.save()
+        try:
+            username = serializer.validated_data['name']
+            password = serializer.validated_data['password']
+            email = serializer.validated_data['email']
+            phonenumber = serializer.validated_data['phonenumber']
+            age = serializer.validated_data['age']
+            gender = serializer.validated_data['gender']
+        except:
+            return Response({'error':'Value missing'})
+        
+        if User.objects.filter(name=username).exists() or Admin.objects.filter(name=username).exists():
+            return Response({'error':'Username already exists'})
+        
+        user = User.objects.create_user(username = username, password = password, email = email, 
+                                        phonenumber = phonenumber, age = age, gender = gender)
+        user.save()
+        return Response({'success': "User created successfully"})
 
-        return Response({'message': "User created successfully"}, status=status.HTTP_201_CREATED)
-
+@method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
+    permission_classes = (permissions.AllowAny,)
+    serializers = LoginSerializer
+    
     def post(self, request):
-        username = request.data.get('name')
-        password = request.data.get('password')
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return JsonResponse({'message': 'Login successful'}, status=200)
-        else:
-            return JsonResponse({'message': 'Invalid credentials'}, status=401)
-
-# ... (other views)
+        serializer = self.serializers(data=request.data)
+        
+        if serializer.is_valid():
+            username = serializer.validated_data['name']
+            password = serializer.validated_data['password']
+            
+            user = auth.authenticate(username = username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return Response({'success' : 'u'})
 
 
 
@@ -169,7 +192,7 @@ class LoginView(APIView):
         
     
     
-# # 제대로 된 로그인 시스템을 만들기 전 임시로 만든 비번 재확인 기능
+# 제대로 된 로그인 시스템을 만들기 전 임시로 만든 비번 재확인 기능
 # class PWCheckView(APIView):    
 #     def post(self, request):
 #         serializer_data = PasswordCheckSerializer(data=request.data)
@@ -188,7 +211,7 @@ class LoginView(APIView):
     
     
 
-# REST API 적용 전 테스트용 코드
+# # REST API 적용 전 테스트용 코드
 # def testing(request):
 #     return HttpResponse("account app is running fine!")
 

@@ -1,9 +1,5 @@
-from rest_framework import serializers
+from rest_framework import serializers, permissions
 from .models import *
-
-from rest_framework import serializers
-from .models import *
-
 class LoginSerializer(serializers.Serializer):
     name = serializers.CharField()
     password = serializers.CharField()
@@ -21,6 +17,7 @@ class LoginSerializer(serializers.Serializer):
     
 
 class SignInSerializer(serializers.ModelSerializer):
+    permission_classes = (permissions.AllowAny,)
     class Meta:
         model = User
         fields = ['name', 'password', 'email', 'phonenumber', 'age', 'gender']

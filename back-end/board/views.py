@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from urllib.parse import unquote
 from rest_framework import generics
 
 from .models import *
@@ -53,7 +53,7 @@ class BoardPostView(generics.ListAPIView):
 class BoardSearchView(generics.ListAPIView):
     
     def get_queryset(self):
-        board_id = self.kwargs['searchfield']
+        searchKeyword = self.kwargs['searchkeyword']
         if self.kwargs['searchfield'] == 'title':
             
             queryset = Board.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
