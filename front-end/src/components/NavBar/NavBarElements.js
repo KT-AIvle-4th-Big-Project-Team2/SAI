@@ -30,7 +30,7 @@ function NavBarElements() {
 
   return (
       <>
-        <Navbar style={{ background: '#3e91b5' }} data-bs-theme="dark">
+        <Navbar style={{ background: '#404040' }} data-bs-theme="dark">
           <Container className="justify-content-between">
             <Navbar.Brand href="/Home">
               <img
@@ -42,7 +42,7 @@ function NavBarElements() {
               />
             </Navbar.Brand>
 
-            <Nav className="fw-bold">
+            <Nav>
               <NavDropdown title="알림마당" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
                 <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
