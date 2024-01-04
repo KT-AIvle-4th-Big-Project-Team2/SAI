@@ -65,7 +65,7 @@ class SignInView(generics.CreateAPIView):
         user.save()
         return Response({'success': "User created successfully"})
 
-#@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = LoginSerializer
