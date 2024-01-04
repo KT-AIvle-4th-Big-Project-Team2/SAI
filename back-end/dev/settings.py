@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
-SELECT_DATABASE = 1 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
+SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -52,10 +52,10 @@ INSTALLED_APPS = [
     "account",
     # 'analysis',
     'board',
-    # 'faq',
-    # 'report',
-    # 'suggestions',
-    # 'announcement',
+    'faq',
+    'report',
+    'suggestions',
+    'announcement',
     # 'reviewBoard',
     # 'concernBoard',
     # 'consultBoard',
