@@ -14,6 +14,7 @@ import {
 } from '@mui/material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useAuth } from './AuthContext';
 
 function Copyright(props) {
   return (
@@ -33,6 +34,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const { loginHandler, setUserInfo } = useAuth();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -41,6 +44,8 @@ export default function SignIn() {
       password: data.get('password'),
     };
     const { email, password} = joinData;
+    loginHandler();
+    setUserInfo({ email, password });
     }
 
   return (

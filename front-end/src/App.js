@@ -1,4 +1,5 @@
-import './App.css';
+import React from 'react';
+import { AuthProvider } from './components/Auth/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './screens/Home';
@@ -27,34 +28,37 @@ import MyinfoCheck from './screens/Mypage/MyinfoCheck';
 
 
 function App() {
+
   return (
-    <Router>
-      <NavBarElements />
-      <Container>
-        <Routes>
-          <Route path = "/" element = { <Index /> } />
-          <Route path = "/Notice" element = { <Notice /> } />
-          <Route path = "/FAQ" element = { <FAQ /> } />
-          <Route path = "/Home" element = { <Home /> } />
-          <Route path = "/Board1" element = { <Board1 /> } />
-          <Route path = "/Board2" element = { <Board2 /> } />
-          <Route path = "/Login" element = { <Login /> } />
-          <Route path = "/signup" element = { <SignUp /> } />
-          <Route path = "/BoardView" element = { <BoardDetail /> } />
-          <Route path = "/BoardWrite" element = { <BoardWrite /> } />
-          <Route path = "/FindID" element = { <FindID /> } />
-          <Route path = "/Simul" element = { <Simul /> } />
-          <Route path = "/Simul2" element = { <Simul2 /> } />
-          <Route path = "/SimulReport" element = { <SimulReport /> } />
-          <Route path = "/Area" element = { <AreaAnaly /> } />
-          <Route path = "/Sectors" element = { <SectorsAnaly /> } />
-          <Route path = "/Myboard" element = { <Myboard /> } />
-          <Route path = "/Myinfo" element = { <Myinfo /> } />
-          <Route path = "/WithDrawal" element = { <WithDrawal /> } />
-          <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
-      </Routes>
-      </Container>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <NavBarElements />
+        <Container>
+          <Routes>
+            <Route path = "/" element = { <Index /> } />
+            <Route path = "/Notice" element = { <Notice /> } />
+            <Route path = "/FAQ" element = { <FAQ /> } />
+            <Route path = "/Home" element = { <Home /> } />
+            <Route path = "/Board1" element = { <Board1 /> } />
+            <Route path = "/Board2" element = { <Board2 /> } />
+            <Route path = "/Login" element = { <Login /> } />
+            <Route path = "/signup" element = { <SignUp /> } />
+            <Route path = "/BoardView" element = { <BoardDetail /> } />
+            <Route path = "/BoardWrite" element = { <BoardWrite /> } />
+            <Route path = "/FindID" element = { <FindID /> } />
+            <Route path = "/Simul" element = { <Simul /> } />
+            <Route path = "/Simul2" element = { <Simul2 /> } />
+            <Route path = "/SimulReport" element = { <SimulReport /> } />
+            <Route path = "/Area" element = { <AreaAnaly /> } />
+            <Route path = "/Sectors" element = { <SectorsAnaly /> } />
+            <Route path = "/Myboard" element = { <Myboard /> } />
+            <Route path = "/Myinfo" element = { <Myinfo /> } />
+            <Route path = "/WithDrawal" element = { <WithDrawal /> } />
+            <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
+        </Routes>
+        </Container>
+      </Router>
+    </AuthProvider>
   );
 }
 
