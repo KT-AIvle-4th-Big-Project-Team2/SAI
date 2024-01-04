@@ -202,6 +202,14 @@ class ResetPW(APIView):
         except:
             return Response({'error':'matching user not found'})
         
+class SendPing(APIView):
+    serializer_class = FindIDOutputSerializer
+    def post(self, request):
+        key = request.data.get("key")
+        if not LoginCheck(key): return Response({"error":"user info error"})
+        else:
+            return Response({'success' : 'ping success'})
+        
 
      
      

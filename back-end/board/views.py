@@ -23,6 +23,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
+from account.customlibs.checkLogin import *
+
 # 연습 및 테스트용
 # class ListPost(generics.ListCreateAPIView):
 #     queryset = Board.objects.all()
@@ -73,7 +75,7 @@ class BoardSearchView(generics.ListAPIView):
         searchKeyword = self.kwargs['searchkeyword']
         if self.kwargs['searchfield'] == 'title':
             
-            queryset = Board.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
+            queryset = Board.objects.filter(title__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'board_id',
                 'title',
                 'creationdate',
@@ -82,7 +84,7 @@ class BoardSearchView(generics.ListAPIView):
             
         elif self.kwargs['searchfield'] == 'contents':
             
-            queryset = Board.objects.filter(contents__contains=self.kwargs['searchkeyword']).values(
+            queryset = Board.objects.filter(contents__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'board_id',
                 'title',
                 'creationdate',
@@ -91,7 +93,7 @@ class BoardSearchView(generics.ListAPIView):
             
         elif self.kwargs['searchfield'] == 'username':
             
-            queryset = Board.objects.filter(user__username__contains=self.kwargs['searchkeyword']).values(
+            queryset = Board.objects.filter(user__username__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'board_id',
                 'title',
                 'creationdate',
@@ -105,25 +107,37 @@ class BoardSearchView(generics.ListAPIView):
         return queryset
 
     serializer_class = BoardSearchSerializer
-@method_decorator(csrf_protect, name='dispatch')
+#@method_decorator(csrf_protect, name='dispatch')
 class BoardPostCreateView(generics.CreateAPIView):
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
-        user_instance = user.objects.get(username=self.request.user)
+        
+        key = self.request.data.get("key")
+        # self.request.data.pop("key")
+        if not LoginCheck(key): return Response({"error":"user info error"})
+        
+        user_instance = user.objects.get(username=self.request.data.get('username'))
+        #user_instance = user.objects.get(username=self.request.user)
         
         Board.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
             user=user_instance
         )
-@method_decorator(csrf_protect, name='dispatch')        
+#@method_decorator(csrf_protect, name='dispatch')        
 class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     serializer_class = BoardPostUpdateSerializer
     queryset = Board.objects.all()
-    def perform_update(self, serializer):    
+    def perform_update(self, serializer):
+        
+        key = self.request.data.get("key")
+        if not LoginCheck(key): return Response({"error":"user info error"})
+        
+        user_instance = user.objects.get(username = key)
+            
         instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
-
+        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
         instance.title = serializer.validated_data['title']
         instance.contents = serializer.validated_data['contents']
 
@@ -132,6 +146,15 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
 class BoardPostDeleteView(generics.DestroyAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardPostSerializer
+    def delete(self, request, *args, **kwargs):
+        key = request.data.get("key")
+        if not LoginCheck(key) : return Response({"error":"user info error"})
+        
+        user_instance = user.objects.get(username = key)
+        instance = self.get_object()
+        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
+        instance.delete()
+        return Response({'success':'delte success'})
     
 
 #******************************************************************************************************************************************************************
@@ -157,7 +180,10 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
     serializer_class = BoardPostcommentCreateSerializer
         
     def perform_create(self, serializer):
-        user_instance = user.objects.get(username=self.request.user)
+        key = self.request.data.get('key')
+        if not LoginCheck(key) : return Response({"error":"user info error"})
+        
+        user_instance = user.objects.get(username=key)
         board_id = Board.objects.get(board_id=self.kwargs['pk'])
         
         Comments.objects.create(
@@ -171,9 +197,15 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
     
     queryset = Comments.objects.all()
     
-    def perform_update(self, serializer):    
+    def perform_update(self, serializer):
+        key = self.request.data.get('key')
+        if not LoginCheck(key) : return Response({"error":"user info error"})    
+        user_instance = user.objects.get(username = key)
+        
         instance = self.get_object()
-
+        
+        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
+        
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
@@ -181,3 +213,12 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
 class BoardPostCommentDeleteView(generics.DestroyAPIView):
     queryset = Comments.objects.all()
     serializer_class = BoardPostCommentSerializer
+    def delete(self, request, *args, **kwargs):
+        key = request.data.get("key")
+        if not LoginCheck(key) : return Response({"error":"user info error"})
+        
+        user_instance = user.objects.get(username = key)
+        instance = self.get_object()
+        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
+        instance.delete()
+        return Response({'success':'delte success'})

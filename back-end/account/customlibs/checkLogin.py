@@ -36,3 +36,8 @@ def LoginCheck(username):
             return False
     except:
         return False
+    
+    
+    
+# key = request.data.get("key")
+# if not LoginCheck(key): return Response({"error":"user info error"})
