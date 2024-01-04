@@ -5,14 +5,14 @@ class FaqListSerializer(serializers.Serializer):
     faq_id = serializers.IntegerField()
     title = serializers.CharField()
     date = serializers.DateTimeField()
-    admin_id = serializers.IntegerField()
+    name = serializers.IntegerField()
     
     def to_representation(self, instance):
         return {
             'faq_id': instance['faq_id'],
             'title': instance['title'],
             'date': instance['creationdate'],
-            'admin_id': instance['admin__admin_id']
+            'name': instance['admin__name']
         }
 
 class FaqSerializer(serializers.Serializer):
@@ -20,7 +20,7 @@ class FaqSerializer(serializers.Serializer):
     title = serializers.CharField()
     contents = serializers.CharField()
     date = serializers.DateTimeField()
-    admin_id = serializers.IntegerField()
+    name = serializers.IntegerField()
     
     def to_representation(self, instance):
         return {
@@ -28,7 +28,7 @@ class FaqSerializer(serializers.Serializer):
             'title': instance['title'],
             'contents': instance['contents'],
             'date': instance['creationdate'],
-            'admin_id': instance['admin__admin_id']
+            'name': instance['admin__name']
         }
 class FaqSearchSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
@@ -36,21 +36,21 @@ class FaqSearchSerializer(serializers.ModelSerializer):
             'faq_id': instance['faq_id'],
             'title': instance['title'],
             'date': instance['creationdate'],
-            'admin_id': instance['admin__admin_id']
+            'name': instance['admin__name']
         }
     class Meta:
         model = Faq
-        fields = ['faq_id', 'title', 'creationdate', 'admin__admin_id']
+        fields = ['faq_id', 'title', 'creationdate', 'admin__name']
 
 class FaqCreateSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField()
     contents = serializers.CharField()
-    admin_id = serializers.IntegerField()
+    name = serializers.CharField()
     
     class Meta:
         model = Faq
-        fields = ('title', 'contents', 'admin_id')
+        fields = ('title', 'contents', 'name')
 class FaqUpdateSerializer(serializers.Serializer):
 
     title = serializers.CharField()

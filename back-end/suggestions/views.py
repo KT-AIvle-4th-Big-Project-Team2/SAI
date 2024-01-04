@@ -101,3 +101,7 @@ class SuggestionUpdateView(generics.UpdateAPIView):
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
+
+class SuggestionDeleteView(generics.DestroyAPIView):
+    queryset = Suggestions.objects.all()
+    serializer_class = SuggestionSerializer

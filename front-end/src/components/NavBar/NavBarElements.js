@@ -42,7 +42,7 @@ function NavBarElements() {
               />
             </Navbar.Brand>
 
-            <Nav className="fw-bold">
+            <Nav>
               <NavDropdown title="알림마당" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
                 <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
@@ -58,8 +58,8 @@ function NavBarElements() {
                 <NavDropdown.Item href="/Sectors">업종 분석</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="게시판" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Board2">창업 정보</NavDropdown.Item>
-                <NavDropdown.Item href="/Board1">창업 게시판</NavDropdown.Item>
+                <NavDropdown.Item href="/Board1">창업 정보</NavDropdown.Item>
+                <NavDropdown.Item href="/Board2">창업 게시판</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="마이페이지" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
