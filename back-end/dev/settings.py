@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
-SELECT_DATABASE = 1 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
+SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -74,9 +74,15 @@ sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
 
-CORS_ORIGIN_WHITELIST = [
-    frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
+# ]
+
+# CORS_ORIGIN_WHITELIST = [
+#     frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
+# ]
 
 MIDDLEWARE = [
     # rest API를 위한 middleware
@@ -90,6 +96,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
     
 ]
 

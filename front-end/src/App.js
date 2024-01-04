@@ -1,5 +1,7 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './screens/Home';
 import Index from './screens/Index';
@@ -33,13 +35,19 @@ import WithDrawal from './screens/Mypage/WithDrawal';
 import Container from 'react-bootstrap/Container'
 import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
+import Header from './header';
+
 
 
 
 function App() {
+  const [headers, setHeaders] = useState({});
+
+
   return (
     <Router>
       <NavBarElements />
+      <Header />
         <Routes>
           
           <Route path = "/" element = { <Index /> } />

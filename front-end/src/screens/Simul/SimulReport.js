@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { experimentalStyled as styled } from '@mui/material/styles';
 import {
   Box,
   Paper,
@@ -7,8 +6,17 @@ import {
 }
 from '@mui/material/'
 import DivLine from '../../components/Styles/DivLine';
+import { ResponsiveCirclePacking } from '@nivo/circle-packing'
+
 
 const SimulReport = () => {
+  const data = {
+      "name": "nivo",
+      "color": "hsl(38, 70%, 50%)",
+      "loc" : 100
+  }
+
+  
   const user = '오진원'
   const danger = '위험' 
   const result = 9.3
@@ -17,10 +25,9 @@ const SimulReport = () => {
   const Dong = '전농동'
   const Sector = '치킨 전문점'
 
-
   return (
     <>
-      <Paper borderRadius={8} bgcolor={'gray.10'} sx={{mt : 3, mb : 4, height : 'auto', padding : 3}}>
+      <Paper borderRadius={8} bgcolor={'primary.main'} sx={{mt : 3, mb : 4, height : 'auto', padding : 10}}>
           <Box sx={{ mt: 3, mb: 3, width: 'fit-content', height: 'auto' }}>
             <Typography fontSize={30} sx={{ml : 10, mt : 2}}> SAI! 예상 창업 비용</Typography>
           </Box>
@@ -33,10 +40,13 @@ const SimulReport = () => {
             <Typography fontSize={20} sx={{mt : 5}}>업종 {Sector}</Typography>
             <Typography fontSize={20} sx={{mt : 5, mr : 30}}>창업준비금 ddddd원</Typography>
             </div>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '3  0vh' }}>
-              <Typography fontSize={30}>
-                그래프
-              </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
+            <ResponsiveCirclePacking
+              data={data}
+              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+              id="name"
+              value="loc"
+              />
             </Box>
             <Box bgcolor="primary.main" >
               <Typography fontSize={30} sx={{ml : 10, mt : 10, mr : 10}}>창업 지수 : {danger}</Typography>
