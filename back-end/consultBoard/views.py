@@ -105,7 +105,7 @@ class BoardPostCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         key = self.request.data.get("key")
         # self.request.data.pop("key")
-        if not LoginCheck(key): return Response({"error":"user info error"})
+        if not LoginCheck(key): raise ValidationError({"error":"user info error"})
         
         user_instance = user.objects.get(username=self.request.data.get('username'))
         
@@ -121,12 +121,12 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     def perform_update(self, serializer):    
         
         key = self.request.data.get("key")
-        if not LoginCheck(key): return Response({"error":"user info error"})
+        if not LoginCheck(key): raise ValidationError({"error":"user info error"})
         
         user_instance = user.objects.get(username = key)
             
         instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
-        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
+        if instance.user_id != user_instance.user_id: raise ValidationError({'error':'wrong user error'})
         instance.title = serializer.validated_data['title']
         instance.contents = serializer.validated_data['contents']
 
@@ -137,11 +137,11 @@ class BoardPostDeleteView(generics.DestroyAPIView):
     serializer_class = BoardPostSerializer
     def delete(self, request, *args, **kwargs):
         key = request.data.get("key")
-        if not LoginCheck(key) : return Response({"error":"user info error"})
+        if not LoginCheck(key) : raise ValidationError({"error":"user info error"})
         
         user_instance = user.objects.get(username = key)
         instance = self.get_object()
-        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
+        if instance.user_id != user_instance.user_id:  raise ValidationError({'error':'wrong user error'})
         instance.delete()
         return Response({'success':'delte success'})
     
@@ -173,9 +173,9 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
         
     def perform_create(self, serializer):
         key = self.request.data.get('key')
-        if not LoginCheck(key) : return Response({"error":"user info error"})
+        if not LoginCheck(key) :  raise ValidationError({"error":"user info error"})
         
-        user_instance = User.objects.get(name=serializer.validated_data.get('name', ''))
+        user_instance = user.objects.get(name=serializer.validated_data.get('name', ''))
         board_id = BoardConsult.objects.get(board_id=self.kwargs['pk'])
         
         CommentsConsult.objects.create(
@@ -191,7 +191,7 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
     
     def perform_update(self, serializer):
         key = self.request.data.get('key')
-        if not LoginCheck(key) : return Response({"error":"user info error"})    
+        if not LoginCheck(key) :  raise ValidationError({"error":"user info error"})    
         user_instance = user.objects.get(username = key)
             
         instance = self.get_object()
@@ -205,10 +205,10 @@ class BoardPostDeleteView(generics.DestroyAPIView):
     serializer_class = BoardPostSerializer
     def delete(self, request, *args, **kwargs):
         key = request.data.get("key")
-        if not LoginCheck(key) : return Response({"error":"user info error"})
+        if not LoginCheck(key) :  raise ValidationError({"error":"user info error"})
         
         user_instance = user.objects.get(username = key)
         instance = self.get_object()
-        if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
+        if instance.user_id != user_instance.user_id:  raise ValidationError({'error':'wrong user error'})
         instance.delete()
         return Response({'success':'delete success'})

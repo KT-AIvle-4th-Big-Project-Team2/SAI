@@ -80,7 +80,7 @@ class UpdatePWView(generics.UpdateAPIView):
         
         key = request.data.get('key')
         
-        if not LoginCheck(key): return Response({"error":"user info error"})
+        if not LoginCheck(key):  raise ValidationError({"error":"user info error"})
         instance = UserCustom.objects.get(username = key)
         request.data.pop('key', None)
         
@@ -99,7 +99,7 @@ class LogoutView(APIView):
         try:
             #auth.logout(request)
             key = request.data.get('key')
-            if not LoginFalse(key): return Response({"error":"user info error"})
+            if not LoginFalse(key):  raise ValidationError({"error":"user info error"})
             return Response({'success':'logout success'})
         except:
             return Response({'error':'logout failed'})
@@ -125,7 +125,7 @@ class CheckPWView(APIView):
     serializer_class = PasswordCheckSerializer
     def post(self, request):
         key = request.data.get('key')
-        if not LoginCheck(key): return Response({"error":"user info error"})
+        if not LoginCheck(key):  raise ValidationError({"error":"user info error"})
         request.data.pop('key', None)
         serializer = self.serializer_class(data = request.data)
         if serializer.is_valid():
@@ -146,7 +146,7 @@ class DeleteAccountView(APIView):
     serializer_class = PasswordCheckSerializer
     def delete(self, request):
         key = request.data.get('key')
-        if not LoginCheck(key): return Response({"error":"user info error"})
+        if not LoginCheck(key):  raise ValidationError({"error":"user info error"})
         request.data.pop('key', None)
         serializer = self.serializer_class(data = request.data)
         if serializer.is_valid():
@@ -206,7 +206,7 @@ class SendPing(APIView):
     serializer_class = FindIDOutputSerializer
     def post(self, request):
         key = request.data.get("key")
-        if not LoginCheck(key): return Response({"error":"user info error"})
+        if not LoginCheck(key):  raise ValidationError({"error":"user info error"})
         else:
             return Response({'success' : 'ping success'})
         

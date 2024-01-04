@@ -20,7 +20,7 @@ def LoginFalse(username):
     except:
         return False
     
-def LoginCheck(username):
+def LoginCheck(username, checkauth = False):
     try:
         user_logInfo = LogInfo.objects.get(user_id__username = username)
         if user_logInfo.isLogedIn:
@@ -29,14 +29,25 @@ def LoginCheck(username):
                 user_logInfo.save()
                 return False
             else:
-                user_logInfo.isLogedIn = True
-                user_logInfo.save()
-                return True
+                if checkauth:
+                    if user_logInfo.isadmin:
+                        user_logInfo.isLogedIn = True
+                        user_logInfo.save()
+                        return True
+                    
+                    else:
+                        return False
+                    
+                else:
+                    user_logInfo.isLogedIn = True
+                    user_logInfo.save()
+                    return True
+                
         else:
             return False
     except:
         return False
-    
+        
     
     
 # key = request.data.get("key")
