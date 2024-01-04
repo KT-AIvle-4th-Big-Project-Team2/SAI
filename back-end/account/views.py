@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
+#
 
 from .models import Admin, UserCustom
 from .serializers import *
@@ -95,13 +96,41 @@ class UpdateUserView(generics.UpdateAPIView):
         return self.partial_update(request, *args, **kwargs)
 
 @method_decorator(csrf_protect, name='dispatch')
+class UpdateUserView(generics.UpdateAPIView):
+    queryset = UserCustom.objects.all()
+    serializer_class = UpdateUserSerializer
+
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()  # 뷰의 queryset에서 사용자를 가져옵니다.
+        serializer = self.serializer_class(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@method_decorator(csrf_protect, name='dispatch')
 class LogoutView(APIView):
     def post(self, request, format = None):
         try:
             auth.logout(request)
             return Response({'success':'logout success'})
         except:
-            return Response({'error':'logout fail'})
+            return Response({'error':'logout failed'})
+        
+        
+@method_decorator(csrf_protect, name='dispatch')
+class GetUserView(APIView):
+    serializer_class = GetUserData
+    def get(self, request, format = None):
+        user = self.request.user
+        user_data = UserCustom.objects.filter(username = user).first()
+        print(user_data)
+        serializer = self.serializer_class(user_data)
+        return Response(serializer.data)
+
+
+
+
         
 # class SignInView(generics.CreateAPIView):
 #     serializer_class = SignInSerializer

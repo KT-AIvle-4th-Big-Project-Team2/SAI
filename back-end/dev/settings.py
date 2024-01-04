@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 SELECT_DATABASE = 1 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
@@ -50,7 +51,7 @@ INSTALLED_APPS = [
     # 사이트 기능
     "account",
     # 'analysis',
-    # 'board',
+    'board',
     # 'faq',
     # 'report',
     # 'suggestions',
@@ -61,7 +62,11 @@ INSTALLED_APPS = [
     
     # rest API
     "rest_framework",
+    "rest_framework.authtoken", # django + REST framework Token authentication
     "corsheaders",
+    
+    # Token JWT 인증
+    'rest_framework_simplejwt'
 ]
 
 sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
@@ -198,7 +203,6 @@ USE_I18N = True
 USE_TZ = False
 
 
-
 REST_FRAMEWORK = {
     # 'DEFAULT_PARSER_CLASSES': [
     #     'rest_framework.parsers.JSONParser',
@@ -210,8 +214,10 @@ REST_FRAMEWORK = {
     
     'DEFAULT_AUTHENTICATON_CLASSES':[
         'rest_framework.authentication.SessionAuthentication',
+        
     ]
 }
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -222,3 +228,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+

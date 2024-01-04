@@ -55,3 +55,8 @@ class PasswordCheckSerializer(serializers.Serializer):
     
 class DeleteUserSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=75)
+
+class GetUserData(serializers.ModelSerializer):
+    class Meta:
+        model = UserCustom
+        fields = ['username', 'email', 'phonenumber', 'age', 'gender']
