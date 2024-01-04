@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
-SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
+SELECT_DATABASE = 1 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,30 +50,24 @@ INSTALLED_APPS = [
     
     # 사이트 기능
     "account",
-    'analysis',
+    # 'analysis',
     'board',
-    'faq',
-    'report',
-    'suggestions',
-    'announcement',
-    'reviewBoard',
-    'concernBoard',
-    'consultBoard',
+    # 'faq',
+    # 'report',
+    # 'suggestions',
+    # 'announcement',
+    # 'reviewBoard',
+    # 'concernBoard',
+    # 'consultBoard',
     
     # rest API
     "rest_framework",
+    "rest_framework.authtoken", # django + REST framework Token authentication
     "corsheaders",
-]
-
-REST_FRAMEWORK = {
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
-    ],
     
-    'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.AllowAny',
-    ]
-}
+    # Token JWT 인증
+    'rest_framework_simplejwt'
+]
 
 sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
@@ -86,16 +81,16 @@ CORS_ORIGIN_WHITELIST = [
 MIDDLEWARE = [
     # rest API를 위한 middleware
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     
     # django 기본 middleware
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -150,6 +145,7 @@ if SELECT_DATABASE == 0 :
     }
     
 elif SELECT_DATABASE == 1:
+    print
     DATABASES = { 
         'default': {
             'ENGINE': sensitiveDataList[6][:-1],
@@ -157,7 +153,7 @@ elif SELECT_DATABASE == 1:
             'USER': sensitiveDataList[8][:-1],
             'PASSWORD': sensitiveDataList[9][:-1],
             'HOST': sensitiveDataList[10][:-1],
-            'PORT': sensitiveDataList[11][:-1],
+            'PORT': sensitiveDataList[11],
             'OPTIONS': {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',
@@ -193,6 +189,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'account.UserCustom'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -206,6 +203,22 @@ USE_I18N = True
 USE_TZ = False
 
 
+REST_FRAMEWORK = {
+    # 'DEFAULT_PARSER_CLASSES': [
+    #     'rest_framework.parsers.JSONParser',
+    # ],
+    
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    
+    'DEFAULT_AUTHENTICATON_CLASSES':[
+        'rest_framework.authentication.SessionAuthentication',
+        
+    ]
+}
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -215,3 +228,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
