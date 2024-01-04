@@ -40,8 +40,8 @@ function App() {
   return (
     <Router>
       <NavBarElements />
-      <Container>
         <Routes>
+          
           <Route path = "/" element = { <Index /> } />
           <Route path = "/Notice" element = { <Notice /> } />
           <Route path = "/NoticeWrite" element = { <NoticeWrite /> } />
@@ -73,7 +73,6 @@ function App() {
           <Route path = "/WithDrawal" element = { <WithDrawal /> } />
           <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
       </Routes>
-      </Container>
     </Router>
   );
 }

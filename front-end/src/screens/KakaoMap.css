@@ -1,0 +1,65 @@
+.map-container {
+    position: relative; /* 상대적 위치 지정 */
+    height: 100vh; /* 전체 뷰포트 높이 */
+}
+
+.title {
+    /* 여기에 원하는 스타일을 추가하세요 */
+    color: blue; /* 텍스트 색상을 빨간색으로 설정 */
+    font-size: 32px; /* 글꼴 크기를 16px로 설정 */
+    font-style: border;
+    font-weight: bold;
+    /* 다른 스타일을 필요에 따라 추가하세요 */
+  }
+  
+
+.sidebar {
+    margin-top: 1%;
+    margin-left: 1%;
+    position: absolute; /* 절대 위치 지정 */
+    top: 0; /* 상단에 위치 */
+    left: 0; /* 좌측에 위치 */
+    background-color: #fff; /* 배경색 */
+    height: 30%;
+    width: 20%;
+    padding: 10px; /* 내부 여백 */
+    box-sizing: border-box; /* 총 너비 계산 방식 */
+    z-index:10;
+}
+
+.menu-item {
+    display: block; /* 블록 레벨 요소로 표시 */
+    margin-top: 5px;
+    margin-bottom: 5px; /* 하단 여백 */
+}
+
+.map {
+    height: 100%; /* 전체 높이 차지 */
+   
+}
+/* 팝업 메뉴 스타일 (초기에는 숨김) */
+.menu-popup {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  }
+  
+  /* 팝업 메뉴를 보이게 함 */
+  .menu-container:hover .menu-popup {
+    display: block;
+  }
+  
+  .menu-container-outer {
+    position: absolute; /* 절대 위치 지정 */
+    top: 0; /* 상단에 위치 */
+    left: 20%; /* sidebar 너비에 맞게 위치 조정 */
+    /* 다른 스타일을 필요에 따라 추가하세요 */
+}
+
+.menu-container-inner {
+    background-color: #fff; /* 배경색을 흰색으로 설정 */
+    width: 200px; /* 새로운 메뉴 영역의 너비 설정 */
+    /* 다른 스타일을 필요에 따라 추가하세요 */
+}
