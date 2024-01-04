@@ -8,20 +8,20 @@ from .serializers import *
 
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from rest_framework import status
+# from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 
 from .serializers import *
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 
-from django.contrib.auth.models import User
-from django.contrib import auth
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+# from django.contrib.auth.models import User
+# from django.contrib import auth
+# from django.contrib.auth import authenticate, login, logout
+# from django.contrib.auth.decorators import login_required
+# from django.http import JsonResponse
 
 from account.customlibs.checkLogin import *
 
@@ -40,7 +40,7 @@ from account.customlibs.checkLogin import *
     
      
 class BoardPostListView(generics.ListAPIView):
-    permission_classes = (permissions.AllowAny,)
+    #permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
         board_contents = Board.objects.values(
             'board_id',
@@ -54,7 +54,7 @@ class BoardPostListView(generics.ListAPIView):
     
     serializer_class = BoardPostListSerializer
 class BoardPostView(generics.ListAPIView):
-    permission_classes = (permissions.AllowAny,)
+    #permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
 
         board_id = self.kwargs['pk']
@@ -70,7 +70,7 @@ class BoardPostView(generics.ListAPIView):
 
     serializer_class = BoardPostSerializer
 class BoardSearchView(generics.ListAPIView):
-    permission_classes = (permissions.AllowAny,)
+    #permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
         searchKeyword = self.kwargs['searchkeyword']
         if self.kwargs['searchfield'] == 'title':
@@ -161,7 +161,7 @@ class BoardPostDeleteView(generics.DestroyAPIView):
 # 댓글 기능
 #******************************************************************************************************************************************************************
 class BoardPostCommentView(generics.ListAPIView):
-    permission_classes = (permissions.AllowAny,)
+    #permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
 
         board_id = self.kwargs['pk']
@@ -221,4 +221,4 @@ class BoardPostCommentDeleteView(generics.DestroyAPIView):
         instance = self.get_object()
         if instance.user_id != user_instance.user_id: return Response({'error':'wrong user error'})
         instance.delete()
-        return Response({'success':'delte success'})
+        return Response({'success':'delete success'})
