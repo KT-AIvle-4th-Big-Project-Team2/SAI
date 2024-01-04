@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Avatar,
   Button,
@@ -14,6 +14,7 @@ import {
 } from '@mui/material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -32,7 +33,9 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+
 export default function SignIn() {
+  const [authTokens, setAuthTokens] = useState('')
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,8 +43,29 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     };
-    const { email, password} = joinData;
-    }
+    console.log(joinData)
+      const {email, password} = joinData
+      const username = email
+      axios.post("http://127.0.0.1:8000/accounts/login/", {
+        username,
+        password
+      },
+      {
+        withCredentials: true,
+        credentials: 'include',
+      }
+      )
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response.headers)
+            console.log(response.headers['set-cookie'])
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -90,7 +114,6 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              href = '/Home'
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
@@ -113,4 +136,5 @@ export default function SignIn() {
       </Container>
     </ThemeProvider>
   );
+        
 }

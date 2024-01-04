@@ -5,11 +5,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import imgLogo from './logo.png';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, createTheme, ThemeProvider, CssBaseline } from '@mui/material';
+import axios from 'axios';
 
 function NavBarElements() {
   const [openFeedback, setOpenFeedback] = useState(false);
   const [feedbackTitle, setFeedbackTitle] = useState('');
   const [feedbackContent, setFeedbackContent] = useState('');
+  const name = 'test'
 
   const handleOpenFeedback = () => {
     setOpenFeedback(true);
@@ -20,17 +22,28 @@ function NavBarElements() {
   };
 
   const handleSendFeedback = () => {
-    // Handle sending feedback to the server (you can add your logic here)
-    // Then, close the feedback pop-up
+    const title = feedbackTitle
+    const contents = feedbackContent
+    axios.post("http://127.0.0.1:8000/suggestions/suggestions/createpost", {
+      title,
+      contents,
+      name
+    })
+      .then(function (response) {
+        console.log(response);
+        // Consider using a redirect method here
+      })
+      .catch(function (error) {
+        console.log(error);
     setOpenFeedback(false);
     // Reset the input fields
     setFeedbackTitle('');
     setFeedbackContent('');
-  };
+    })}
 
   return (
       <>
-        <Navbar style={{ background: '#3e91b5' }} data-bs-theme="dark">
+        <Navbar style={{ background: '#404040' }} data-bs-theme="dark">
           <Container className="justify-content-between">
             <Navbar.Brand href="/Home">
               <img
@@ -42,7 +55,7 @@ function NavBarElements() {
               />
             </Navbar.Brand>
 
-            <Nav className="fw-bold">
+            <Nav>
               <NavDropdown title="알림마당" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
                 <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
@@ -58,8 +71,8 @@ function NavBarElements() {
                 <NavDropdown.Item href="/Sectors">업종 분석</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="게시판" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Board2">창업 정보</NavDropdown.Item>
-                <NavDropdown.Item href="/Board1">창업 게시판</NavDropdown.Item>
+                <NavDropdown.Item href="/Board1">창업 정보</NavDropdown.Item>
+                <NavDropdown.Item href="/Board2">창업 게시판</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="마이페이지" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
