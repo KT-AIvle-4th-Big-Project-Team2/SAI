@@ -34,7 +34,7 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["http://localhost:3000", "http://127.0.0.1:8000"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Application definition
 
@@ -94,7 +94,7 @@ MIDDLEWARE = [
 #CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL
+    frontURL, "http://localhost", "http://127.0.0.1"
 ]
 
 ROOT_URLCONF = "dev.urls"
