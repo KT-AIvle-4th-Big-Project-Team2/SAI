@@ -14,6 +14,7 @@ import {
 } from '@mui/material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useAuth } from './AuthContext';
 import axios from 'axios';
 
 function Copyright(props) {
@@ -35,6 +36,8 @@ const defaultTheme = createTheme();
 
 
 export default function SignIn() {
+  const { loginHandler, setUserInfo } = useAuth();
+
   const [authTokens, setAuthTokens] = useState('')
   const handleSubmit = (event) => {
     event.preventDefault();
