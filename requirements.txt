@@ -1,0 +1,12 @@
+django
+djangorestframework
+markdown
+django-filter
+django-cors-headers
+dj-rest-auth
+mysqlclient
+node.js
+react
+react-bootstrap
+json
+requests

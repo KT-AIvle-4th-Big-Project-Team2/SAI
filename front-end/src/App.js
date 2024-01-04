@@ -1,17 +1,28 @@
-import React from 'react';
-import { AuthProvider } from './components/Auth/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './components/Auth/AuthContext';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './screens/Home';
 import Index from './screens/Index';
 import Board1 from './screens/Board/Board1';
+import Board1Mod from './screens/Board/Board1Mod';
+import Board1View from './screens/Board/Board1View';
+import Board1Write from './screens/Board/Board1Write';
+import Board1Search from './screens/Board/Board1Search';
 import Board2 from './screens/Board/Board2';
+import Board2Mod from './screens/Board/Board2Mod';
+import Board2View from './screens/Board/Board2View';
+import Board2Write from './screens/Board/Board2Write';
+import Board2Search from './screens/Board/Board2Serach';
 import Login from './screens/Login/login';
 import NavBarElements from './components/NavBar/NavBarElements';
 import SignUp from './screens/Login/SignUp';
-import BoardDetail from './screens/Board/BoardView';
-import BoardWrite from './screens/Board/BoardWrite';
 import Notice from './screens/Notice/Notice';
+import NoticeMod from './screens/Notice/NoticeMod';
+import NoticeView from './screens/Notice/NoticeView';
+import NoticeWrite from './screens/Notice/NoticeWrite';
+import NoticeSearch from './screens/Notice/NoticeSearch';
 import FindID from './screens/Login/FindID';
 import Simul from './screens/Simul/Simul';
 import Simul2 from './screens/Simul/Simul2';
@@ -24,6 +35,8 @@ import WithDrawal from './screens/Mypage/WithDrawal';
 import Container from 'react-bootstrap/Container'
 import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
+import Header from './header';
+
 
 
 

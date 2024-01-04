@@ -10,13 +10,12 @@ const theme = createTheme({
     secondary: {
       main: '#1E90FF', // 파란색 또는 다른 원하는 색상으로 변경
     },
-    background: {
-      default: `url(${backgroundimg})`,
-    },
   },
 });
 
 const About = () => {
+
+
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline />
