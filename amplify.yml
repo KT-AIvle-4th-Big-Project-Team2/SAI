@@ -3,12 +3,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        - yarn install
-    # IMPORTANT - Please verify your build commands
+        - npm install
     build:
-      commands: []
+      commands:
+        - npm build
   artifacts:
-    baseDirectory: dist
+    baseDirectory: build
     files:
       - '**/*'
   cache:
