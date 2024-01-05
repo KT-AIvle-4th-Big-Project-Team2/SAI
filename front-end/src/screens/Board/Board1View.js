@@ -13,7 +13,7 @@ const Board1View = () => {
   const [boardContent, setBoardContent] = useState({}); // Change to object
 
   function getBoardContent() {
-    axios.get(`http://127.0.0.1:8000/board/postlist/${post_num}`)
+    axios.get(`http://43.202.42.122/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);

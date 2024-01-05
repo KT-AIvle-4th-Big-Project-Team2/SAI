@@ -31,7 +31,7 @@ const Board2Mod = () => {
     const { title, content } = text;
 
     // Make a PATCH request to update the post with the modified data
-    axios.patch(`http://127.0.0.1:8000/board2/postlist/${post_num}`, {
+    axios.patch(`http://43.202.42.122/board2/postlist/${post_num}`, {
       title,
       content,
     })

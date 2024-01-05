@@ -11,7 +11,7 @@ const NoticeView = () => {
   const [boardContent, setBoardContent] = useState({}); // Change to object
 
   function getBoardContent() {
-    axios.get(`43.202.42.122/announcements/announcementlist/${post_num}`)
+    axios.get(`http://43.202.42.122/announcements/announcementlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);
