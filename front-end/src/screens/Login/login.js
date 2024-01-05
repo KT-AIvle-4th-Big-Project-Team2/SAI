@@ -49,7 +49,7 @@ export default function SignIn() {
     console.log(joinData)
       const {email, password} = joinData
       const username = email
-      axios.post("http://43.202.42.122/", {
+      axios.post("https://43.202.42.122/", {
         username,
         password
       },

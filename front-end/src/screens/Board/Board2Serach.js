@@ -33,7 +33,7 @@ const Board2Search = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get(`http://43.202.42.122/Board2/postlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`https://3.38.190.216/Board2/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);
