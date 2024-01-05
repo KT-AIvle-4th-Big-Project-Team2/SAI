@@ -1,10 +1,27 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from urllib.parse import unquote
 from rest_framework import generics
 
 from .models import *
 from .serializers import *
+
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
+from rest_framework.views import APIView
+
+from .serializers import *
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+
+from django.contrib.auth.models import User
+from django.contrib import auth
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 # 연습 및 테스트용
 # class ListPost(generics.ListCreateAPIView):
@@ -19,22 +36,23 @@ from .serializers import *
 # 게시글 기능
 #******************************************************************************************************************************************************************
     
+     
 class BoardPostListView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
         board_contents = Board.objects.values(
             'board_id',
             'title',
             'creationdate',
-            'user__name',
+            'user__username',
         )
         
         queryset = board_contents
         return queryset
     
     serializer_class = BoardPostListSerializer
-    
 class BoardPostView(generics.ListAPIView):
-    
+    permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
 
         board_id = self.kwargs['pk']
@@ -43,24 +61,23 @@ class BoardPostView(generics.ListAPIView):
             'title',
             'contents',
             'creationdate',
-            'user__name',
+            'user__username',
         )
         
         return queryset
 
     serializer_class = BoardPostSerializer
-
 class BoardSearchView(generics.ListAPIView):
-    
+    permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
-        board_id = self.kwargs['searchfield']
+        searchKeyword = self.kwargs['searchkeyword']
         if self.kwargs['searchfield'] == 'title':
             
             queryset = Board.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
                 'board_id',
                 'title',
                 'creationdate',
-                'user__name',
+                'user__username',
             )
             
         elif self.kwargs['searchfield'] == 'contents':
@@ -69,39 +86,38 @@ class BoardSearchView(generics.ListAPIView):
                 'board_id',
                 'title',
                 'creationdate',
-                'user__name',
+                'user__username',
             )
             
-        elif self.kwargs['searchfield'] == 'name':
+        elif self.kwargs['searchfield'] == 'username':
             
-            queryset = Board.objects.filter(user__name__contains=self.kwargs['searchkeyword']).values(
+            queryset = Board.objects.filter(user__username__contains=self.kwargs['searchkeyword']).values(
                 'board_id',
                 'title',
                 'creationdate',
-                'user__name',
+                'user__username',
             )
             
         else:
             return HttpResponse("ERROR")
         
         
-        print(queryset)
         return queryset
 
     serializer_class = BoardSearchSerializer
-
+@method_decorator(csrf_protect, name='dispatch')
 class BoardPostCreateView(generics.CreateAPIView):
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
-        user_instance = User.objects.get(name=serializer.validated_data.get('name', ''))
+        user_instance = user.objects.get(username=self.request.user)
         
         Board.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
             user=user_instance
         )
-        
+@method_decorator(csrf_protect, name='dispatch')        
 class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     serializer_class = BoardPostUpdateSerializer
     queryset = Board.objects.all()
@@ -122,14 +138,14 @@ class BoardPostDeleteView(generics.DestroyAPIView):
 # 댓글 기능
 #******************************************************************************************************************************************************************
 class BoardPostCommentView(generics.ListAPIView):
-    
+    permission_classes = (permissions.AllowAny,)
     def get_queryset(self):
 
         board_id = self.kwargs['pk']
         queryset = Comments.objects.filter(board=board_id).values(
             'contents',
             'creationdate',
-            'user__name',
+            'user__username',
             'comment_id',
         )
         
@@ -141,7 +157,7 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
     serializer_class = BoardPostcommentCreateSerializer
         
     def perform_create(self, serializer):
-        user_instance = User.objects.get(name=serializer.validated_data.get('name', ''))
+        user_instance = user.objects.get(username=self.request.user)
         board_id = Board.objects.get(board_id=self.kwargs['pk'])
         
         Comments.objects.create(

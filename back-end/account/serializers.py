@@ -1,12 +1,10 @@
 from rest_framework import serializers
-from .models import *
+# from .models import Admin, User
+from .models import UserCustom
 
-from rest_framework import serializers
-from .models import *
-
-class LoginSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    password = serializers.CharField()
+class LoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length = 75)
+    password = serializers.CharField(max_length = 75)
     # def to_representation(self, instance):
     #     return {
     #         'post_id': instance['board_id'],
@@ -15,23 +13,23 @@ class LoginSerializer(serializers.Serializer):
     #         'date': instance['creationdate'],
     #         'name': instance['user__name']
     #     }
-    # class Meta:
-    #     model = User
-    #     fields = ('name', 'password')
+    class Meta:
+        model = UserCustom
+        fields = ['username', 'password']
     
 
 class SignInSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['name', 'password', 'email', 'phonenumber', 'age', 'gender']
+        model = UserCustom
+        fields = ['username', 'password', 'email', 'phonenumber', 'age', 'gender']
         
 class FindIDInputSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserCustom
         fields = ['email', 'phonenumber', 'gender']
 class FindIDOutputSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = UserCustom
         fields = ['name']
         
 class FindPasswordInputSerializer(serializers.Serializer):
@@ -43,16 +41,13 @@ class FindPasswordInputSerializer(serializers.Serializer):
                                    
 class FindPasswordOutputSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['password']
+        model = UserCustom
+        fields = ['username', 'password', 'email', 'phonenumber', 'age', 'gender']
         
-class UpdateUserSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=75)
-    password = serializers.CharField(max_length=75)
-    email = serializers.CharField(max_length=254)
-    phonenumber = serializers.CharField(max_length=11)
-    age = serializers.IntegerField()
-    gender = serializers.CharField(max_length=1)
+class UpdateUserSerializer(serializers.ModelField):
+    class Meta:
+        model = UserCustom
+        fields = ['username', 'password', 'email', 'phonenumber', 'age', 'gender']
 
 class PasswordCheckSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=75)
@@ -60,3 +55,8 @@ class PasswordCheckSerializer(serializers.Serializer):
     
 class DeleteUserSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=75)
+
+class GetUserData(serializers.ModelSerializer):
+    class Meta:
+        model = UserCustom
+        fields = ['username', 'email', 'phonenumber', 'age', 'gender']

@@ -26,7 +26,7 @@ class BoardPostListSerializer(serializers.Serializer):
             'post_id': instance['board_id'],
             'title': instance['title'],
             'date': instance['creationdate'],
-            'name': instance['user__name']
+            'name': instance['user__username']
         }
 
 class BoardPostSerializer(serializers.Serializer):
@@ -42,7 +42,7 @@ class BoardPostSerializer(serializers.Serializer):
             'title': instance['title'],
             'contents': instance['contents'],
             'date': instance['creationdate'],
-            'name': instance['user__name']
+            'name': instance['user__username']
         }
         
 class BoardPostCommentSerializer(serializers.Serializer):
@@ -51,7 +51,7 @@ class BoardPostCommentSerializer(serializers.Serializer):
         return {
             'contents': instance['contents'],
             'date': instance['creationdate'],
-            'name': instance['user__name'],
+            'name': instance['user__username'],
             'comment_id': instance['comment_id']
         }
 
@@ -61,21 +61,20 @@ class BoardSearchSerializer(serializers.ModelSerializer):
             'post_id': instance['board_id'],
             'title': instance['title'],
             'date': instance['creationdate'],
-            'name': instance['user__name']
+            'name': instance['user__username']
         }
     class Meta:
         model = Board
-        fields = ['post_id', 'title', 'creationdate', 'user__name']
+        fields = ['post_id', 'title', 'creationdate', 'user__username']
 
 class BoardPostCreateSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField()
     contents = serializers.CharField()
-    name = serializers.CharField()
     
     class Meta:
         model = Board
-        fields = ('title', 'contents', 'name')
+        fields = ('title', 'contents')
 
 class BoardPostUpdateSerializer(serializers.Serializer):
 
@@ -86,11 +85,10 @@ class BoardPostUpdateSerializer(serializers.Serializer):
 class BoardPostcommentCreateSerializer(serializers.ModelSerializer):
 
     contents = serializers.CharField()
-    name = serializers.CharField()
     
     class Meta:
         model = Comments
-        fields = ('contents', 'name')
+        fields = ('contents',)
 
 
 class BoardPostCommentUpdateSerializer(serializers.ModelSerializer):
@@ -100,3 +98,9 @@ class BoardPostCommentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ('contents',)
+        
+        
+# class GetUserData(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserCustom
+#         fields = ['username', 'email', 'phonenumber', 'age', 'gender']

@@ -3,156 +3,276 @@
 # from django.http import HttpResponse
 # from .forms import signinForm
 
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
+#
 
-from .models import *
+from .models import Admin, UserCustom
 from .serializers import *
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+
+from django.contrib.auth.models import User
+from django.contrib import auth
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+
+@method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
+class GetCSRFToken(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self, request, format = None):
+        return Response({'success' : 'CSRF Cookie set'})
+
+@method_decorator(csrf_protect, name='dispatch')
+class CheckAuthenticatedView(APIView):
+    def get(self, request, format = None):
+        try:
+            isAuthenticated = request.user.is_authenticated
+            
+            if isAuthenticated:
+                return Response({'isAuthenticated':'sucess'})
+            else:
+                return Response({'isAuthenticated':'error'})
+        except:
+            return Response({'error': 'Something went wrong during checking authentication status'})
+
+@method_decorator(csrf_protect, name='dispatch')
 class SignInView(generics.CreateAPIView):
+    permission_classes = (permissions.AllowAny,)
     serializer_class = SignInSerializer
     
     def perform_create(self, serializer):
-        new_user_data = serializer.validated_data
-        username = new_user_data['name']
-
-        if User.objects.filter(name=username).exists() or Admin.objects.filter(name=username).exists():
-            raise ValidationError({'message': "That username is already used!"})
+        try:
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            email = serializer.validated_data['email']
+            phonenumber = serializer.validated_data['phonenumber']
+            age = serializer.validated_data['age']
+            gender = serializer.validated_data['gender']
+        except:
+            raise ValidationError({'error':'Value missing'})
         
-        serializer.save()
+        if UserCustom.objects.filter(username=username).exists() or Admin.objects.filter(name=username).exists():
+            return Response({'error':'Username already exists'})
+        
+        user = UserCustom.objects.create_user(username = username, password = password, email = email, 
+                                        phonenumber = phonenumber, age = age, gender = gender)
+        user.save()
+        return Response({'success': "User created successfully"})
 
-        return Response({'message': "User created successfully"}, status=status.HTTP_201_CREATED)
-    
+#@method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
-    serializers = LoginSerializer
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginSerializer
     
-    def post(self, request):
-        serializer = self.serializers(data=request.data)
+    def post(self, request, format = None):
         
+        print(request.data)
+        serializer = self.serializer_class(data=request.data)
+        print(serializer.is_valid())
         if serializer.is_valid():
-            inputs = serializer.validated_data
-            username = inputs['name']
-            password = inputs['password']
-            
-            if User.objects.filter(name = username).exists():
-                print("id matched")
-                potentialUserRow = User.objects.filter(name = username).first()
-                if password == potentialUserRow.password:
-                    print("password matched")
-                    return Response({'message': "user login successful"}, status=status.HTTP_200_OK,)
-                else: return Response({'message': "password wrong"}, status.HTTP_401_UNAUTHORIZED,)
-                
-            elif Admin.objects.filter(name = username).exists():
-                print("Admin Id matched!")
-                potentialAdminRow = Admin.objects.filter(name = username).first()
-                if password == potentialAdminRow.password:
-                    print("password matched!")
-                    return Response({'message': "admin login successful"}, status=status.HTTP_200_OK,)
-                else: return Response({'message': "password wrong"}, status.HTTP_401_UNAUTHORIZED,)
-                
-            else: return Response({'message': "id wrong"}, status.HTTP_401_UNAUTHORIZED,)
-        else: return Response(status.HTTP_400_BAD_REQUEST)
-        
-class FindIDView(APIView):
-    queryset = User.objects.all()
-    
-    def post(self, request):
-        self.queryset
-        serializer_data = FindIDInputSerializer(data=request.data)
-        if serializer_data.is_valid():
-            inputs = serializer_data.validated_data
-            email = inputs['email']
-            phonenumber = inputs['phonenumber']
-            gender = inputs['gender']
-            try:
-                matchingUser = User.objects.filter(email = email, phonenumber = phonenumber, gender =gender)
-                matchingUserDatas = FindIDOutputSerializer(matchingUser, many = True)
-                return Response(matchingUserDatas.data, status=status.HTTP_200_OK)
-            except:
-                raise ValidationError({'message':'matching user not found!'})
-        return  Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-class FindPasswordView(APIView):    
-    def post(self, request):
-        serializer_data = FindPasswordInputSerializer(data=request.data)
-        if serializer_data.is_valid():
-            inputs = serializer_data.validated_data
-            name = inputs['name']
-            email = inputs['email']
-            phonenumber = inputs['phonenumber']
-            gender = inputs['gender']
-            try:
-                matchingUser = User.objects.filter(name = name, email = email, phonenumber = phonenumber, gender =gender)
-                matchingUserDatas = FindPasswordOutputSerializer(matchingUser, many = True)
-                return Response(matchingUserDatas.data, status=status.HTTP_200_OK)
-            except:
-                raise ValidationError({'message':'matching user not found!'})
-        return  Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = auth.authenticate(username = username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return Response({'success' : 'user login successs'})
+            else:
+                return Response({'error':'user login failed'})
+        else:
+            return Response({"error":"login data error"})
+
+
+@method_decorator(csrf_protect, name='dispatch')
 class UpdateUserView(generics.UpdateAPIView):
     serializer_class = UpdateUserSerializer
-    queryset = User.objects.all()
-    lookup_field = 'name'
-    
-    def get_object(self):
-        # Use the provided lookup_field to filter the queryset
-        filter_kwargs = {self.lookup_field: self.request.data.get(self.lookup_field)}
-        target = self.get_queryset().filter(**filter_kwargs).first()
-        return target
-    
-    def perform_update(self, serializer):
-        instance = self.get_object()
-        #instance = self.queryset.filter(name = serializer.validated_data['name'])
+    def patch(self, request, *args, **kwargs):
+
+        return self.partial_update(request, *args, **kwargs)
+
+@method_decorator(csrf_protect, name='dispatch')
+class UpdateUserView(generics.UpdateAPIView):
+    queryset = UserCustom.objects.all()
+    serializer_class = UpdateUserSerializer
+
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()  # 뷰의 queryset에서 사용자를 가져옵니다.
+        serializer = self.serializer_class(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@method_decorator(csrf_protect, name='dispatch')
+class LogoutView(APIView):
+    def post(self, request, format = None):
+        try:
+            auth.logout(request)
+            return Response({'success':'logout success'})
+        except:
+            return Response({'error':'logout failed'})
         
-        instance.password = serializer.validated_data['password']
-        instance.email = serializer.validated_data['email']
-        instance.phonenumber = serializer.validated_data['phonenumber']
-        instance.age = serializer.validated_data['age']
-        instance.gender = serializer.validated_data['gender']
         
-        instance.save()
+@method_decorator(csrf_protect, name='dispatch')
+class GetUserView(APIView):
+    serializer_class = GetUserData
+    def get(self, request, format = None):
+        user = self.request.user
+        user_data = UserCustom.objects.filter(username = user).first()
+        print(user_data)
+        serializer = self.serializer_class(user_data)
+        return Response(serializer.data)
+
+
+
+
         
-class DeleteUserView(APIView):
-    serializer_class = DeleteUserSerializer
+# class SignInView(generics.CreateAPIView):
+#     serializer_class = SignInSerializer
     
-    def post(self, request):
-        serializerd_data = self.serializer_class(data = request.data)
-        if serializerd_data.is_valid():
-            targetName = serializerd_data.validated_data.get('name', None)
-        print(targetName)
-        print(type(targetName))
-        self.delete(request, targetName = targetName)
-        return Response({'message': "User data is deleted!"}, status=status.HTTP_200_OK,)
+#     def perform_create(self, serializer):
+#         new_user_data = serializer.validated_data
+#         username = new_user_data['name']
+
+#         if User.objects.filter(name=username).exists() or Admin.objects.filter(name=username).exists():
+#             raise ValidationError({'message': "That username is already used!"})
+        
+#         serializer.save()
+
+#         return Response({'message': "User created successfully"}, status=status.HTTP_201_CREATED)
     
-    def delete(self, request, targetName, *args, **kwargs):
-        target = User.objects.filter(name = targetName).first()
-        target.delete()
+# class LoginView(APIView):
+#     serializers = LoginSerializer
+    
+#     def post(self, request):
+#         serializer = self.serializers(data=request.data)
+        
+#         if serializer.is_valid():
+#             inputs = serializer.validated_data
+#             username = inputs['name']
+#             password = inputs['password']
+            
+#             if User.objects.filter(name = username).exists():
+#                 print("id matched")
+#                 potentialUserRow = User.objects.filter(name = username).first()
+#                 if password == potentialUserRow.password:
+#                     print("password matched")
+#                     return Response({'message': "user login successful"}, status=status.HTTP_200_OK,)
+#                 else: return Response({'message': "password wrong"}, status.HTTP_401_UNAUTHORIZED,)
+                
+#             elif Admin.objects.filter(name = username).exists():
+#                 print("Admin Id matched!")
+#                 potentialAdminRow = Admin.objects.filter(name = username).first()
+#                 if password == potentialAdminRow.password:
+#                     print("password matched!")
+#                     return Response({'message': "admin login successful"}, status=status.HTTP_200_OK,)
+#                 else: return Response({'message': "password wrong"}, status.HTTP_401_UNAUTHORIZED,)
+                
+#             else: return Response({'message': "id wrong"}, status.HTTP_401_UNAUTHORIZED,)
+#         else: return Response(status.HTTP_400_BAD_REQUEST)
+        
+# class FindIDView(APIView):
+#     queryset = User.objects.all()
+    
+#     def post(self, request):
+#         self.queryset
+#         serializer_data = FindIDInputSerializer(data=request.data)
+#         if serializer_data.is_valid():
+#             inputs = serializer_data.validated_data
+#             email = inputs['email']
+#             phonenumber = inputs['phonenumber']
+#             gender = inputs['gender']
+#             try:
+#                 matchingUser = User.objects.filter(email = email, phonenumber = phonenumber, gender =gender)
+#                 matchingUserDatas = FindIDOutputSerializer(matchingUser, many = True)
+#                 return Response(matchingUserDatas.data, status=status.HTTP_200_OK)
+#             except:
+#                 raise ValidationError({'message':'matching user not found!'})
+#         return  Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+# class FindPasswordView(APIView):    
+#     def post(self, request):
+#         serializer_data = FindPasswordInputSerializer(data=request.data)
+#         if serializer_data.is_valid():
+#             inputs = serializer_data.validated_data
+#             name = inputs['name']
+#             email = inputs['email']
+#             phonenumber = inputs['phonenumber']
+#             gender = inputs['gender']
+#             try:
+#                 matchingUser = User.objects.filter(name = name, email = email, phonenumber = phonenumber, gender =gender)
+#                 matchingUserDatas = FindPasswordOutputSerializer(matchingUser, many = True)
+#                 return Response(matchingUserDatas.data, status=status.HTTP_200_OK)
+#             except:
+#                 raise ValidationError({'message':'matching user not found!'})
+#         return  Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# class UpdateUserView(generics.UpdateAPIView):
+#     serializer_class = UpdateUserSerializer
+#     queryset = User.objects.all()
+#     lookup_field = 'name'
+    
+#     def get_object(self):
+#         # Use the provided lookup_field to filter the queryset
+#         filter_kwargs = {self.lookup_field: self.request.data.get(self.lookup_field)}
+#         target = self.get_queryset().filter(**filter_kwargs).first()
+#         return target
+    
+#     def perform_update(self, serializer):
+#         instance = self.get_object()
+#         #instance = self.queryset.filter(name = serializer.validated_data['name'])
+        
+#         instance.password = serializer.validated_data['password']
+#         instance.email = serializer.validated_data['email']
+#         instance.phonenumber = serializer.validated_data['phonenumber']
+#         instance.age = serializer.validated_data['age']
+#         instance.gender = serializer.validated_data['gender']
+        
+#         instance.save()
+        
+# class DeleteUserView(APIView):
+#     serializer_class = DeleteUserSerializer
+    
+#     def post(self, request):
+#         serializerd_data = self.serializer_class(data = request.data)
+#         if serializerd_data.is_valid():
+#             targetName = serializerd_data.validated_data.get('name', None)
+#         print(targetName)
+#         print(type(targetName))
+#         self.delete(request, targetName = targetName)
+#         return Response({'message': "User data is deleted!"}, status=status.HTTP_200_OK,)
+    
+#     def delete(self, request, targetName, *args, **kwargs):
+#         target = User.objects.filter(name = targetName).first()
+#         target.delete()
         
     
     
 # 제대로 된 로그인 시스템을 만들기 전 임시로 만든 비번 재확인 기능
-class PWCheckView(APIView):    
-    def post(self, request):
-        serializer_data = PasswordCheckSerializer(data=request.data)
-        if serializer_data.is_valid():
-            inputs = serializer_data.validated_data
-            name = inputs['name']
-            password = inputs['password']
-            if User.objects.filter(name = name, password = password).exists():
-                return Response({'message': "Password check pass!"}, status=status.HTTP_200_OK,)
-            else:
-                raise ValidationError({'message':'password doesnt match!'})
-        return  Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+# class PWCheckView(APIView):    
+#     def post(self, request):
+#         serializer_data = PasswordCheckSerializer(data=request.data)
+#         if serializer_data.is_valid():
+#             inputs = serializer_data.validated_data
+#             name = inputs['name']
+#             password = inputs['password']
+#             if User.objects.filter(name = name, password = password).exists():
+#                 return Response({'message': "Password check pass!"}, status=status.HTTP_200_OK,)
+#             else:
+#                 raise ValidationError({'message':'password doesnt match!'})
+#         return  Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
     
     
     
 
-# REST API 적용 전 테스트용 코드
+# # REST API 적용 전 테스트용 코드
 # def testing(request):
 #     return HttpResponse("account app is running fine!")
 
