@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from urllib.parse import unquote
 
 from rest_framework import generics
-
+from rest_framework.exceptions import ValidationError
 from .models import *
 from .serializers import *
-
+from account.customlibs.checkLogin import *
 #******************************************************************************************************************************************************************
 # 게시글 기능
 #******************************************************************************************************************************************************************
@@ -16,7 +17,7 @@ class FaqListView(generics.ListAPIView):
             'faq_id',
             'title',
             'creationdate',
-            'admin__name',
+            'admin__username',
         )
         
         queryset = board_contents
@@ -34,7 +35,7 @@ class FaqView(generics.ListAPIView):
             'title',
             'contents',
             'creationdate',
-            'admin__name',
+            'admin__username',
         )
         
         return queryset
@@ -47,20 +48,20 @@ class FaqSearchView(generics.ListAPIView):
         board_id = self.kwargs['searchfield']
         if self.kwargs['searchfield'] == 'title':
             
-            queryset = Faq.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
+            queryset = Faq.objects.filter(title__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'faq_id',
                 'title',
                 'creationdate',
-                'admin__name',
+                'admin__username',
             )
             
         elif self.kwargs['searchfield'] == 'contents':
             
-            queryset = Faq.objects.filter(contents__contains=self.kwargs['searchkeyword']).values(
+            queryset = Faq.objects.filter(contents__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'faq_id',
                 'title',
                 'creationdate',
-                'admin__name',
+                'admin__username',
             )
             
         else:
@@ -76,7 +77,13 @@ class FaqCreateView(generics.CreateAPIView):
     serializer_class = FaqCreateSerializer
         
     def perform_create(self, serializer):
-        admin_instance = Admin.objects.get(name=serializer.validated_data.get('name', ''))
+        
+        key = self.request.data.get("key")
+        # self.request.data.pop("key")
+        if not LoginCheck(key, True): 
+            raise ValidationError({"error":"user info error"})
+        
+        admin_instance = Admin.objects.get(username=serializer.validated_data.get('username', ''))
         Faq.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
@@ -87,8 +94,15 @@ class FaqUpdateView(generics.UpdateAPIView):#PATCH method
     serializer_class = FaqUpdateSerializer
     queryset = Faq.objects.all()
     def perform_update(self, serializer):    
-        instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
-
+        
+        key = self.request.data.get("key")
+        # self.request.data.pop("key")
+        if not LoginCheck(key, True): raise ValidationError({"error":"user info error"})
+        
+        user_instance = Admin.objects.get(username = key)
+        instance = self.get_object()
+        if instance.admin_id != user_instance.user_id: raise ValidationError({'error':'wrong user error'})
+        
         instance.title = serializer.validated_data['title']
         instance.contents = serializer.validated_data['contents']
 
@@ -97,3 +111,12 @@ class FaqUpdateView(generics.UpdateAPIView):#PATCH method
 class FaqDeleteView(generics.DestroyAPIView):
     queryset = Faq.objects.all()
     serializer_class = FaqSerializer
+    def delete(self, request, *args, **kwargs):
+        key = request.data.get("key")
+        if not LoginCheck(key, True) : raise ValidationError({"error":"user info error"})
+
+        user_instance = Admin.objects.get(username = key)
+        instance = self.get_object()
+        if instance.admin_id != user_instance.user_id: raise ValidationError({'error':'wrong user error'})
+        instance.delete()
+        return Response({'success':'delte success'})

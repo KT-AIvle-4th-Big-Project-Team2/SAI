@@ -36,7 +36,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,16 +48,17 @@ INSTALLED_APPS = [
     'django.forms',
     
     # 사이트 기능
-    "account",
-    # 'analysis',
-    'board',
-    # 'faq',
-    # 'report',
-    # 'suggestions',
-    # 'announcement',
+    "account", # 로그인 및 계정 관련기능
+    'analysis', # AI 분석 관련 기능
+    'board', # 자유 게시판
+    'faq', # 자주 물어보는 질문
+    'report', # 분석보고서 관련기능
+    'suggestions', # 사용자 제안기능
+    'announcement', # 공지게시판
+    'consultBoard', # ?
+    
     # 'reviewBoard',
     # 'concernBoard',
-    # 'consultBoard',
     
     # rest API
     "rest_framework",
@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     "corsheaders",
     
     # Token JWT 인증
-    'rest_framework_simplejwt'
+    #'rest_framework_simplejwt'
 ]
 
 sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
@@ -98,6 +98,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
     
+]
+
+#CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_WHITELIST = [
+    frontURL, "http://localhost", "http://127.0.0.1"
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -198,6 +205,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'account.UserCustom'
 
+# Django 보안 관련 설정
+
+REST_FRAMEWORK = {
+    # 'DEFAULT_PARSER_CLASSES': [
+    #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
+    # ],
+    
+    # 'DEFAULT_PERMISSION_CLASSES':[
+    #     'rest_framework.permissions.IsAuthenticated', # 모든 REST API 기능을 SESSION ID 또는 TOKEN이 있어야 사용할 수 있게 설정
+    # ],
+    
+    # 'DEFAULT_AUTHENTICATON_CLASSES':[
+    #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
+        
+    # ]
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -208,22 +232,6 @@ TIME_ZONE = "Asia/Seoul"
 USE_I18N = True
 
 USE_TZ = False
-
-
-REST_FRAMEWORK = {
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     'rest_framework.parsers.JSONParser',
-    # ],
-    
-    'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-    
-    'DEFAULT_AUTHENTICATON_CLASSES':[
-        'rest_framework.authentication.SessionAuthentication',
-        
-    ]
-}
 
 
 # Static files (CSS, JavaScript, Images)

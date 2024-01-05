@@ -25,3 +25,9 @@ class UserCustom(AbstractUser):
     
     # groups = models.ManyToManyField(Group, related_name='custom_user_groups')
     # user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions')
+
+class LogInfo(models.Model):
+    user = models.OneToOneField(UserCustom, on_delete=models.CASCADE, primary_key=True)
+    isLogedIn = models.BooleanField(default=False)
+    logtime = models.DateTimeField(auto_now=True)
+    isadmin = models.BooleanField(default = False)
