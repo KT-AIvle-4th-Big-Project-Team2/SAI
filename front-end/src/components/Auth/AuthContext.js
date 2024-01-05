@@ -5,6 +5,10 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [csrfToken, setCsrfToken] = useState('');
+  const setCsrfTokenHandler = (token) => {
+    setCsrfToken(token);
+  };
 
   const loginHandler = () => {
     setIsLogin(true);
@@ -20,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLogin, loginHandler, logoutHandler, userData, setUserInfo }}>
+    <AuthContext.Provider value={{ isLogin, loginHandler, logoutHandler, userData, setUserInfo, csrfToken, setCsrfTokenHandler,}}>
       {children}
     </AuthContext.Provider>
   );

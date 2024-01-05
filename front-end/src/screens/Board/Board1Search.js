@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -20,7 +21,6 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -29,11 +29,14 @@ const Board1Search = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
-  const [searchTarget, setSearchTarget] = useState('title');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [Target, setSearchTarget] = useState('');
+  const [Keyword, setSearchKeyword] = useState('');
+
+  const {searchTarget} = useParams();
+  const {searchKeyword} = useParams();
 
   function getNotice() {
-    axios.get(`http://127.0.0.1:8000/board1/postlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`http://127.0.0.1:8000/board/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);

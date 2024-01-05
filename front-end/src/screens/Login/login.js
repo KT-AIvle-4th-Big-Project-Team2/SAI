@@ -14,7 +14,7 @@ import {
 } from '@mui/material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../../components/Auth/AuthContext';
 import axios from 'axios';
 
 function Copyright(props) {
@@ -36,7 +36,7 @@ const defaultTheme = createTheme();
 
 
 export default function SignIn() {
-  const { loginHandler, setUserInfo } = useAuth();
+  const { loginHandler, setUserInfo, setCsrfTokenHandler } = useAuth();
 
   const [authTokens, setAuthTokens] = useState('')
   const handleSubmit = (event) => {
@@ -55,13 +55,19 @@ export default function SignIn() {
       },
       {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
         credentials: 'include',
       }
       )
         .then((response) => {
           if (response.status === 200) {
-            console.log(response.headers)
-            console.log(response.headers['set-cookie'])
+            console.log("CSRF token received:", response.headers['Set-Cookie']);
+            loginHandler();
+            setUserInfo(response.data)
+            console.log(response.data)
           }
         })
         .catch(function (error) {
