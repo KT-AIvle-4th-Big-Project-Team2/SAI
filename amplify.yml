@@ -4,10 +4,10 @@ frontend:
     preBuild:
       commands:
         - cd front-end
-        - yarn install
+        - npm install
     build:
       commands:
-        - yarn build
+        - npm run build
   artifacts:
     baseDirectory: front-end/build
     files:
