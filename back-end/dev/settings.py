@@ -74,15 +74,15 @@ sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ALLOWED_ORIGINS = [
-#     frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
-# ]
+CORS_ALLOWED_ORIGINS = [
+    frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
+]
 
-# CORS_ORIGIN_WHITELIST = [
-#     frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
-# ]
+CORS_ORIGIN_WHITELIST = [
+    frontURL[:-1],'http://127.0.0.1:3000', 'http://localhost:3000'
+]
 
 MIDDLEWARE = [
     # rest API를 위한 middleware

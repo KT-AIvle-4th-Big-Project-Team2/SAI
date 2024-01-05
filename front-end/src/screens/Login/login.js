@@ -52,6 +52,10 @@ export default function SignIn() {
       },
       {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
         credentials: 'include',
       }
       )
