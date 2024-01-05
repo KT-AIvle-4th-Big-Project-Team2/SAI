@@ -38,7 +38,7 @@ const NoticeMod = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/announcements/announcementlist/${post_num}`)
+      .get(`43.202.42.122/announcements/announcementlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText((prevText) => ({

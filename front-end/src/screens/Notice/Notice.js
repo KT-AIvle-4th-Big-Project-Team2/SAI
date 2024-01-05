@@ -55,7 +55,7 @@ const Notice = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get("http://127.0.0.1:8000/announcements/announcementlist/")
+    axios.get("43.202.42.122/announcements/announcementlist/")
       .then((response) => {
         setNoticeList([...response.data]);
         console.log(response.data);
