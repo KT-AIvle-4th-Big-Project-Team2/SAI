@@ -27,7 +27,7 @@ const NoticeWrite = () => {
 
   const handleTextInput = () => {
     const { title, contents } = text;
-    axios.post("43.202.42.122/announcements/announcementlist/createpost", {
+    axios.post("http://43.202.42.122/announcements/announcementlist/createpost", {
       title,
       name,
       contents,
