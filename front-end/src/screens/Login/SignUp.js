@@ -19,6 +19,7 @@ import {
   FormLabel,
 } from '@mui/material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -59,6 +60,13 @@ export default function SignUp() {
       age: data.get('age')
     };
     const { email, name, password, rePassword, age } = joinData;
+    axios.post("http://127.0.0.1:8000/board/postlist/createpost", {
+      name,
+      password,
+      email,
+      age
+    })
+
 
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;

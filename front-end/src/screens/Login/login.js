@@ -66,12 +66,8 @@ export default function SignIn() {
           if (response.status === 200) {
             console.log("CSRF token received:", response.headers['Set-Cookie']);
             loginHandler();
-            setAuthTokens(response.headers['Set-Cookie'])
-            const csrfToken = response.headers['Set-Cookie']
-            .find((cookie) => cookie.startsWith('csrftoken='))
-            .split('=')[1]
-            .split(';')[0];
-          setCsrfTokenHandler(csrfToken);
+            setUserInfo(response.data)
+            console.log(response.data)
           }
         })
         .catch(function (error) {

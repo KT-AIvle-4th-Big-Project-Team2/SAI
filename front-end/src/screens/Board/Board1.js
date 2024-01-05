@@ -64,7 +64,7 @@ const Board1 = () => {
     // URL 인코딩 적용
     const encodedSearchTarget = encodeURIComponent(searchTarget);
     const encodedSearchKeyword = encodeURIComponent(searchKeyword);
-  
+
     // URL을 동적으로 생성하여 이동
     const searchUrl = `/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`;
   

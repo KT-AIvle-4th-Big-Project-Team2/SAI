@@ -41,7 +41,7 @@ import Header from './header';
 
 
 function App() {
-
+  console.log()
   return (
     <AuthProvider>
       <Router>
