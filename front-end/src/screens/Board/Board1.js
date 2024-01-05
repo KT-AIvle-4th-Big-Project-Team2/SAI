@@ -45,7 +45,18 @@ const Board1 = () => {
         console.log(error);
       });
   };
-
+  /*
+  function getBoard() {
+    axios.get("https://subdomain.storeaivle.com/board/postlist/")
+      .then((response) => {
+        setBoardList([...response.data]);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+*/
   useEffect(() => {
     getBoard(); // 1) 게시글 목록 조회 함수 호출
   }, []);
@@ -90,7 +101,7 @@ const Board1 = () => {
   return (
     <>      
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보 게시판</h2>
+        <h2>창업 정보 게시판태스트</h2>
     </Box>
     <DivLine />
 
