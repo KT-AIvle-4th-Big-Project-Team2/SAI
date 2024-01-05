@@ -34,7 +34,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-
+/*
 export default function SignIn() {
   const { loginHandler, setUserInfo, setCsrfTokenHandler } = useAuth();
 
@@ -74,7 +74,49 @@ export default function SignIn() {
           console.log(error);
         });
     };
-  
+  */
+
+    export default function SignIn() {
+      const { loginHandler, setUserInfo, setCsrfTokenHandler } = useAuth();
+    
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const joinData = {
+          email: data.get('email'),
+          password: data.get('password'),
+        };
+        console.log(joinData);
+    
+        try {
+          const response = await fetch("https://subdomain.storeaivle.com/accounts/login", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              username: joinData.email,
+              password: joinData.password
+            }),
+            credentials: 'include', // 자격 증명을 포함시킵니다.
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            console.log("CSRF token received:", response.headers.get('Set-Cookie'));
+            loginHandler();
+            setUserInfo(data);
+            console.log(data);
+          } else {
+            console.error("Response not OK", response.status);
+          }
+        } catch (error) {
+          console.error("Network error:", error);
+        }
+      };
+    
+    
 
   return (
     <ThemeProvider theme={defaultTheme}>

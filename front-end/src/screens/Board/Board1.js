@@ -35,6 +35,7 @@ const Board1 = () => {
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
 
+  /*
   function getBoard() {
     axios.get("https://subdomain.storeaivle.com/board/postlist/")
       .then((response) => {
@@ -45,6 +46,24 @@ const Board1 = () => {
         console.log(error);
       });
   };
+  */
+  function getBoard() {
+    fetch("https://subdomain.storeaivle.com/board/postlist/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBoardList([...data]);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
   /*
   function getBoard() {
     axios.get("https://subdomain.storeaivle.com/board/postlist/")
@@ -101,7 +120,7 @@ const Board1 = () => {
   return (
     <>      
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보 게시판태스트</h2>
+        <h2>창업 정보 게시판 변경</h2>
     </Box>
     <DivLine />
 
