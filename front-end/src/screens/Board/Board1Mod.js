@@ -20,7 +20,7 @@ const Board1Mod = () => {
 
     // PATCH 요청을 통해 수정된 데이터로 업데이트
     axios
-      .patch(`http://43.202.42.122/board/postlist/${post_num}/updatepost`, {
+      .patch(`https://3.38.190.216/board/postlist/${post_num}/updatepost`, {
         title,
         contents,
         name,
@@ -38,7 +38,7 @@ const Board1Mod = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/board/postlist/${post_num}`)
+      .get(`https://3.38.190.216/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText((prevText) => ({
