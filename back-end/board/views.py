@@ -13,7 +13,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 
 from .serializers import *
-
+from account.models import UserCustom
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 
@@ -38,9 +38,9 @@ from account.customlibs.checkLogin import *
 # 게시글 기능
 #******************************************************************************************************************************************************************
     
-     
+
 class BoardPostListView(generics.ListAPIView):
-    #permission_classes = (permissions.AllowAny,)
+    
     def get_queryset(self):
         board_contents = Board.objects.values(
             'board_id',
@@ -107,24 +107,43 @@ class BoardSearchView(generics.ListAPIView):
         return queryset
 
     serializer_class = BoardSearchSerializer
-#@method_decorator(csrf_protect, name='dispatch')
+    
+
 class BoardPostCreateView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
         
-        key = self.request.data.get("key")
-        # self.request.data.pop("key")
-        if not LoginCheck(key):  raise ValidationError({"error":"user info error"})
+        user = self.request.user
         
-        user_instance = user.objects.get(username=self.request.data.get('username'))
+        user_instance = UserCustom.objects.get(username=user.username)
         #user_instance = user.objects.get(username=self.request.user)
         
         Board.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
             user=user_instance
-        )
+        )    
+
+#@method_decorator(csrf_protect, name='dispatch')
+# class BoardPostCreateView(generics.CreateAPIView):
+#     serializer_class = BoardPostCreateSerializer
+        
+#     def perform_create(self, serializer):
+        
+#         key = self.request.data.get("key")
+#         # self.request.data.pop("key")
+#         if not LoginCheck(key):  raise ValidationError({"error":"user info error"})
+        
+#         user_instance = user.objects.get(username=self.request.data.get('username'))
+#         #user_instance = user.objects.get(username=self.request.user)
+        
+#         Board.objects.create(
+#             title=serializer.validated_data['title'],
+#             contents=serializer.validated_data['contents'],
+#             user=user_instance
+#         )
 #@method_decorator(csrf_protect, name='dispatch')        
 class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     serializer_class = BoardPostUpdateSerializer

@@ -12,8 +12,8 @@ from rest_framework.views import APIView
 from .models import LogInfo, UserCustom
 from .serializers import *
 
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password, check_password
@@ -22,9 +22,31 @@ from account.customlibs.checkLogin import *
 
 
 
+@method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
+class GetCSRFToken(APIView):
+    permission_classes = (permissions.AllowAny,)
+    
+    
+    def get(self, request, format = None):
+        return Response({'success' : 'CSRF Cookie set'})
+
+class CheckAuthenticatedView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self, request, format = None):
+        try:
+            isAuthenticated = request.user.is_authenticated
+            
+            if isAuthenticated:
+                return Response({'isAuthenticated':'sucess'})
+            else:
+                return Response({'isAuthenticated':'error'})
+        except:
+            return Response({'error': 'Something went wrong during checking authentication status'})
+
+
 #@method_decorator(csrf_protect, name='dispatch')
 class SignInView(generics.CreateAPIView):
-    #permission_classes = (permissions.AllowAny,)
+    # permission_classes = (permissions.AllowAny,)
     serializer_class = SignInSerializer
     
     def perform_create(self, serializer):
@@ -40,14 +62,11 @@ class SignInView(generics.CreateAPIView):
         #if UserCustom.objects.filter(username=username).exists() or Admin.objects.filter(name=username).exists(): # Admin 테이블을 따로 사용할 경우 활성화
         if UserCustom.objects.filter(username=username).exists():
             return Response({'error':'username already exists'})
-        
-        user = UserCustom.objects.create_user(username = username, password = password, email = email, 
-                                        phonenumber = phonenumber, age = age, gender = gender)
-        user.save()
-        new_user = UserCustom.objects.get(username = username)
-        user_auth = LogInfo.objects.create(user_id=new_user.user_id)
-        user_auth.save()
-        return Response({'success': "User created successfully"})
+        else:
+            user = UserCustom.objects.create_user(username = username, password = password, email = email, 
+                                            phonenumber = phonenumber, age = age, gender = gender)
+            user.save()
+            return Response({'success': "User created successfully"})
 
 # @method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
@@ -61,11 +80,9 @@ class LoginView(APIView):
             password = serialized.validated_data['password']
             
             user_info = authenticate(username=username, password=password)
-            # user_info = UserCustom.objects.filter(username=username, password=password).first()
             if user_info != None:
-                LoginTrue(username)
-                return Response({'success' : 'login successful', 'user':user_info.username, 'email' : user_info.email, 
-                                 'phonenumber' : user_info.phonenumber, 'age': user_info.age, 'gender':user_info.gender})
+                auth.login(request, user_info)
+                return Response({'success' : 'login successful'}, status=status.HTTP_202_ACCEPTED)
             else:
                   return Response({'error' : 'wrong user info'})
         else:
@@ -92,17 +109,28 @@ class UpdatePWView(generics.UpdateAPIView):
             return Response({'success':'pw update success'})
         else:
             return Response({'error':'input error'})
-
-#@method_decorator(csrf_protect, name='dispatch')
+        
+        
 class LogoutView(APIView):
     def post(self, request, format = None):
         try:
-            #auth.logout(request)
-            key = request.data.get('key')
-            if not LoginFalse(key):  raise ValidationError({"error":"user info error"})
+            auth.logout(request)
             return Response({'success':'logout success'})
         except:
             return Response({'error':'logout failed'})
+
+
+
+#@method_decorator(csrf_protect, name='dispatch')
+# class LogoutView(APIView):
+#     def post(self, request, format = None):
+#         try:
+#             #auth.logout(request)
+#             key = request.data.get('key')
+#             if not LoginFalse(key):  raise ValidationError({"error":"user info error"})
+#             return Response({'success':'logout success'})
+#         except:
+#             return Response({'error':'logout failed'})
         
 
 class GetUserView(APIView):

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from urllib.parse import unquote
 from rest_framework import generics
 
 from .models import *
@@ -13,7 +13,7 @@ class SuggestionListView(generics.ListAPIView):
             'suggestion_id',
             'title',
             'creationdate',
-            'user__name',
+            'user__username',
         )
         
         queryset = suggestion_contents
@@ -31,7 +31,7 @@ class SuggestionView(generics.ListAPIView):
             'title',
             'contents',
             'creationdate',
-            'user__name',
+            'user__username',
         )
         
         return queryset
@@ -44,29 +44,29 @@ class SuggestionSearchView(generics.ListAPIView):
         board_id = self.kwargs['searchfield']
         if self.kwargs['searchfield'] == 'title':
             
-            queryset = Suggestions.objects.filter(title__contains=self.kwargs['searchkeyword']).values(
+            queryset = Suggestions.objects.filter(title__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'suggestion_id',
                 'title',
                 'creationdate',
-                'user__name',
+                'user__username',
             )
             
         elif self.kwargs['searchfield'] == 'contents':
             
-            queryset = Suggestions.objects.filter(contents__contains=self.kwargs['searchkeyword']).values(
+            queryset = Suggestions.objects.filter(contents__contains=unquote(self.kwargs['searchkeyword'])).values(
                 'suggestion_id',
                 'title',
                 'creationdate',
-                'user__name',
+                'user__username',
             )
             
         elif self.kwargs['searchfield'] == 'name':
             
-            queryset = Suggestions.objects.filter(user__name__contains=self.kwargs['searchkeyword']).values(
+            queryset = Suggestions.objects.filter(user__username__contain=unquote(self.kwargs['searchkeyword'])).values(
                 'suggestion_id',
                 'title',
                 'creationdate',
-                'user__name',
+                'user__username',
             )
             
         else:
@@ -82,7 +82,7 @@ class SuggestionCreateView(generics.CreateAPIView):
     serializer_class = SuggestionCreateSerializer
         
     def perform_create(self, serializer):
-        user_instance = User.objects.get(name=serializer.validated_data.get('name', ''))
+        user_instance = user.objects.get(username=serializer.validated_data.get('name', ''))
         
         Suggestions.objects.create(
             title=serializer.validated_data['title'],

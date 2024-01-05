@@ -14,6 +14,6 @@ urlpatterns = [
     path("updatepw/", views.UpdatePWView.as_view()),
     path("ping/", views.SendPing.as_view()),
     
-    # path("checkauth/", views.CheckAuthenticatedView.as_view()),
-    # path("getcsrf/", views.GetCSRFToken.as_view()),
+    path("checkauth/", views.CheckAuthenticatedView.as_view()),
+    path("getcsrf/", views.GetCSRFToken.as_view()),
 ]
