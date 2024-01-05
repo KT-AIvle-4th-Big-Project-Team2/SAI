@@ -46,7 +46,6 @@ function App() {
     <AuthProvider>
       <Router>
         <NavBarElements />
-        <Container>
           <Routes>
           <Route path = "/" element = { <Index /> } />
           <Route path = "/Notice" element = { <Notice /> } />
@@ -79,7 +78,6 @@ function App() {
           <Route path = "/WithDrawal" element = { <WithDrawal /> } />
           <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
         </Routes>
-        </Container>
       </Router>
     </AuthProvider>
   );
