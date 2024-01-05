@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('/home/ubuntu/key/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/bigproject/sensitiveDatas/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'announcement', # 공지게시판
     'consultBoard', # ?
     'user',
+    'analysis',
     
     # 'reviewBoard',
     # 'concernBoard',
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('/home/ubuntu/key/frontURL_info.txt')
+sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -105,7 +106,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('/home/ubuntu/key/DB_info.txt')
+sensitiveDataPath = ('C:/bigproject/sensitiveDatas/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 

@@ -26,5 +26,6 @@ urlpatterns = [
     # path('reviewboard/', include('reviewBoard.urls')),
     path('announcements/', include('announcement.urls')),
     path('suggestions/', include('suggestions.urls')),
-    path('faq/', include("faq.urls"))
+    path('faq/', include("faq.urls")),
+    path('analysis/', include("analysis.urls"))
 ]
