@@ -2,5 +2,8 @@
   "dependencies": {
     "@nivo/circle-packing": "^0.84.0",
     "axios": "^1.6.3"
+  },
+  "scripts": {
+    "build": "react-scripts build"
   }
 }
