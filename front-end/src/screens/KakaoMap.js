@@ -1,10 +1,12 @@
 import { drawPolygons } from './DrawPolygons.js';
 import { drawSelectedPolygon } from './DrawPolygons_jachigu.js';
+import { drawPolygonsForCity } from './DrawPolygons_seoul.js'
 import React, { Component } from 'react';
 import geoJsonData from './geometry.json';
 import geoJsonData_jachigu from './jachigugeojson.json'
 import './KakaoMap.css'; // 스타일을 위한 CSS 파일을 가정합니다
 import Data from '../assets/서울시 행정동.json';
+import seoul from './seoul.json'
 
 function calculatePolygonCenter(geometry) {
     let latSum = 0, lngSum = 0, pointsCount = 0;
@@ -68,6 +70,9 @@ class KakaoMap extends Component {
 
     componentDidMount() {
         this.initializeMap();
+        
+        drawPolygonsForCity(this.map, seoul, "서울특별시", this.polygons);
+   
         //drawPolygons(this.map, geoJsonData, this.displayMessage);
         //drawSelectedPolygon(this.map, geoJsonData_jachigu, this.displayMessage, '종로구','사직동')
     }
@@ -76,7 +81,7 @@ class KakaoMap extends Component {
         const mapContainer = this.mapContainer;
         const mapOption = {
             center: new window.kakao.maps.LatLng(37.566535, 126.977969), // 서울의 좌표
-            level: 7
+            level: 8
         };
 
         this.map = new window.kakao.maps.Map(mapContainer, mapOption);
