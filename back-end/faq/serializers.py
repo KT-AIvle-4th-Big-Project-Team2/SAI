@@ -43,15 +43,15 @@ class FaqSearchSerializer(serializers.ModelSerializer):
         fields = ['faq_id', 'title', 'creationdate', 'admin__username']
 
 class FaqCreateSerializer(serializers.ModelSerializer):
-
-    title = serializers.CharField()
-    contents = serializers.CharField()
-    username = serializers.CharField()
     
     class Meta:
         model = Faq
-        fields = ('title', 'contents', 'username')
+        fields = ('title', 'contents')
 class FaqUpdateSerializer(serializers.Serializer):
 
-    title = serializers.CharField()
-    contents = serializers.CharField()
+    title = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=50)
+    contents = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=45)
+    
+    class Meta:
+        model = Faq
+        fields = ('title', 'contents')

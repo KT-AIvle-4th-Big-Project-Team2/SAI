@@ -13,7 +13,7 @@ class Announcements(models.Model):
     creationdate = models.DateTimeField(db_column='creationDate', auto_now_add=True)  # Field name made lowercase.
     title = models.CharField(max_length=50)
     contents = models.CharField(max_length=45)
-    admin = models.ForeignKey(user, models.DO_NOTHING)
+    admin = models.ForeignKey(user, on_delete =models.CASCADE)
 
     class Meta:
         managed = False

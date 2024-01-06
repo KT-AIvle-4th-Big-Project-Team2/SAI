@@ -1,15 +1,10 @@
-# 시리얼라이저 안 쓰는 테스트 코드 사용시 
-# from django.shortcuts import render, get_object_or_404, redirect
-# from django.http import HttpResponse
-# from .forms import signinForm
-
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 
-from .models import LogInfo, UserCustom
+from .models import UserCustom
 from .serializers import *
 
 from django.utils.decorators import method_decorator
@@ -247,6 +242,11 @@ class ResetPW(APIView):
     serializer_class = ResetPasswordInput
 
     def post(self, request):
+        try:
+            password_again = self.request.data.pop('password_again')
+        except:
+            raise ValidationError({'error':'input error'}, status.HTTP_400_BAD_REQUEST)
+        
         input_data = self.serializer_class(data = request.data)
         
         if not input_data.is_valid(): 
@@ -257,6 +257,7 @@ class ResetPW(APIView):
         email = input_data.validated_data['email']
         phonenumber = input_data.validated_data['phonenumber']
         
+        if new_password != password_again: raise ValidationError({'error':'password not match'}, status.HTTP_400_BAD_REQUEST)
         try:
             instance = UserCustom.objects.get(username = username, phonenumber = phonenumber, email = email)
             instance.set_password(new_password)
