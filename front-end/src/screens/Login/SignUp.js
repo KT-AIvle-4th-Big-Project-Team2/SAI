@@ -20,16 +20,12 @@ import {
 } from '@mui/material/';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
+import TermsModal from '../../components/TermsModal';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {'Copyright © SAI! All Rights Reserved.'}
     </Typography>
   );
 }
@@ -111,8 +107,23 @@ export default function SignUp() {
     };
 
   // 동의 체크
+
+  //이용약관 모달
+  const [isChecked, setIsChecked] = useState(false);
+  const [isTermsModalOpen, setTermsModalOpen] = useState(false);
+
   const handleAgree = (event) => {
-    setChecked(event.target.checked);
+    setIsChecked(event.target.checked);
+  };
+
+  const handleAgreeTextClick = () => {
+    if (!isChecked) {
+      setTermsModalOpen(true);
+    }
+  };
+
+  const handleCloseTermsModal = () => {
+    setTermsModalOpen(false);
   };
 
   return (
@@ -142,22 +153,33 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="name"
-                  label="name"
+                  label="이름"
                   autoFocus
                   error={nameError !== '' || false}
                 />
               </Grid>
-              
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-name"
+                  name="nickname"
+                  required
+                  fullWidth
+                  id="nickname"
+                  label="닉네임"
+                  autoFocus
+                  error={nameError !== '' || false}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">Gender *</FormLabel>
+                  <FormLabel id="demo-row-radio-buttons-group-label">성별 *</FormLabel>
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
                   >
-                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                    <FormControlLabel value="male" control={<Radio />} label="남성" />
+                    <FormControlLabel value="female" control={<Radio />} label="여성" />
                   </RadioGroup>
                 </FormControl>
               </Grid>
@@ -166,7 +188,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="age"
-                  label="age"
+                  label="나이"
                   name="age"
                 />
               </Grid>
@@ -175,7 +197,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="이메일"
                   name="email"
                   autoComplete="email"
                   error={emailError !== '' || false}
@@ -186,11 +208,12 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password (숫자 + 영문자 + 특수문자 8자리 이상)"
+                  label="비밀번호 (숫자 + 영문자 + 특수문자 8자리 이상)"
                   type="password"
                   id="password"
                   autoComplete="new-password"
                   error={passwordState !== '' || false}
+                  helperText={passwordState}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -198,18 +221,30 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="repassword"
-                  label="PasswordCheck"
+                  label="비밀번호 확인"
                   type="password"
                   id="repassword"
                   error={passwordError !== '' || false}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid container alignItems="center" sx={{ml:2, mt :1}}>
+              <Grid item>
                 <FormControlLabel
                   control={<Checkbox onChange={handleAgree} color="primary" />}
-                  label="이용약관에 동의합니다."
                 />
               </Grid>
+              <Grid item>
+                <span
+                  style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={handleAgreeTextClick}
+                >
+                  개인정보 수집 및 이용에 동의합니다.
+                </span>
+              </Grid>
+              {!isChecked && (
+                <TermsModal open={isTermsModalOpen} onClose={handleCloseTermsModal} />
+              )}
+            </Grid>
             </Grid>
             <Button
               type="submit"
@@ -218,12 +253,12 @@ export default function SignUp() {
               href = '/login'
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              회원가입
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/login" variant="body2">
-                  Already have an account? Sign in
+                  이미 계정이 있으신가요? 로그인
                 </Link>
               </Grid>
             </Grid>
