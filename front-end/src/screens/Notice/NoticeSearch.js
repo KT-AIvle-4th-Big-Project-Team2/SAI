@@ -72,7 +72,7 @@ const NoticeSearch = () => {
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>공지사항</h2>
       </Box>
@@ -153,7 +153,7 @@ const NoticeSearch = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 

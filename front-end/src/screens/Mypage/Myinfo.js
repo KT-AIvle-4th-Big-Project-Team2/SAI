@@ -80,6 +80,8 @@
 import React from 'react';
 import { Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Withdrawal from './WithDrawal';
+import logo from '../../assets/SAI_logo_slogan.png'
 
 const Myinfo = () => {
   const name = '홍길동';
@@ -98,12 +100,10 @@ const Myinfo = () => {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          내 정보 수정
-        </Typography>
+          <img src={logo} alt="logoslogan"/>
+          <Typography component="h1" variant="h5">
+            내 정보 수정
+          </Typography>
         <Box component="form" noValidate sx={{ mt: 3  }} >
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -119,11 +119,19 @@ const Myinfo = () => {
               <Typography variant="subtitle1" color="textSecondary">이메일: {email}</Typography>
             </Grid>
             <Grid item xs={12}>
+                <TextField
+                  name="nickname"
+                  fullWidth
+                  id="nickname"
+                  label="닉네임"
+                  autoFocus
+                />
+              </Grid>
+            <Grid item xs={12}>
               <TextField
-                required
                 fullWidth
                 name="password"
-                label="Password"
+                label="비밀번호"
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -132,12 +140,11 @@ const Myinfo = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                required
                 fullWidth
                 name="password"
-                label="PasswordCheck"
+                label="비밀번호 확인"
                 type="password"
-                id="password"
+                id="repassword"
                 variant="outlined"
               />
             </Grid>
@@ -152,18 +159,8 @@ const Myinfo = () => {
             수정 완료
           </Button>
         </Box>
-        <hr></hr>
       </Box>
-      <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-        <Button
-            type="submit"
-            variant="contained"
-            href="/WithDrawal"
-            color="error"
-          >
-            회원 탈퇴
-          </Button>
-        </Box>
+      <Withdrawal />
     </Container>
   );
 };

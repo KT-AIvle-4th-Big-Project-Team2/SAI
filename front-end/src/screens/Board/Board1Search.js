@@ -75,7 +75,7 @@ const Board1Search = () => {
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (
-    <>
+    <div className="container">
 
       <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
         <TableContainer component={Paper} style={{ height: '100%' }}>
@@ -153,7 +153,7 @@ const Board1Search = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 

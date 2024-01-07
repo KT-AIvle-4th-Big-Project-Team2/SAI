@@ -5,7 +5,7 @@ export const Testimonials = (props) => {
     <div id="testimonials">
       <div className="container">
         <div className="section-title text-center">
-          <h2>What our clients say</h2>
+          <h2>예비 사장님들, 그동안 궁금하셨죠?</h2>
         </div>
         <div className="row">
           {props.data
@@ -13,11 +13,13 @@ export const Testimonials = (props) => {
                 <div key={`${d.name}-${i}`} className="col-12 col-md-6 col-lg-6 mb-4">
                   <div className="testimonial">
                     <div className="testimonial-image">
-                      <img src={d.img} alt="" />
+                      {d.img ? (
+                          <img src={d.img} alt="" />
+                        ) : ""}
                     </div>
-                    <div className="testimonial-content">
-                      <p>"{d.text}"</p>
-                      <div className="testimonial-meta">- {d.name}</div>
+                    <div>
+                      <h4>{d.text}</h4>
+                      <div className="testimonial-meta">{d.name}</div>
                     </div>
                   </div>
                 </div>
