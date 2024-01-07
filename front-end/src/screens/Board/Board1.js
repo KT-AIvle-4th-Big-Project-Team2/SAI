@@ -48,7 +48,7 @@ const Board1 = () => {
   };
   */
   function getBoard() {
-    fetch("https://subdomain.storeaivle.com/board/postlist/")
+    fetch("http://subdomain.storeaivle.com/board/postlist/")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

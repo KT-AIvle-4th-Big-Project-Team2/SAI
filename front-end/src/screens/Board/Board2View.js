@@ -13,7 +13,7 @@ const Board2View = () => {
   const [boardContent, setBoardContent] = useState({}); // Change to object
 
   function getBoardContent() {
-    axios.get(`https://subdomain.storeaivle.com/board/postlist/${post_num}`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);
@@ -24,7 +24,7 @@ const Board2View = () => {
   }
 
   function getcomment() {
-    axios.get(`https://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
       .then((response) => {
         setComments(response.data); // Update state with fetched data
         console.log(response.data);

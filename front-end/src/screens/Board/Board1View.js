@@ -13,7 +13,7 @@ const Board1View = () => {
   const [boardContent, setBoardContent] = useState({}); // Change to object
 
   function getBoardContent() {
-    axios.get(`https://subdomain.storeaivle.com/board/postlist/${post_num}`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);
@@ -24,7 +24,7 @@ const Board1View = () => {
   }
 
   function getcomment() {
-    axios.get(`https://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
       .then((response) => {
         setComments(response.data); // Update state with fetched data
         console.log(response.data);
@@ -42,7 +42,7 @@ const Board1View = () => {
   const handleCommentInput = () => {
     console.log(comment)
     const {contents} = comment;
-    axios.post(`https://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
+    axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
       contents,
       name,
     })
@@ -57,7 +57,7 @@ const Board1View = () => {
   };
 
   const handleCommentDelete = (commentId) => {
-    axios.delete(`https://subdomain.storeaivle.com/board/postlist/deletecomment/${commentId}`)
+    axios.delete(`http://subdomain.storeaivle.com/board/postlist/deletecomment/${commentId}`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
@@ -70,7 +70,7 @@ const Board1View = () => {
   };
 
   const handleDelete = () => {
-    axios.delete(`https://subdomain.storeaivle.com/board/postlist/${post_num}/deletepost`)
+    axios.delete(`http://subdomain.storeaivle.com/board/postlist/${post_num}/deletepost`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행

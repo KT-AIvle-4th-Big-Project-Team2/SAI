@@ -60,7 +60,7 @@ export default function SignUp() {
       age: data.get('age')
     };
     const { email, name, password, rePassword, age } = joinData;
-    axios.post("https://subdomain.storeaivle.com/accounts/signin/", {
+    axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
       name,
       password,
       email,

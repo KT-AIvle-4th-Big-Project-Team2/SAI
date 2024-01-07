@@ -20,7 +20,7 @@ const NoticeMod = () => {
 
     // PATCH 요청을 통해 수정된 데이터로 업데이트
     axios
-      .patch(`http://127.0.0.1:8000/announcements/announcementlist/updatepost/${post_num}`, {
+      .patch(`http://subdomain.storeaivle.com/announcements/announcementlist/updatepost/${post_num}`, {
         title,
         contents,
         name,
@@ -38,7 +38,7 @@ const NoticeMod = () => {
 
   useEffect(() => {
     axios
-      .get(`http://43.202.42.122/announcements/announcementlist/${post_num}`)
+      .get(`http://subdomain.storeaivle.com/announcements/announcementlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText((prevText) => ({

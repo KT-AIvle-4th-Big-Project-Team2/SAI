@@ -93,7 +93,6 @@ class KakaoMap extends Component {
             position: this.map.getCenter()
         });
         
-
         window.kakao.maps.event.addListener(this.map, 'click', this.handleMapClick);
         window.kakao.maps.event.addListener(this.map, 'dragend', this.handleMapDragEnd);
         window.kakao.maps.event.addListener(this.map, 'zoom_changed', this.handleMapZoomChanged);

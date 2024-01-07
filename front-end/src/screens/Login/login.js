@@ -89,7 +89,7 @@ export default function SignIn() {
         console.log(joinData);
     
         try {
-          const response = await fetch("https://subdomain.storeaivle.com/accounts/login", {
+          const response = await fetch("http://subdomain.storeaivle.com/accounts/login", {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',

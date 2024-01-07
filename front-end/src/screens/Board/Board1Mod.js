@@ -20,7 +20,7 @@ const Board1Mod = () => {
 
     // PATCH 요청을 통해 수정된 데이터로 업데이트
     axios
-      .patch(`https://subdomain.storeaivle.com/board/postlist/${post_num}/updatepost`, {
+      .patch(`http://subdomain.storeaivle.com/board/postlist/${post_num}/updatepost`, {
         title,
         contents,
         name,
@@ -38,7 +38,7 @@ const Board1Mod = () => {
 
   useEffect(() => {
     axios
-      .get(`https://subdomain.storeaivle.com/board/postlist/${post_num}`)
+      .get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText((prevText) => ({
