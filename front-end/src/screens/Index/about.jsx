@@ -6,28 +6,19 @@ export const About = (props) => {
       <div className="container">
         <div className="row">
           <div className="col-12 col-md-6">
-            <img src="img/about.jpg" className="img-fluid" alt="" />
+            <img src="img/about1.png" className="img-fluid" alt="" />
           </div>
           <div className="col-12 col-md-6">
             <div className="about-text">
-              <h2>About Us</h2>
+              <h2 style={{fontWeight : 'bold'}}>창업을 고민하고 있는 입지와 업종 분석 결과를 리포트로 제공해드려요.</h2>
               <p>{props.data ? props.data.paragraph : "loading..."}</p>
-              <h3>Why Choose Us?</h3>
+              <h3>제공 기능</h3>
               <div className="list-style row">
-                <div className="col-lg-6 col-md-6 col-sm-12">
+                <div className="col-lg-8 col-md-6 col-sm-12">
                   <ul>
                     {props.data
                       ? props.data.Why.map((d, i) => (
                           <li key={`${d}-${i}`}>{d}</li>
-                        ))
-                      : "loading"}
-                  </ul>
-                </div>
-                <div className="col-lg-6 col-md-6 col-sm-12">
-                  <ul>
-                    {props.data
-                      ? props.data.Why2.map((d, i) => (
-                          <li key={`${d}-${i}`}> {d}</li>
                         ))
                       : "loading"}
                   </ul>

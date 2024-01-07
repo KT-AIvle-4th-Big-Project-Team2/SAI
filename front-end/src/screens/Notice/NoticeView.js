@@ -40,7 +40,7 @@ const NoticeView = () => {
   };
 
   return (
-    <>
+    <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
         공지사항
@@ -78,7 +78,7 @@ const NoticeView = () => {
       </Box>
       <DivLine />
       </Box>
-    </>
+    </div>
   );
 };
 

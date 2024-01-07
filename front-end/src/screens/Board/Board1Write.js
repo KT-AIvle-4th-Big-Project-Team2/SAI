@@ -43,7 +43,7 @@ const Board1Write = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 정보</h2>
       </Box>
@@ -89,7 +89,7 @@ const Board1Write = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

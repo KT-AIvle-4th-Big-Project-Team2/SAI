@@ -16,6 +16,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from '../../components/Auth/AuthContext';
 import axios from 'axios';
+import logo from '../../assets/SAI_logo_slogan.png'
 
 function Copyright(props) {
   return (
@@ -115,8 +116,6 @@ export default function SignIn() {
           console.error("Network error:", error);
         }
       };
-    
-    
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -133,12 +132,10 @@ export default function SignIn() {
         <Box component="form" border={1} p = {3} onSubmit={handleSubmit} noValidate sx={{ mt: 1, minWidth: 400, display: 'flex',
             flexDirection: 'column',
             alignItems: 'center', }}>
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+              <img src={logo} alt="logoslogan"/>
+              <Typography component="h1" variant="h5">
+                로그인
+              </Typography>
             <TextField
               margin="normal"
               required
