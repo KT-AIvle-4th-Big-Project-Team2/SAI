@@ -112,7 +112,7 @@ class ManageBoard(APIView):
         
         if kwargs['category'] == 'board':
             try:
-                instance = Board.objects.get(board_id = unquote(kwargs['target']))
+                instance = Board.objects.get(board_id = kwargs['target'])
             except:
                 raise ValidationError({'error' : 'no post found'}, status.HTTP_400_BAD_REQUEST)
             
@@ -150,7 +150,7 @@ class ManageComment(APIView):
         
         if kwargs['category'] == 'board':
             try:
-                instance = Comments.objects.get(comment_id = unquote(kwargs['comment_id']))
+                instance = Comments.objects.get(comment_id = kwargs['comment_id'])
             except:
                 raise ValidationError({'error' : 'no comment found'}, status.HTTP_400_BAD_REQUEST)
             
@@ -159,16 +159,7 @@ class ManageComment(APIView):
         
         elif kwargs['category'] == 'consultboard':
             try:
-                instance = CommentsConsult.objects.get(comment_id = unquote(kwargs['comment_id']))
-            except:
-                raise ValidationError({'error' : 'no comment found'}, status.HTTP_400_BAD_REQUEST)
-            
-            instance.delete()
-            return Response({'success':'comment delete success'}, status.HTTP_200_OK)
-        
-        elif kwargs['category'] == 'suggestions':
-            try:
-                instance = Suggestions.objects.get(suggestion_id = unquote(kwargs['comment_id']))
+                instance = CommentsConsult.objects.get(comment_id = kwargs['comment_id'])
             except:
                 raise ValidationError({'error' : 'no comment found'}, status.HTTP_400_BAD_REQUEST)
             

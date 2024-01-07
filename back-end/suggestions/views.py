@@ -106,7 +106,6 @@ class SuggestionUpdateView(generics.UpdateAPIView):
         if instance.user != self.request.user : raise ValidationError({'error':'not the user'}, status.HTTP_403_FORBIDDEN)
         
         instance.title = serializer.validated_data['title']
-        instance.tag = serializer.validated_data['tag']
         instance.contents = serializer.validated_data['contents']
 
         instance.save()

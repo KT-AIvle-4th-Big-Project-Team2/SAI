@@ -225,8 +225,8 @@ class FindIDView(APIView):
             phonenumber = inputs['phonenumber']
             
             try:
-                print(email)
-                print(phonenumber)
+                # print(email)
+                # print(phonenumber)
                 matchingUser = UserCustom.objects.get(email = email, phonenumber = phonenumber)
                 
                 return Response({"success" : "ID found", "ID" : matchingUser.username}, 
