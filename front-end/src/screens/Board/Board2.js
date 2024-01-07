@@ -88,7 +88,7 @@ const Board2 = () => {
 
 
   return (
-    <>      
+    <div className="container">      
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 게시판</h2>
     </Box>
@@ -170,7 +170,7 @@ const Board2 = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 

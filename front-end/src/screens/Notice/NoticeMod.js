@@ -54,7 +54,7 @@ const NoticeMod = () => {
   
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>공지사항 수정</h2>
       </Box>
@@ -97,7 +97,7 @@ const NoticeMod = () => {
             </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

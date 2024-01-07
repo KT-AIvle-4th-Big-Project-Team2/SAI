@@ -87,6 +87,7 @@ export default function Myb() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
+    <div className="container">
     <Paper className='Paper'>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -134,5 +135,6 @@ export default function Myb() {
     </div>
 
     </Paper>
+    </div>
   );
 }

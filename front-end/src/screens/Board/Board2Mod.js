@@ -61,7 +61,7 @@ const Board2Mod = () => {
   }, [post_num]);
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 게시판 수정</h2>
       </Box>
@@ -107,7 +107,7 @@ const Board2Mod = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

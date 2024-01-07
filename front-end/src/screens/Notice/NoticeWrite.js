@@ -42,7 +42,7 @@ const NoticeWrite = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>공지사항</h2>
       </Box>
@@ -87,7 +87,7 @@ const NoticeWrite = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

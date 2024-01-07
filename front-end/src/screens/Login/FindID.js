@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, TextField, Link, Box, Typography, Container } from '@mui/material/';
+import { Button, TextField, Link, Box, Typography, Container, Grid } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/SAI_logo_slogan.png';
 
@@ -78,6 +78,11 @@ export default function FindID() {
             제출
           </Button>
         </Box>
+      </Box>
+      <Box textAlign="right">
+        <Link href="/login" variant="body2">
+          로그인
+        </Link>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>

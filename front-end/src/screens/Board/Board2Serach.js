@@ -72,7 +72,7 @@ const Board2Search = () => {
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 게시판</h2>
       </Box>
@@ -153,7 +153,7 @@ const Board2Search = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 

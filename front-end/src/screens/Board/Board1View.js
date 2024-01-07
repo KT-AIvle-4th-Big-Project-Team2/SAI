@@ -83,7 +83,7 @@ const Board1View = () => {
   };
 
   return (
-    <>
+    <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
         게시판
@@ -152,7 +152,7 @@ const Board1View = () => {
     </Paper>
 
       </Box>
-    </>
+    </div>
   );
 };
 
