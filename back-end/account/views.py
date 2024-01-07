@@ -48,8 +48,8 @@ class SignInView(APIView):
     def post(self, request):
         input_data = self.request.data
         print(input_data)
-        passwordAgain = input_data.get("passwordAgain")
-        input_data.pop("passwordAgain")
+        passwordAgain = input_data.get("password_again")
+        input_data.pop("password_again")
         serializer = self.serializer_class(data = self.request.data)
         
         if serializer.is_valid():
@@ -93,7 +93,7 @@ class LoginView(APIView):
             user_info = authenticate(username=username, password=password)
             if user_info != None:
                 auth.login(request, user_info)
-                return Response({'success' : 'login successful'}, status=status.HTTP_202_ACCEPTED)
+                return Response({'success' : 'login successful'}, status=status.HTTP_200_OK)
             else:
                   return Response({'error' : 'wrong user info'})
         else:
@@ -154,7 +154,7 @@ class GetUserView(APIView):
                 serializer = self.serializer_class(user_data)
                 return Response(serializer.data)
             else:
-                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"error": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "Username is required"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -172,19 +172,19 @@ class UpdatePWView(generics.UpdateAPIView):
         try:
             userIstance = UserCustom.objects.get(username = user.username)
         except:
-            return Response({'error':'user not exists'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error':'user not exists'}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer = self.serializer_class(data = request.data)
         if serializer.is_valid():
             try:
                 userIstance.set_password(serializer.validated_data['password'])
             except:
-                return Response({'error':'pw input failed'})
+                return Response({'error':'pw input failed'}, status.HTTP_400_BAD_REQUEST)
             userIstance.save()
-            return Response({'success':'pw update success'})
+            return Response({'success':'pw update success'}, status.HTTP_200_OK)
         
         else:
-            return Response({'error':'input error'})
+            return Response({serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
 
 @method_decorator(csrf_protect, name = 'dispatch')

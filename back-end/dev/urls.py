@@ -21,11 +21,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("account.urls")),
     path('board/', include('board.urls')),
-    # path('concernboard/', include('concernBoard.urls')),
     path('consultboard/', include('consultBoard.urls')),
-    # path('reviewboard/', include('reviewBoard.urls')),
     path('announcement/', include('announcement.urls')),
     path('suggestions/', include('suggestions.urls')),
     path('faq/', include("faq.urls")),
-    path('analysis/', include("analysis.urls"))
+    path('analysis/', include("analysis.urls")),
+    path('adminpage/', include("adminPage.urls")),
+    path('userPage/', include("userPage.urls"))
 ]

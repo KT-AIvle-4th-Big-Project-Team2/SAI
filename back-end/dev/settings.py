@@ -43,11 +43,9 @@ INSTALLED_APPS = [
     'suggestions', # 사용자 제안기능
     'announcement', # 공지게시판
     'consultBoard', # ?
-    'user',
+    'userPage',
+    'adminPage',
     'analysis',
-    
-    # 'reviewBoard',
-    # 'concernBoard',
     
     # rest API
     "rest_framework",
@@ -226,3 +224,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 
+################################
+#         쿠키 관련 설정
+################################
+
+SESSION_COOKIE_SAMESITE = None
+#SESSION_COOKIE_DOMAIN = 
