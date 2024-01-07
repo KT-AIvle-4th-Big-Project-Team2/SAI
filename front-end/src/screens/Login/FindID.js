@@ -1,16 +1,7 @@
 import * as React from 'react';
-import {
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-  Link,
-  Box,
-  Typography,
-  Container,
-} from '@mui/material/';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Button, TextField, Link, Box, Typography, Container } from '@mui/material/';
+import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/SAI_logo_slogan.png';
 
 function Copyright(props) {
   return (
@@ -25,72 +16,70 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
-
 export default function FindID() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    // 여기에 이메일로 비밀번호 찾기 안내 등의 비즈니스 로직을 추가할 수 있습니다.
+
+    // Alert 표시
+    alert('이메일로 비밀번호 찾기 안내를 보내드렸습니다.');
+
+    // '/login' 페이지로 리디렉션
+    navigate('/login');
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Recover Password
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="Name"
-              label="Name"
-              name="Name"
-              autoComplete="Name"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="Email"
-              label="Email"
-              type="Email"
-              id="Email"
-              autoComplete="email"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              href='/signup'
-            >
-              Submit
-            </Button>
-          </Box>
+    <Container component="main" maxWidth="xs">
+      <Box
+        component="form"
+        border={1}
+        p={3}
+        noValidate
+        sx={{
+          mt: 16,
+          minWidth: 400,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <img src={logo} alt="logoslogan" />
+        <Typography component="h1" variant="h5">
+          비밀번호 찾기
+        </Typography>
+        <Box sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="Name"
+            label="이름"
+            name="Name"
+            autoComplete="Name"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="Email"
+            label="이메일"
+            type="Email"
+            id="Email"
+            autoComplete="email"
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleButtonClick} // 클릭 시 handleButtonClick 함수 호출
+          >
+            제출
+          </Button>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+    </Container>
   );
 }

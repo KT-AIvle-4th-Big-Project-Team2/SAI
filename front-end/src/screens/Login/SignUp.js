@@ -21,6 +21,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
 import TermsModal from '../../components/TermsModal';
+import logo from '../../assets/SAI_logo_slogan.png'
 
 function Copyright(props) {
   return (
@@ -89,7 +90,7 @@ export default function SignUp() {
     // 이름 유효성 검사
       const nameRegex = /^[가-힣a-zA-Z]+$/;
       if (!nameRegex.test(name) || name.length < 1) {
-        setNameError('올바른 이름을 입력해주세요.');
+        setNameError('올바른 형식을 입력해주세요.');
       } else {
         setNameError('');
       }
@@ -138,9 +139,7 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img src={logo} alt="logoslogan" />
           <Typography component="h1" variant="h5">
             회원가입
           </Typography>
@@ -148,7 +147,6 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
                   name="name"
                   required
                   fullWidth
@@ -160,11 +158,10 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="nickname"
+                  name="username"
                   required
                   fullWidth
-                  id="nickname"
+                  id="username"
                   label="닉네임"
                   autoFocus
                   error={nameError !== '' || false}

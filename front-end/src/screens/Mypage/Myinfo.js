@@ -81,6 +81,7 @@ import React from 'react';
 import { Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Withdrawal from './WithDrawal';
+import logo from '../../assets/SAI_logo_slogan.png'
 
 const Myinfo = () => {
   const name = '홍길동';
@@ -99,12 +100,10 @@ const Myinfo = () => {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          내 정보 수정
-        </Typography>
+          <img src={logo} alt="logoslogan"/>
+          <Typography component="h1" variant="h5">
+            내 정보 수정
+          </Typography>
         <Box component="form" noValidate sx={{ mt: 3  }} >
           <Grid container spacing={2}>
             <Grid item xs={12}>

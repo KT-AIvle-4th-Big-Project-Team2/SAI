@@ -25,7 +25,7 @@ export const About2 = (props) => {
           </div>
           
           <div className="col-12 col-md-6">
-            <img src="img/about.jpg" className="img-fluid" alt="" />
+            <img src="img/about2.png" className="img-fluid" alt="" />
           </div>
         </div>
       </div>
