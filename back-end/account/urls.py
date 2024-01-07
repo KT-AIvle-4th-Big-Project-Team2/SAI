@@ -12,6 +12,6 @@ urlpatterns = [
     path("deleteuser/", views.DeleteAccountView.as_view()),
     path("checkpassword/", views.CheckPWView.as_view()), #
     path("updatepw/", views.UpdatePWView.as_view()), #
-    path("checkauth/", views.CheckAuthenticatedView.as_view()), #
-    path("getcsrf/", views.GetCSRFToken.as_view()), #
+    # path("checkauth/", views.CheckAuthenticatedView.as_view()), #
+    # path("getcsrf/", views.GetCSRFToken.as_view()), #
 ]

@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from urllib.parse import unquote
 from rest_framework import generics, status, permissions
-from django.views.decorators.csrf import csrf_protect
+# from django.views.decorators.csrf import csrf_protect
 from .models import *
 from .serializers import *
 from django.utils.decorators import method_decorator
 
-
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
@@ -97,25 +97,25 @@ class BoardSearchView(generics.ListAPIView):
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class BoardPostCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
-    
-        
+        username = self.request.data.pop("username")
+
         Board.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            user=self.request.user
+            user=username
         )      
-        return Response({'success': 'create post success'}, status.HTTP_201_CREATED)
+        return Response({'success': 'create post success'})
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostUpdateSerializer
     queryset = Board.objects.all()
     
@@ -135,9 +135,9 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
         return Response({'success': 'update post success'}, status.HTTP_201_CREATED)
         
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = Board.objects.all()
     serializer_class = BoardPostSerializer
     
@@ -173,7 +173,7 @@ class BoardPostCommentView(generics.ListAPIView):
     
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentCreateView(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostcommentCreateSerializer
@@ -187,9 +187,9 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
             board=board_id,
         )
         return Response({'success': 'crate comment success'}, status.HTTP_201_CREATED)
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCommentUpdateSerializer
     queryset = Comments.objects.all()
     
@@ -202,9 +202,9 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = Comments.objects.all()
     
     def delete(self, request, *args, **kwargs):

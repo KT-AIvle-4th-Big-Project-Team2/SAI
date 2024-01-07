@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
-
+from django.views.decorators.csrf import csrf_exempt
 from .models import UserCustom
 from .serializers import *
 
@@ -17,37 +17,36 @@ from account.customlibs.checkLogin import *
 
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
-class GetCSRFToken(APIView):
+# @method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
+# class GetCSRFToken(APIView):
 
-    def get(self, request, format = None):
-        return Response({'success' : 'CSRF Cookie set'})
+#     def get(self, request, format = None):
+#         return Response({'success' : 'CSRF Cookie set'})
 
 
-@method_decorator(csrf_protect, name='dispatch')
-class CheckAuthenticatedView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+# @method_decorator(csrf_protect, name='dispatch')
+# class CheckAuthenticatedView(APIView):
+#     permission_classes = (permissions.IsAuthenticated,)
     
-    def get(self, request, format = None):
-        try:
-            isAuthenticated = request.user.is_authenticated
+#     def get(self, request, format = None):
+#         try:
+#             isAuthenticated = request.user.is_authenticated
             
-            if isAuthenticated:
-                return Response({'isAuthenticated':'sucess'})
-            else:
-                return Response({'isAuthenticated':'error'})
-        except:
-            return Response({'error': 'Something went wrong during checking authentication status'})
+#             if isAuthenticated:
+#                 return Response({'isAuthenticated':'sucess'})
+#             else:
+#                 return Response({'isAuthenticated':'error'})
+#         except:
+#             return Response({'error': 'Something went wrong during checking authentication status'})
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class SignInView(APIView):
     serializer_class = SignInSerializer
     
     def post(self, request):
         input_data = self.request.data
-        print(input_data)
         passwordAgain = input_data.get("password_again")
         input_data.pop("password_again")
         serializer = self.serializer_class(data = self.request.data)
@@ -80,7 +79,7 @@ class SignInView(APIView):
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
     serializer_class = LoginSerializer
     
@@ -101,9 +100,10 @@ class LoginView(APIView):
 
         
         
-@method_decorator(csrf_protect, name='dispatch')        
+# @method_decorator(csrf_protect, name='dispatch')        
 class LogoutView(APIView):
     def post(self, request, format = None):
+        username = self.request.data.pop("username")
         try:
             auth.logout(request)
             return Response({'success':'logout success'})
@@ -113,9 +113,9 @@ class LogoutView(APIView):
 
 
 
-@method_decorator(csrf_protect, name = 'dispatch')
+# @method_decorator(csrf_protect, name = 'dispatch')
 class DeleteAccountView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = PasswordCheckSerializer
     
     def delete(self, request):
@@ -140,13 +140,13 @@ class DeleteAccountView(APIView):
         
         
                 
-@method_decorator(csrf_protect, name='dispatch')       
+# @method_decorator(csrf_protect, name='dispatch')       
 class GetUserView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = GetUserData 
 
     def post(self, request, format=None):
-        username = self.request.user.username
+        username = self.request.data.pop("username")
         
         if username:
             user_data = UserCustom.objects.filter(username=username).first()
