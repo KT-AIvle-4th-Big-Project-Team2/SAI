@@ -65,7 +65,11 @@ class LoginView(APIView):
 
                 user_info = authenticate(username=username, password=password)
                 if user_info != None:
-                    auth.login(request, user_info)
+                    #auth.login(request, user_info) # session 필요 함수 대체
+                    instance = UserCustom.objects.get(username = username)
+                    instance.is_active = 1
+                    instance.save()
+                    
                     logger.debug(f"User {username} logged in successfully")  # 로그 남기기
                     return Response({'success': 'login successful'}, status=status.HTTP_200_OK)
                 else:
@@ -86,8 +90,14 @@ class LogoutView(APIView):
         username = self.request.data.pop("username")
         try:
             #auth.logout(request)
+            instance = UserCustom.objects.get(usrename = username)
+            instance.is_active = 0
+            instance.save()
+            
+            logger.debug(f"User {username} logged out successfully")  # 로그 남기기
             return Response({'success':'logout success'})
         except:
+            logger.exception("An exception occurred during login")
             return Response({'error':'logout failed'})
 
 
@@ -96,14 +106,13 @@ class DeleteAccountView(APIView):
     serializer_class = PasswordCheckSerializer
     
     def delete(self, request):
-        username = request.data.pop
+        username = request.data.pop('username')
         serializer = self.serializer_class(data = request.data)
         
         
         if serializer.is_valid():
             try:
-                instance = UserCustom.objects.get(username = self.request.user.username)
-                
+                instance = UserCustom.objects.get(username = username)                
             except:
                 return Response({"error":"user doesn't exists error"})
             
@@ -126,7 +135,7 @@ class GetUserView(APIView):
         username = self.request.data.pop("username")
         
         if username:
-            user_data = UserCustom.objects.filter(username=username).first()
+            instance = UserCustom.objects.get(username=username)
             if user_data.is_valid():
                 serializer = self.serializer_class(user_data)
                 return Response({serializer.data}, status.HTTP_200_OK)
@@ -144,10 +153,11 @@ class UpdatePWView(generics.UpdateAPIView):
     
     def patch(self, request, *args, **kwargs):
         
-        user = self.request.user
+        username = self.request.data.pop('username')
         
         try:
-            userIstance = UserCustom.objects.get(username = user.username)
+            instance = UserCustom.objects.get(username = username)
+            
         except:
             return Response({'error':'user not exists'}, status=status.HTTP_400_BAD_REQUEST)
         

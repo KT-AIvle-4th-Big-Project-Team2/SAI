@@ -20,3 +20,8 @@ class MarketSortedDbFinSerializer(serializers.ModelSerializer):
     class Meta:
         model = MarketSortedDbFin
         fields = ['점포별_평균_매출_금액']
+        
+class MarketServiceEstimateShapValuesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MarketServiceEstimateShapValues
+        fields = '__all__'

@@ -101,7 +101,7 @@ class DongServiceDataEstimateTestFullFin(models.Model):
 
 
 class DongServiceDataPredictTestFullFin(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
+    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
     행정동_코드 = models.IntegerField(blank=True, null=True)
     행정동_코드_명 = models.TextField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
@@ -280,7 +280,7 @@ class DongServiceEstimateShapValues(models.Model):
 
 
 class DongServiceEstimateY(models.Model):
-    행정동_코드 = models.IntegerField(blank=True, null=True)
+    행정동_코드 = models.IntegerField(blank=True, primary_key = True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
     prediction_label = models.FloatField(blank=True, null=True)
 
@@ -290,7 +290,7 @@ class DongServiceEstimateY(models.Model):
 
 
 class DongSortedDbFin(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
+    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
     행정동_코드 = models.IntegerField(blank=True, null=True)
     행정동_코드_명 = models.TextField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
@@ -475,7 +475,7 @@ class DongSortedDbFin(models.Model):
 
 
 class MarketServiceDataEstimateTestFull(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
+    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
     상권_구분_코드 = models.TextField(blank=True, null=True)
     상권_구분_코드_명 = models.TextField(blank=True, null=True)
     상권_코드 = models.IntegerField(blank=True, null=True)
@@ -574,7 +574,7 @@ class MarketServiceDataEstimateTestFull(models.Model):
 
 
 class MarketServiceDataPredictTestFull(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
+    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
     상권_구분_코드 = models.TextField(blank=True, null=True)
     상권_구분_코드_명 = models.TextField(blank=True, null=True)
     상권_코드 = models.IntegerField(blank=True, null=True)
@@ -673,7 +673,7 @@ class MarketServiceDataPredictTestFull(models.Model):
 
 
 class MarketServiceEstimateShapValues(models.Model):
-    상권_코드 = models.IntegerField(blank=True, null=True)
+    상권_코드 = models.IntegerField(blank=True, primary_key = True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
     관공서_수 = models.FloatField(blank=True, null=True)
     은행_수 = models.FloatField(blank=True, null=True)
@@ -761,7 +761,7 @@ class MarketServiceEstimateShapValues(models.Model):
 
 
 class MarketServiceEstimateY(models.Model):
-    상권_코드 = models.IntegerField(blank=True, null=True)
+    상권_코드 = models.IntegerField(blank=True, primary_key = True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
     prediction_label = models.FloatField(blank=True, null=True)
 
