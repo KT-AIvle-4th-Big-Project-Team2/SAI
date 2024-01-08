@@ -162,9 +162,9 @@ class GetUserView(APIView):
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class UpdatePWView(generics.UpdateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UpdatePWSerializer
     
     def patch(self, request, *args, **kwargs):
@@ -191,7 +191,7 @@ class UpdatePWView(generics.UpdateAPIView):
 
 @method_decorator(csrf_protect, name = 'dispatch')
 class CheckPWView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = PasswordCheckSerializer
     
     def post(self, request):
