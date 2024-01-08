@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 
 from .models import UserCustom
 from .serializers import *
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
@@ -16,6 +17,27 @@ from account.customlibs.checkLogin import *
 
 logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
 
+@method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
+class GetCSRFToken(APIView):
+
+    def get(self, request, format = None):
+        return Response({'success' : 'CSRF Cookie set'})
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class CheckAuthenticatedView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    
+    def get(self, request, format = None):
+        try:
+            isAuthenticated = request.user.is_authenticated
+            
+            if isAuthenticated:
+                return Response({'isAuthenticated':'sucess'})
+            else:
+                return Response({'isAuthenticated':'error'})
+        except:
+            return Response({'error': 'Something went wrong during checking authentication status'})
 class SignInView(APIView):
     serializer_class = SignInSerializer
     
