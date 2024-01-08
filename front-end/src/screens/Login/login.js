@@ -88,13 +88,15 @@ export default function SignIn() {
           password: data.get('password'),
         };
         console.log(joinData);
-    
+        const csrfToken = getCsrfToken(); // CSRF 토큰을 가져오는 함수를 정의해야 함
+        
         try {
           const response = await fetch("http://subdomain.storeaivle.com/accounts/login/", {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
               'Accept': 'application/json',
+              'X-CSRFToken': csrfToken, // X-CSRFToken 헤더에 CSRF 토큰을 추가
             },
             body: JSON.stringify({
               username: joinData.email,
