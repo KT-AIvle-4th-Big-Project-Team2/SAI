@@ -3,53 +3,22 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
+
 from .models import UserCustom
 from .serializers import *
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-
-from django.contrib import auth
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
 from account.customlibs.checkLogin import *
 
 
 
-# @method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
-# class GetCSRFToken(APIView):
-
-#     def get(self, request, format = None):
-#         return Response({'success' : 'CSRF Cookie set'})
-
-
-# @method_decorator(csrf_protect, name='dispatch')
-# class CheckAuthenticatedView(APIView):
-#     permission_classes = (permissions.IsAuthenticated,)
-    
-#     def get(self, request, format = None):
-#         try:
-#             isAuthenticated = request.user.is_authenticated
-            
-#             if isAuthenticated:
-#                 return Response({'isAuthenticated':'sucess'})
-#             else:
-#                 return Response({'isAuthenticated':'error'})
-#         except:
-#             return Response({'error': 'Something went wrong during checking authentication status'})
-
-
-
-# @method_decorator(csrf_protect, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
 class SignInView(APIView):
     serializer_class = SignInSerializer
     
     def post(self, request):
         input_data = self.request.data
-        passwordAgain = input_data.get("password_again")
-        input_data.pop("password_again")
+        passwordAgain = input_data.pop("password_again")
         serializer = self.serializer_class(data = self.request.data)
         
         if serializer.is_valid():
@@ -80,8 +49,7 @@ class SignInView(APIView):
 
 
 
-# @method_decorator(csrf_protect, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
+
 class LoginView(APIView):
     serializer_class = LoginSerializer
     
@@ -93,8 +61,9 @@ class LoginView(APIView):
             
             user_info = authenticate(username=username, password=password)
             if user_info != None:
-                auth.login(request, user_info)
-                return Response({'success' : 'login successful'}, status=status.HTTP_200_OK)
+                # auth.login(request, user_info)
+                instance = UserCustom
+                return Response({'success' : 'login successful', "key" : username}, status=status.HTTP_200_OK)
             else:
                   return Response({'error' : 'wrong user info'})
         else:
@@ -102,26 +71,25 @@ class LoginView(APIView):
 
         
         
-# @method_decorator(csrf_protect, name='dispatch')        
+               
 class LogoutView(APIView):
     def post(self, request, format = None):
         username = self.request.data.pop("username")
         try:
-            auth.logout(request)
+            #auth.logout(request)
             return Response({'success':'logout success'})
         except:
             return Response({'error':'logout failed'})
 
 
 
-
-# @method_decorator(csrf_protect, name = 'dispatch')
 class DeleteAccountView(APIView):
-    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = PasswordCheckSerializer
     
     def delete(self, request):
+        username = request.data.pop
         serializer = self.serializer_class(data = request.data)
+        
         
         if serializer.is_valid():
             try:
@@ -141,10 +109,8 @@ class DeleteAccountView(APIView):
             return Response(serializer.errors)
         
         
-                
-# @method_decorator(csrf_protect, name='dispatch')       
+                    
 class GetUserView(APIView):
-    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = GetUserData 
 
     def post(self, request, format=None):
@@ -152,9 +118,9 @@ class GetUserView(APIView):
         
         if username:
             user_data = UserCustom.objects.filter(username=username).first()
-            if user_data:
+            if user_data.is_valid():
                 serializer = self.serializer_class(user_data)
-                return Response(serializer.data)
+                return Response({serializer.data}, status.HTTP_200_OK)
             else:
                 return Response({"error": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -189,7 +155,7 @@ class UpdatePWView(generics.UpdateAPIView):
             return Response({serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
 
-@method_decorator(csrf_protect, name = 'dispatch')
+
 class CheckPWView(APIView):
     # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = PasswordCheckSerializer
@@ -213,7 +179,7 @@ class CheckPWView(APIView):
             return Response({"error":"user info error"})
         
         
-@method_decorator(csrf_protect, name = 'dispatch')
+        
 class FindIDView(APIView):
     queryset = UserCustom.objects.all()
     serializer_class = FindIDInputSerializer
@@ -239,7 +205,7 @@ class FindIDView(APIView):
     
     
 
-@method_decorator(csrf_protect, name = 'dispatch')
+
 class ResetPW(APIView):
     serializer_class = ResetPasswordInput
 
