@@ -6,12 +6,14 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import imgLogo from './logo.png';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
 
 function NavBarElements() {
   const [openFeedback, setOpenFeedback] = useState(false);
   const [feedbackTitle, setFeedbackTitle] = useState('');
   const [feedbackContent, setFeedbackContent] = useState('');
   const name = 'test'
+  const { isLogin, logoutHandler } = useAuth();
 
   const handleOpenFeedback = () => {
     setOpenFeedback(true);
@@ -54,7 +56,7 @@ function NavBarElements() {
                 alt="React Bootstrap logo"
               />
             </Navbar.Brand>
-
+          {isLogin ? (
             <Nav>
               <NavDropdown title="알림마당" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
@@ -74,10 +76,17 @@ function NavBarElements() {
                 <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
                 <NavDropdown.Item href="/Myboard">내가 쓴 글</NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link href="/">Log out</Nav.Link>
+              <Nav.Link href="/">Logout</Nav.Link>
             </Nav>
+          ) : ( 
+          <Nav>
+          <Nav.Link href="/login">로그인</Nav.Link>
+          <Nav.Link href="/Signup">회원가입</Nav.Link>
+          </Nav>
+          )}
           </Container>
         </Navbar>
+        
 
         <Dialog open={openFeedback} onClose={handleCloseFeedback}>
           <DialogTitle>개선의견 제출</DialogTitle>
