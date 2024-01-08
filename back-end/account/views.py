@@ -1,3 +1,4 @@
+import logging
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,11 +8,13 @@ from rest_framework.views import APIView
 from .models import UserCustom
 from .serializers import *
 
+from django.contrib import auth
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
 from account.customlibs.checkLogin import *
 
 
+logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
 
 class SignInView(APIView):
     serializer_class = SignInSerializer
@@ -53,21 +56,27 @@ class SignInView(APIView):
 class LoginView(APIView):
     serializer_class = LoginSerializer
     
-    def post(self, request, format = None):
-        serialized = self.serializer_class(data = request.data)
-        if serialized.is_valid():
-            username = serialized.validated_data['username']
-            password = serialized.validated_data['password']
-            
-            user_info = authenticate(username=username, password=password)
-            if user_info != None:
-                # auth.login(request, user_info)
-                instance = UserCustom
-                return Response({'success' : 'login successful', "key" : username}, status=status.HTTP_200_OK)
+    def post(self, request, format=None):
+        try:
+            serialized = self.serializer_class(data=request.data)
+            if serialized.is_valid():
+                username = serialized.validated_data['username']
+                password = serialized.validated_data['password']
+
+                user_info = authenticate(username=username, password=password)
+                if user_info != None:
+                    auth.login(request, user_info)
+                    logger.debug(f"User {username} logged in successfully")  # 로그 남기기
+                    return Response({'success': 'login successful'}, status=status.HTTP_200_OK)
+                else:
+                    logger.error(f"Login failed for user {username}")  # 로그 남기기
+                    return Response({'error': 'wrong user info'})
             else:
-                  return Response({'error' : 'wrong user info'})
-        else:
-            return Response({'error':'input value error'})
+                logger.error("Invalid input data during login")  # 로그 남기기
+                return Response({'error': 'input value error'})
+        except Exception as e:
+            logger.exception("An exception occurred during login")  # 예외 발생 시 로그 남기기
+            return Response({'error': 'An error occurred during login'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         
         
