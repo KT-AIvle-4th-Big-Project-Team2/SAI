@@ -42,6 +42,7 @@ from account.customlibs.checkLogin import *
 
 
 # @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class SignInView(APIView):
     serializer_class = SignInSerializer
     
@@ -80,6 +81,7 @@ class SignInView(APIView):
 
 
 # @method_decorator(csrf_protect, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
     serializer_class = LoginSerializer
     
