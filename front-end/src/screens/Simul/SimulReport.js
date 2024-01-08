@@ -2,12 +2,16 @@ import * as React from 'react';
 import {
   Box,
   Paper,
-  Typography
+  Typography,
+  Grid,
+  Button,
 }
 from '@mui/material/'
 import DivLine from '../../components/Styles/DivLine';
 import { ResponsiveCirclePacking } from '@nivo/circle-packing'
 import { ResponsiveBullet } from '@nivo/bullet'
+import { ResponsiveBar } from '@nivo/bar'
+import { ResponsiveBump } from '@nivo/bump';
 import { styled } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
 
@@ -15,7 +19,6 @@ const createGradientStyle = (theme) => ({
   background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
   borderRadius: 3,
   padding: theme.spacing(2),
-  marginTop: theme.spacing(3),
   marginBottom: theme.spacing(4),
   height: 'auto',
 });
@@ -27,10 +30,41 @@ const StyledPaper = styled(Paper)(({ theme }) => createGradientStyle(theme));
 const SimulReport = () => {
   const theme = useTheme();
   const data1 = {
-      "name": "nivo",
-      "color": "hsl(38, 70%, 50%)",
-      "loc" : 100
+    "name": "nivo",
+    "color": "hsl(249, 70%, 50%)",
+    "children" : [
+    {
+      "name": "변수 요인 1",
+      "color": "hsl(200, 70%, 50%)",
+      "loc": 150
+    },
+    {
+      "name": '변수 요인 2',
+      "color": "hsl(200, 70%, 40%)",
+      "loc": 90
+    },
+    {
+      "name": '변수 요인 3',
+      "color": "hsl(200, 70%, 30%)",
+      "loc": 80
+    }
+  ]
   }
+  
+  const CircleGraph = () => (
+    <div style={{ height: '550px' }}>
+    <ResponsiveCirclePacking
+      data={data1}
+      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+      id="id"
+      value="loc"
+      colors={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, ' + (70 - 20 * depth) + '%)')}
+      borderColor={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, 50%)')}
+    />
+  </div>
+);
+
+
   const data2 = [
     {
       "id": '9%',
@@ -39,7 +73,116 @@ const SimulReport = () => {
       "markers": [null], // markers는 필요에 따라 추가
     },
   ];
+
+  const data3 = [
+    { id: 'y1', value: 10, color: 'blue' },
+    { id: 'y2', value: 5, color: 'orange' },
+    { id: 'y3', value: 2, color: 'gray' },
+  ];
   
+  const BarGraph = () => (
+    <div style={{ height: '450px' }}>
+      <ResponsiveBar
+        data={data3}
+        keys={['value']}
+        indexBy="id"
+        margin={{ top: 50, right: 60, bottom: 50, left: 60 }}
+        padding={0.3}
+        colors={(bar) => bar.data.color}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+        }}
+      />
+    </div>
+  );
+  
+  const data4 = [
+    {
+      id: '선택상권',
+      data: [
+        { x: '2023년 2분기', y: 2000 },
+        { x: '2023년 3분기', y: 2500 },
+        { x: '2024년 4분기', y: 2000 },
+      ],
+    },
+    {
+      id: '자치구',
+      data: [
+        { x: '2023년 2분기', y: 1000 },
+        { x: '2023년 3분기', y: 1200 },
+        { x: '2024년 4분기', y: 1100 },
+      ],
+    },
+    {
+      id: '서울시',
+      data: [
+        { x: '2023년 2분기', y: 500 },
+        { x: '2023년 3분기', y: 600 },
+        { x: '2024년 4분기', y: 700 },
+      ],
+    },
+  ];
+  
+  const BumpGraph = () => (
+    <div style={{ height: '400px' }}>
+    <ResponsiveBump
+      data={data4}
+      margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
+      colors={['#6474C8', '#FF6B00', 'gray']}
+      lineWidth={3}
+      activeLineWidth={6}
+      inactiveLineWidth={3}
+      inactiveOpacity={0.15}
+      pointSize={10}
+      activePointSize={16}
+      inactivePointSize={0}
+      pointColor={{ theme: 'background' }}
+      pointBorderWidth={3}
+      activePointBorderWidth={3}
+      pointBorderColor={{ from: 'serie.color' }}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+      }}
+      axisLeft={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+      }}
+      legends={[
+        {
+          anchor: 'bottom-right',
+          direction: 'column',
+          translateY: 30,
+          itemsSpacing: 20,
+          itemWidth: 80,
+          itemHeight: 20,
+          itemTextColor: '#999',
+          symbolSize: 12,
+          symbolShape: 'circle',
+          effects: [
+            {
+              on: 'hover',
+              style: {
+                itemTextColor: '#000',
+              },
+            },
+          ],
+        },
+      ]}
+    />
+  </div>
+  );
 
 
 
@@ -109,12 +252,12 @@ const SimulReport = () => {
   return (
     <div className="container">  
     
-    <button>분석 보고서</button><button>시뮬레이션 리포트</button>
-      <StyledPaper borderRadius={3} p={2} sx={{mt : 3, mb : 4, height : 'auto', padding : 3}}>
+    <Button variant='outlined' sx={{mt : 4, color : '#012A5B'}}>분석 보고서</Button><Button variant='contained' sx={{mt : 4, color: '#FFFFFF', backgroundColor: '#012A5B'}}>시뮬레이션 리포트</Button>
+      <StyledPaper sx={{ height : 'auto', padding : 3}}>
           <Box sx={{ml: 4, mb: 3, width: 'fit-content', height: 'auto' }}>
             <Typography style={{ fontSize : 40, fontWeight : 'bold' }}><span style={{ color : '#FFFFFF' }}> SAI 창업 시뮬레이션 리포트</span></Typography>
           </Box>
-          <Paper p={3} border="1px solid black" borderRadius={8} sx={{ height: 'auto', mb: 3, ml : 4, mr : 4}}>
+          <Paper border="1px solid black" borderRadius={8} sx={{ height: 'auto', mb: 3, ml : 4, mr : 4, padding : 2}}>
             <TitleType> 선택 값을 반영해 SAI!로 분석한</TitleType>
             <TitleType> {user} 님의 매장의 예상 매출이에요</TitleType>
             <DivLine />
@@ -123,14 +266,8 @@ const SimulReport = () => {
             <Typography fontSize={20} sx={{mt : 5, fontWeight : 'bold'}}>업종 <span style={{ color : '#6474C8', fontStyle: 'italic' }}>{da.업종}</span></Typography>
             <Typography fontSize={20} sx={{mt : 5, mr : 20, fontWeight : 'bold'}}>창업준비금 <span style={{ color : '#6474C8', fontStyle: 'italic' }}>{da.자본금}원</span></Typography>
             </div>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh', marginTop:5 }}>
-            <ResponsiveCirclePacking
-              data={data1}
-              margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-              id="name"
-              value="loc"
-              />
-            </Box>
+            <BumpGraph />
+
             <Box>
               <Typography fontSize={30} sx={{ml : 1, mt : 10, mr : 10, fontWeight : 'bold'}}>창업 전망 : {da.시뮬레이션_결과}</Typography>
               <Box bgcolor={'primary.gray'} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '12vh', marginTop:5,  }}>
@@ -152,7 +289,8 @@ const SimulReport = () => {
               <ContentsType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동}</span>은 전년 동분기에 비해 유동인구가 [감소]하고 있는 지역이에요. 마케팅이 중요한 상권이에요.</ContentsType>
               </Box>
             </Box>
-            <Box bgcolor={'gray.100'}>
+            <Grid container spacing={2}>
+             <Grid item xs={6}>
               <TitleType>비슷한 지역 추천</TitleType>
               <br></br>
               <ContentsType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동} {da.업종}</span> 업종과 비슷한 추정 매출을 보이는 곳은 <span style={{ color : '#FF6B00' }}>{da.유사_행정동1_명}, {da.유사_행정동2_명}</span>이 있어요.</ContentsType>
@@ -166,13 +304,19 @@ const SimulReport = () => {
               <br></br>
               <ContentsType>2023년도 3,4분기 평균 추정 매출</ContentsType>
               <ContentsType>XXXX원 yyy원 높아요</ContentsType>
-            </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <BarGraph />
+              </Grid>
+            </Grid>
             <Box sx={{mt : 5}}>
               <TitleType>매출 영향 요인 분석</TitleType>
               <br></br>
               <ContentsType>SAI로 분석한 {user}님의 매장의 추정 매출의 영향 요인이에요.</ContentsType>
               <br></br>
-              <ContentsType>graph1, graph2</ContentsType>
+            </Box>
+              <CircleGraph />
+            <Box>
               <br></br>
               <ContentsType>분석된 <span style={{ color : '#0500FF' }}>파란색</span> 요인은 매출을 증가시키는데 기여할 수 있어요.</ContentsType>
               <ContentsType>분석된 <span style={{ color : '#FF0000' }}>빨간색</span> 요인은 매출을 증가시키는데 기여할 수 있어요.</ContentsType>
@@ -188,18 +332,6 @@ const SimulReport = () => {
                 <ContentsType><span style={{ color : '#5F5F5F' }}>좋은 자리라면 평균 임대료에 권리금이 추가로 더 발생할 수 있어요.</span></ContentsType>
                 <ContentsType><span style={{ color : '#5F5F5F' }}>{da.행정구} {da.행정동}의 평균 임대 면적은 ()m^2이고, 평균 임대료는 M^2 당 (얼마)이에요.</span></ContentsType>
                 <br></br>
-              </Box>
-              <ContentsType>프랜차이즈1</ContentsType>
-              <Box>
-                <ContentsType>예상 창업 비용</ContentsType>
-                <ContentsType>(임대료 및 보증금 포함)</ContentsType>
-              </Box>
-                <ContentsType>XXXX원</ContentsType>
-              <Box>
-                <DivLine/>
-                <ContentsType>가입비 :</ContentsType>
-                <ContentsType>분석된 파란색blue 요인은 매출을 증가시키는데 기여할 수 있어요.</ContentsType>
-                <ContentsType>분석된 빨간색red 요인은 매출을 증가시키는데 기여할 수 있어요.</ContentsType>
               </Box>
             </Box>
         </Paper>
