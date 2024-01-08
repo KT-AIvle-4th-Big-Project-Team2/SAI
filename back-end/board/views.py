@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from urllib.parse import unquote
-#from rest_framework import generics, status, permissions
+from rest_framework import generics, status, permissions
 # from django.views.decorators.csrf import csrf_protect
 from .models import *
 from .serializers import *
@@ -23,7 +23,7 @@ from account.models import UserCustom
 
 
 class BoardPostListView(generics.ListAPIView):
-    @csrf_exempt
+    
     def get_queryset(self):
         board_contents = Board.objects.values(
             'board_id',
@@ -56,15 +56,8 @@ class BoardPostView(generics.ListAPIView):
 
     serializer_class = BoardPostSerializer
 
-class BoardPostView2(APIView):
-    def post(self, request):
-        username = request.data.get('username')
-        title = "session out testing"
-        contesnts = "session out testing"
-        user_id = UserCustom.objects.get(username = username).user_id
-        thepost = Board.objects.create(user_id = user_id, title = title, contents = contesnts)
-        thepost.save()
-        return Response({'did it worked?'})
+
+
 class BoardSearchView(generics.ListAPIView):
     def get_queryset(self):
         if self.kwargs['searchfield'] == 'title':
@@ -182,7 +175,7 @@ class BoardPostCommentView(generics.ListAPIView):
 
 # @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentCreateView(generics.CreateAPIView):
-    #permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostcommentCreateSerializer
     
     def perform_create(self, serializer):

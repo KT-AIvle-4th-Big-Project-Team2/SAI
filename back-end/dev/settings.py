@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('/home/ubuntu/setting/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -22,27 +22,7 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
-
-
-ALLOWED_HOSTS = ["localhost", "127.0.0.1","13.124.221.229","subdomain.storeaivle.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","43.202.42.122"]
 
 # Application definition
 
@@ -69,14 +49,14 @@ INSTALLED_APPS = [
     
     # rest API
     "rest_framework",
-    #"rest_framework.authtoken", # django + REST framework Token authentication
+    "rest_framework.authtoken", # django + REST framework Token authentication
     "corsheaders",
     
     # Token JWT 인증
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('/home/ubuntu/setting/frontURL_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -88,7 +68,7 @@ MIDDLEWARE = [
     # django 기본 middleware
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -97,11 +77,11 @@ MIDDLEWARE = [
     
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+#CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1","http://storeaivle.com"
+    frontURL, "http://localhost", "http://127.0.0.1"
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -124,7 +104,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('/home/ubuntu/setting/DB_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
@@ -205,20 +185,20 @@ AUTH_USER_MODEL = 'account.UserCustom'
 
 # Django 보안 관련 설정
 
-REST_FRAMEWORK = {
+# REST_FRAMEWORK = {
     # 'DEFAULT_PARSER_CLASSES': [
     #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
     # ],
     
-    'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.AllowAny',
-    ],
+    # 'DEFAULT_PERMISSION_CLASSES':[
+    #     'rest_framework.permissions.IsAuthenticated', # 모든 REST API 기능을 SESSION ID 또는 TOKEN이 있어야 사용할 수 있게 설정
+    # ],
     
     # 'DEFAULT_AUTHENTICATON_CLASSES':[
     #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
         
     # ]
-}
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -248,5 +228,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #         쿠키 관련 설정
 ################################
 
-#SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SAMESITE = None
 #SESSION_COOKIE_DOMAIN = 

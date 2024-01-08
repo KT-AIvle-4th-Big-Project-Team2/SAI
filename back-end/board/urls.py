@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from django.views.decorators.csrf import csrf_exempt
+
 urlpatterns = [
     path('postlist/', views.BoardPostListView.as_view()),
     path('postlist/<int:pk>', views.BoardPostView.as_view()),
@@ -13,5 +13,4 @@ urlpatterns = [
     path('postlist/<int:pk>/createcomment', views.BoardPostCommentCreateView.as_view()),
     path('postlist/updatecomment/<int:pk>', views.BoardPostCommentUpdateView.as_view()),
     path('postlist/deletecomment/<int:pk>', views.BoardPostCommentDeleteView.as_view()),
-    path('testing', csrf_exempt(views.BoardPostView2.as_view()))
 ]
