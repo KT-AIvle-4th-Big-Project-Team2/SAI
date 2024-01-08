@@ -1318,7 +1318,7 @@
   resolved "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.8.1.tgz"
   integrity sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==
 
-"@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0":
+"@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.11.3", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0":
   version "11.11.3"
   resolved "https://registry.npmjs.org/@emotion/react/-/react-11.11.3.tgz"
   integrity sha512-Cnn0kuq4DoONOMcnoVsTOR8E+AdnKFf//6kUWc4LCdnxj31pZWn7rIULd6Y7/Js1PiPHzn7SKCM9vB/jBni8eA==
@@ -1931,6 +1931,19 @@
     d3-scale "^3.2.3"
     d3-shape "^1.3.5"
     lodash "^4.17.21"
+
+"@nivo/bullet@^0.84.0":
+  version "0.84.0"
+  resolved "https://registry.npmjs.org/@nivo/bullet/-/bullet-0.84.0.tgz"
+  integrity sha512-E4AWYQSMUrt9mZTE0wfFF3AgQf4cv7DP5+5bXT3C3WGUyCrVip4PBN9J2wVkdEgE4a//hiTebFTWNXdaj8zkIg==
+  dependencies:
+    "@nivo/axes" "0.84.0"
+    "@nivo/colors" "0.84.0"
+    "@nivo/core" "0.84.0"
+    "@nivo/legends" "0.84.0"
+    "@nivo/scales" "0.84.0"
+    "@nivo/tooltip" "0.84.0"
+    "@react-spring/web" "9.4.5 || ^9.7.2"
 
 "@nivo/circle-packing@^0.84.0":
   version "0.84.0"

@@ -8,9 +8,24 @@ from '@mui/material/'
 import DivLine from '../../components/Styles/DivLine';
 import { ResponsiveCirclePacking } from '@nivo/circle-packing'
 import { ResponsiveBullet } from '@nivo/bullet'
+import { styled } from '@mui/system';
+import { useTheme } from '@mui/material/styles';
+
+const createGradientStyle = (theme) => ({
+  background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
+  borderRadius: 3,
+  padding: theme.spacing(2),
+  marginTop: theme.spacing(3),
+  marginBottom: theme.spacing(4),
+  height: 'auto',
+});
+
+
+const StyledPaper = styled(Paper)(({ theme }) => createGradientStyle(theme));
 
 
 const SimulReport = () => {
+  const theme = useTheme();
   const data1 = {
       "name": "nivo",
       "color": "hsl(38, 70%, 50%)",
@@ -18,9 +33,9 @@ const SimulReport = () => {
   }
   const data2 = [
     {
-      "id": "target",
+      "id": '9%',
       "ranges": [0, 100],
-      "measures": [9],
+      "measures": [50],
       "markers": [null], // markers는 필요에 따라 추가
     },
   ];
@@ -95,11 +110,11 @@ const SimulReport = () => {
     <div className="container">  
     
     <button>분석 보고서</button><button>시뮬레이션 리포트</button>
-      <Paper borderRadius={8} p={5} bgcolor={'primary.main'} sx={{mt : 3, mb : 4, height : 'auto', padding : 10}}>
-          <Box sx={{ mt: 3, mb: 3, width: 'fit-content', height: 'auto' }}>
-            <TitleType> SAI 창업 시뮬레이션 리포트</TitleType>
+      <StyledPaper borderRadius={3} p={2} sx={{mt : 3, mb : 4, height : 'auto', padding : 3}}>
+          <Box sx={{ml: 4, mb: 3, width: 'fit-content', height: 'auto' }}>
+            <Typography style={{ fontSize : 40, fontWeight : 'bold' }}><span style={{ color : '#FFFFFF' }}> SAI 창업 시뮬레이션 리포트</span></Typography>
           </Box>
-          <Box p={5} border="1px solid black" borderRadius={8} sx={{ height: 'auto', mb: 3}}>
+          <Paper p={3} border="1px solid black" borderRadius={8} sx={{ height: 'auto', mb: 3, ml : 4, mr : 4}}>
             <TitleType> 선택 값을 반영해 SAI!로 분석한</TitleType>
             <TitleType> {user} 님의 매장의 예상 매출이에요</TitleType>
             <DivLine />
@@ -118,13 +133,16 @@ const SimulReport = () => {
             </Box>
             <Box>
               <Typography fontSize={30} sx={{ml : 1, mt : 10, mr : 10, fontWeight : 'bold'}}>창업 전망 : {da.시뮬레이션_결과}</Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '15vh', marginTop:5 }}>
+              <Box bgcolor={'primary.gray'} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '12vh', marginTop:5,  }}>
               <ResponsiveBullet
                 data={data2}
-                margin={{ top: 10, right: 50, bottom: 40, left: 50 }}
+                margin={{left : 10, right : 10, top: 30, bottom: 30}}
                 title="Bullet Chart Example"
-                rangeColors={['#ccc']} // range color를 회색으로 설정
-                measureColors={['red', 'blue']} // 낮은 값일 때 빨간색, 높은 값일 때 파란색
+                rangeColors={['#FACFD5']} // 옅은 분홍색
+                measureColors={['blue']} // 파란색
+                theme={{ textColor: '#333' }} // 텍스트 색상 지정 (선택사항)
+                measureBorderWidth={5}
+                rangeBorderWidth={5}
               />
               </Box>
               <Box sx={{ mt : 2, mb : 5}}>
@@ -166,7 +184,7 @@ const SimulReport = () => {
                 <ContentsType>비슷한 창업 비용으로 가능한 {da.업종} 업종 프랜차이즈 목록이에요.</ContentsType>
               <Box sx = {{bgcolor:'primary.gray', mt : 5, mb : 5}}>
                 <br></br>
-                <Typography fontSize={23} sx={{ml : 1}}>전구 아이콘 <span style={{ fontWeight : 'bold'}}>참고 도움말</span></Typography>
+                <Typography fontSize={23} sx={{ml : 1}}>💡 <span style={{ fontWeight : 'bold'}}>참고 도움말</span></Typography>
                 <ContentsType><span style={{ color : '#5F5F5F' }}>좋은 자리라면 평균 임대료에 권리금이 추가로 더 발생할 수 있어요.</span></ContentsType>
                 <ContentsType><span style={{ color : '#5F5F5F' }}>{da.행정구} {da.행정동}의 평균 임대 면적은 ()m^2이고, 평균 임대료는 M^2 당 (얼마)이에요.</span></ContentsType>
                 <br></br>
@@ -184,8 +202,8 @@ const SimulReport = () => {
                 <ContentsType>분석된 빨간색red 요인은 매출을 증가시키는데 기여할 수 있어요.</ContentsType>
               </Box>
             </Box>
-        </Box>
-      </Paper>
+        </Paper>
+      </StyledPaper>
     </div>
   )
 }

@@ -9,11 +9,12 @@ const theme = createTheme({
     primary: {
       main: '#8398CA',
       gray: '#EEEEEE',
-      orange: '#FF6B00'
+      orange: '#FF6B00',
+      dark: '#012A5B'
     },
   },
   typography: {
-    fontFamily: "'Noto Sans KR', sans-serif"
+    fontFamily: "'Noto Sans KR'"
   }
 });
 
