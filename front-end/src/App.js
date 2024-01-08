@@ -41,7 +41,10 @@ import Header from './header';
 
 
 function App() {
-  console.log()
+  const [loginData, setLoginData] = useState({});
+  useEffect(() => {
+    setLoginData(AuthProvider.isLogin)
+  }, []);
   return (
     <AuthProvider>
       <Router>
