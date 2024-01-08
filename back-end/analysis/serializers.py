@@ -25,3 +25,15 @@ class MarketServiceEstimateShapValuesSerializer(serializers.ModelSerializer):
     class Meta:
         model = MarketServiceEstimateShapValues
         fields = '__all__'
+        
+        
+class AIReportSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = AiReport
+        fields = '__all__'
+
+class AIReportListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AiReport
+        fields = ['creationdate', 'region', 'area', 'business', 'funds', 'sim_result', 'report_id']
