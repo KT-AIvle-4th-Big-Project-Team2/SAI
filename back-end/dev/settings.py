@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import timedelta
+import os
 
 SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
@@ -11,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'userPage',
     'adminPage',
     'analysis',
+    "fileupload",
     
     # rest API
     "rest_framework",
@@ -56,7 +58,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/frontURL_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -104,7 +106,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/DB_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
@@ -216,6 +218,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

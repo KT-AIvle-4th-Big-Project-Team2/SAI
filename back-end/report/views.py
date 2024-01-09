@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse #http응답객체. HttpResponse는 클라이언트에게 200을 보내줌.
 from .models import *
 from .serializers import *
-
+import re
 import json, requests, math
 from time import sleep
 from urllib.parse import unquote
@@ -18,8 +18,8 @@ class dong_report(APIView):
     
     def get(self, request):
         
-        dong_name = "신촌동"
-        business = "한식음식점"
+        dong_name = "북가좌2동"
+        business = "제과점"
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
@@ -77,8 +77,82 @@ class dong_report(APIView):
         queryset_dong_20224 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_dong_20223 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20223 ,서비스_업종_코드_명 = business).values(*col_data)
         
+        #1. 종합의견
+
+        queryset_dong_goo = MarketSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20233).all()
         
+
+        #전분기
+        Quarterly_sales = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20232[0]["당월_매출_금액"])//10000)
+
+        #전년도 분기 대비
+        Sales_compared_to_the_same_quarter_last_year = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20223[0]["당월_매출_금액"])//10000)
+
         
+        #종합 의견
+
+        #general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year]
+        #general_opinion = [data]
+
+        #1-1 best 매출
+        #성별
+        gender_max = "남성" if queryset_dong_20233[0]["남성_매출_금액"] > queryset_dong_20233[0]["여성_매출_금액"] else "여성"
+
+        # 연령대 중 가장 매출이 많은 것 찾기
+        age_groups = ["연령대_10", "연령대_20", "연령대_30", "연령대_40", "연령대_50", "연령대_60_이상"]
+        age_max = max(age_groups, key=lambda x: queryset_dong_20233[0][f"{x}_매출_금액"])
+
+        # 요일 중 가장 매출이 많은 것 찾기
+        days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+        day_max = max(days, key=lambda x: queryset_dong_20233[0][f"{x}_매출_금액"])
+        total_sales = sum(queryset_dong_20233[0][f"{day}_매출_금액"] for day in ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"])
+        
+        dat_percentages = round((queryset_dong_20233[0][f"{day_max}_매출_금액"] /total_sales *100),1)
+
+        # 시간대 중 가장 매출이 많은 것 찾기
+        time_ranges = ["시간대_00_06", "시간대_06_11", "시간대_11_14", "시간대_14_17", "시간대_17_21", "시간대_21_24"]
+        time_max = max(time_ranges, key=lambda x: queryset_dong_20233[0][f"{x}_매출_금액"])
+
+
+        best_gender_age_group = gender_max +"/" + re.sub("[^0-9]", "", age_max) +"대"
+        best_sales_day = day_max+f"({dat_percentages}%)"
+        best_sales_time = re.sub("[^0-9]", "", time_max)
+        best_sales_time = best_sales_time[:2] + "~" + best_sales_time[2:] + "시"
+
+        sales_data = [best_gender_age_group , best_sales_day , best_sales_time  ]
+
+        #유동인구
+        
+        gender_max = "남성" if queryset_dong_20233[0]["남성_유동인구_수"] > queryset_dong_20233[0]["여성_유동인구_수"] else "여성"
+
+        # 연령대 중 가장 인구이 많은 것 찾기
+        age_groups = ["연령대_10", "연령대_20", "연령대_30", "연령대_40", "연령대_50", "연령대_60_이상"]
+        age_max = max(age_groups, key=lambda x: queryset_dong_20233[0][f"{x}_유동인구_수"])
+        total_age_population = sum(queryset_dong_20233[0][f"{age}_유동인구_수"] for age in ["연령대_10", "연령대_20", "연령대_30", "연령대_40", "연령대_50", "연령대_60_이상"])
+        age_percentages = round((queryset_dong_20233[0][f"{age_max}_유동인구_수"] /total_age_population *100),1)
+
+        # 요일 중 가장 인구이 많은 것 찾기
+        days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+        day_max = max(days, key=lambda x: queryset_dong_20233[0][f"{x}_유동인구_수"])
+        total_population = sum(queryset_dong_20233[0][f"{day}_유동인구_수"] for day in ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"])
+        
+        dat_percentages = round((queryset_dong_20233[0][f"{day_max}_유동인구_수"] /total_population *100),1)
+
+        # 시간대 중 가장 매출이 많은 것 찾기
+        time_ranges = ["시간대_00_06", "시간대_06_11", "시간대_11_14", "시간대_14_17", "시간대_17_21", "시간대_21_24"]
+        time_max = max(time_ranges, key=lambda x: queryset_dong_20233[0][f"{x}_유동인구_수"])
+
+        best_population_age_group =  re.sub("[^0-9]", "", age_max) +"대"+f"({age_percentages}%)"
+        best_population_day = day_max+f"({dat_percentages}%)"
+        best_population_time = re.sub("[^0-9]", "", time_max)
+        best_population_time = best_population_time[:2] + "~" + best_population_time[2:] + "시"
+
+
+        #유동인구
+        floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
+
+
+
         
         #2.점포
         
@@ -164,8 +238,17 @@ class dong_report(APIView):
         #매출
         
         
-        #인구
-        
+        #주거 인구
+
+        residential_population = {
+            "20223residential_population" : queryset_dong_20223[0]["총_상주인구_수"],
+            "20224residential_population" : queryset_dong_20224[0]["총_상주인구_수"],
+            "20231residential_population" : queryset_dong_20231[0]["총_상주인구_수"],
+            "20232residential_population" : queryset_dong_20232[0]["총_상주인구_수"],
+            "20233residential_population" : queryset_dong_20233[0]["총_상주인구_수"],
+        }
+
+
         
         #배후지
         
@@ -200,19 +283,103 @@ class dong_report(APIView):
         }
         
         max_value_key = max(background, key=background.get)
-        max_value = background[max_value_key]
         
+        if max_value_key == "go":
+            most_infra ="관공서"
+        if max_value_key == "fi":
+            most_infra ="금융기관"
+        if max_value_key == "ho":
+            most_infra ="병원"
+        if max_value_key == "sc":
+            most_infra ="학교"
+        if max_value_key == "ds":
+            most_infra ="유통점"
+        if max_value_key == "th":
+            most_infra ="극장"
+        if max_value_key == "ac":
+            most_infra ="숙박시설"
+        if max_value_key == "tf":
+            most_infra ="교통시설"
+
+
         #소비트렌드
+
+        #식료품    
+        groceries_total_amount = int(queryset_dong_20233[0]["식료품_지출_총금액"] //10000)
+        #의류
+        Clothing_spending_total_amount = int(queryset_dong_20233[0]["의류_신발_지출_총금액"] //10000)
+
+        #생활용품
+        Household_goods_spending_total_amount = int(queryset_dong_20233[0]["생활용품_지출_총금액"] //10000)
+
+        #의료비
+        Medical_expenses_spending_total_amount = int(queryset_dong_20233[0]["의료비_지출_총금액"] //10000)
+
+        #교통
+        Transportation_spending_total_amount = int(queryset_dong_20233[0]["교통_지출_총금액"] //10000)
+
+        # 교육
+        Education_spending_total_amount = int(queryset_dong_20233[0]["교육_지출_총금액"] //10000)
+
+        # 유흥
+        entertainment_spending_total_amount = int(queryset_dong_20233[0]["유흥_지출_총금액"] //10000)
+
+        #여가
+        Leisure_culture_spending_total_amount = int(queryset_dong_20233[0]["여가_문화_지출_총금액"] //10000)
+
+        #기타
+        Other_spending_total_amount = int(queryset_dong_20233[0]["기타_지출_총금액"] //10000) 
+
+        #음식
+        Food_spending_total_amount = int(queryset_dong_20233[0]["음식_지출_총금액"] //10000) 
+
+        # 총합
+        total_amount = (groceries_total_amount + Clothing_spending_total_amount + Household_goods_spending_total_amount +
+                           Medical_expenses_spending_total_amount +  Transportation_spending_total_amount +
+                            Education_spending_total_amount + entertainment_spending_total_amount +
+                                Leisure_culture_spending_total_amount + Other_spending_total_amount + Food_spending_total_amount)
+        
+        consumption_trend = {
+            "food" :  round(((groceries_total_amount+Food_spending_total_amount) / total_amount *100),1) ,
+            "Clothing" : round(( Clothing_spending_total_amount / total_amount *100),1),
+            "Household" : round(( Household_goods_spending_total_amount / total_amount *100),1),
+            "Medical" : round(( Medical_expenses_spending_total_amount / total_amount *100),1),
+            "Transportation" : round(( Transportation_spending_total_amount / total_amount *100),1),
+            "Education" : round(( Education_spending_total_amount / total_amount *100),1),
+            "entertainment" : round(( entertainment_spending_total_amount / total_amount *100),1),
+            "Leisure" : round(( Leisure_culture_spending_total_amount / total_amount *100),1),
+            "Other" : round(( Other_spending_total_amount / total_amount *100),1),
+        }
+
+        max_value_key = max(consumption_trend, key=consumption_trend.get)
+        
+        if max_value_key == "food":
+            most_trend ="음식"
+        if max_value_key == "Clothing":
+            most_trend ="의류"
+        if max_value_key == "Household":
+            most_trend ="생활용품"
+        if max_value_key == "Medical":
+            most_trend ="의료"
+        if max_value_key == "Transportation":
+            most_trend ="교통"
+        if max_value_key == "Education":
+            most_trend ="교육"
+        if max_value_key == "entertainment":
+            most_trend ="문화"
+        if max_value_key == "Leisure":
+            most_trend ="여가"
+        if max_value_key == "Other":
+            most_trend ="기타"
         
         
+        most_data = [most_infra , most_trend ]
         
         
+        last_data = [store_count ,open_shop , closed_shop , background , residential_population ,  consumption_trend]
+        return Response(queryset_dong_goo, status=status.HTTP_200_OK)
         
-        
-        
-        last_data = [store_count ,open_shop , closed_shop , background ]
-        
-        return Response(last_data, status=status.HTTP_200_OK)
+        #return Response(queryset_dong_20233, status=status.HTTP_200_OK)
         
 
 

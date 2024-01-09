@@ -10,7 +10,7 @@ from django.db import models
 
 class MarketSortedDbFin(models.Model):
     기준_년분기_코드 = models.IntegerField(blank=True, null=True)
-    상권_구분_코드 = models.TextField(blank=True, null=True)
+    상권_구분_코드 = models.TextField(blank=True, primary_key = True )
     상권_구분_코드_명 = models.TextField(blank=True, null=True)
     상권_코드 = models.IntegerField(blank=True, null=True)
     상권_코드_명 = models.TextField(blank=True, null=True)
