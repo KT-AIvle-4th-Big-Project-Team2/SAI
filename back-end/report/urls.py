@@ -12,7 +12,7 @@ urlpatterns = [
     
     
     path("dongreport/", views.dong_report.as_view()),
-    #path("dongreport/", views.franchisedata.as_view()),
+    path("marketreport/", views.market_report.as_view()),
     #path("dongreport/", views.franchisedata.as_view()),
     
     ]

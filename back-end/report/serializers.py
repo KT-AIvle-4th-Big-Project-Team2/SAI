@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 class DongReportDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MarketSortedDbFin
+        model = DongSortedDbFin
         fields = '__all__'
 
 class MarketReportDataSerializer(serializers.ModelSerializer):
