@@ -10,7 +10,9 @@ const theme = createTheme({
       main: '#8398CA',
       gray: '#EEEEEE',
       orange: '#FF6B00',
-      dark: '#012A5B'
+      dark: '#012A5B',
+      pink: '#F25278',
+      blue: '#0055FF'
     },
   },
   typography: {

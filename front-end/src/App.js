@@ -36,7 +36,7 @@ import Container from 'react-bootstrap/Container'
 import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
 import Header from './header';
-
+import SimulReport2 from './screens/Simul/SimulReport2';
 
 
 
@@ -70,6 +70,7 @@ function App() {
           <Route path = "/Simul" element = { <Simul /> } />
           <Route path = "/Simul2" element = { <Simul2 /> } />
           <Route path = "/SimulReport" element = { <SimulReport /> } />
+          <Route path = "/SimulReport2" element = { <SimulReport2 /> } />
           <Route path = "/Area" element = { <AreaAnaly /> } />
           <Route path = "/Sectors" element = { <SectorsAnaly /> } />
           <Route path = "/Myboard" element = { <Myboard /> } />
