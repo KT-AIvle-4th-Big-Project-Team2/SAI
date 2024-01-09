@@ -93,7 +93,7 @@ class LoginView(APIView):
             user_info = authenticate(username=username, password=password)
             if user_info != None:
                 # auth.login(request, user_info)
-                return Response({'success' : 'login successful'}, {'username' : 'jinwon97'}, status=status.HTTP_200_OK)
+                return Response({'success' : 'login successful', 'username' : username}, status=status.HTTP_200_OK)
             else:
                   return Response({'error' : 'wrong user info'})
         else:

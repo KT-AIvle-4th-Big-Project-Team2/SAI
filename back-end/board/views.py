@@ -103,12 +103,12 @@ class BoardPostCreateView(generics.CreateAPIView):
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
-        username = self.request.data.pop("username")
+        #username = self.request.data.pop("username")
 
         Board.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            user=username
+            user=serializer.validated_data['user']
         )      
         return Response({'success': 'create post success'})
 
