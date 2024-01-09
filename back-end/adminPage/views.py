@@ -8,15 +8,16 @@ from suggestions.models import *
 from .models import *
 from .serializers import *
 
-from rest_framework import generics, permissions
+# from rest_framework import permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_protect
 
 from urllib.parse import unquote
 
