@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/djangoSecretKey_info.txt')
+sensitiveDataPath = ('/home/ubuntu/setting/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -22,7 +22,7 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1","43.202.42.122"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com"]
 
 # Application definition
 
@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/frontURL_info.txt')
+sensitiveDataPath = ('/home/ubuntu/setting/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -81,7 +81,7 @@ MIDDLEWARE = [
 #CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1"
+    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com"
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -104,7 +104,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/DB_info.txt')
+sensitiveDataPath = ('/home/ubuntu/setting/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
