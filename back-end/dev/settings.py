@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django.forms',
     
-    # 사이트 기능
+    # 사이트 기능test
     "account", # 로그인 및 계정 관련기능
     'board', # 자유 게시판
     'faq', # 자주 물어보는 질문
@@ -81,7 +81,7 @@ MIDDLEWARE = [
 #CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com"
+    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com","http://localhost:3000"
 ]
 
 ROOT_URLCONF = "dev.urls"
