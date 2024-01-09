@@ -1,15 +1,16 @@
 from .models import *
 from .serializers import *
-
-from rest_framework import generics, permissions
+from account.models import UserCustom
+# from rest_framework import permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_protect
 
 from urllib.parse import unquote
 #******************************************************************************************************************************************************************
@@ -74,7 +75,7 @@ class FaqSearchView(generics.ListAPIView):
         return queryset
 
     serializer_class = FaqSearchSerializer
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class FaqCreateView(generics.CreateAPIView):
     #permission_classes = (permissions.IsAdminUser,)
     serializer_class = FaqCreateSerializer
@@ -84,11 +85,11 @@ class FaqCreateView(generics.CreateAPIView):
         Faq.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin = self.request.user
+            admin = UserCustom.objects.get(username = "jinwon97")
         )
         
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class FaqUpdateView(generics.UpdateAPIView):#PATCH method
     #permission_classes = (permissions.IsAdminUser,)
     serializer_class = FaqUpdateSerializer
@@ -97,7 +98,7 @@ class FaqUpdateView(generics.UpdateAPIView):#PATCH method
     def perform_update(self, serializer):    
         instance = self.get_object()
         
-        if serializer.is_valid() != True : raise ValidationError({'error' : 'update announcement failed'}, status.HTTP_400_BAD_REQUEST)
+        # if serializer.is_valid() != True : raise ValidationError({'error' : 'update announcement failed'}, status.HTTP_400_BAD_REQUEST)
         
         if 'title' in serializer.validated_data:
             
@@ -116,7 +117,7 @@ class FaqUpdateView(generics.UpdateAPIView):#PATCH method
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class FaqDeleteView(generics.DestroyAPIView):
     #permission_classes = (permissions.IsAdminUser,)
     queryset = Faq.objects.all()

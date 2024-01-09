@@ -18,6 +18,12 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ['username', 'password']
     
 
+# class SignInSerializer(serializers.ModelSerializer):
+    
+#     class Meta:
+#         model = UserCustom
+#         fields = ['username', 'name', 'password', 'email', 'phonenumber', 'age', 'gender']
+
 class SignInSerializer(serializers.ModelSerializer):
     
     class Meta:

@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+# from rest_framework import permissions
 from urllib.parse import unquote
 
 from .models import *
 from .serializers import *
 
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
@@ -91,9 +91,9 @@ class BoardSearchView(generics.ListAPIView):
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
@@ -101,21 +101,21 @@ class BoardPostCreateView(generics.CreateAPIView):
         BoardConsult.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            user=self.request.user
+            user=user.objects.get(username = "jinwon97")
         )
         
         
         
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostUpdateSerializer
     queryset = BoardConsult.objects.all()
     
     def perform_update(self, serializer):                
         instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
         
-        if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
+        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
         
         instance.title = serializer.validated_data['title']
         instance.contents = serializer.validated_data['contents']
@@ -125,7 +125,7 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostDeleteView(generics.DestroyAPIView):
     queryset = BoardConsult.objects.all()
     serializer_class = BoardPostSerializer
@@ -133,22 +133,23 @@ class BoardPostDeleteView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         
-        if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'})
+        # if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'})
         
         instance.delete()
         
         return Response({'success':'delte success'})
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostSerializer
     queryset = BoardConsult.objects.all()
     
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         
-        if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'}, status.HTTP_401_UNAUTHORIZED)
+        # if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'}, status.HTTP_401_UNAUTHORIZED)
+        
         
         instance.delete()
         
@@ -176,9 +177,9 @@ class BoardPostCommentView(generics.ListAPIView):
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostcommentCreateSerializer
         
     def perform_create(self, serializer):
@@ -186,36 +187,36 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
         
         CommentsConsult.objects.create(
             contents=serializer.validated_data['contents'],
-            user=self.request.user,
+            user=user.objects.get(username = "jinwon97"),
             board=board_id,
         )
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCommentUpdateSerializer
     queryset = CommentsConsult.objects.all()
     
     def perform_update(self, serializer):
         instance = self.get_object()
         
-        if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_401_UNAUTHORIZED)
+        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_401_UNAUTHORIZED)
         instance.contents = serializer.validated_data['contents']
         instance.save()
         return Response({'success' : 'update comment success'}, status.HTTP_200_OK)
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = CommentsConsult.objects.all()
     
     def delete(self, reqeust, *args, **kwags):
         instance = self.get_object()
         
-        if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
+        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
         
         instance.delete()
         return Response({'success' : 'delete comment success'}, status.HTTP_200_OK)

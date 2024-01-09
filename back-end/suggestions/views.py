@@ -1,15 +1,19 @@
 from .models import *
 from .serializers import *
+from account.models import UserCustom
 
-from rest_framework import generics, permissions
+# from rest_framework import permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
+
+
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_protect
 
 from urllib.parse import unquote
     
@@ -81,9 +85,9 @@ class SuggestionSearchView(generics.ListAPIView):
         return queryset
 
     serializer_class = SuggestionSearchSerializer
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class SuggestionCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = SuggestionCreateSerializer
         
     def perform_create(self, serializer):
@@ -91,19 +95,19 @@ class SuggestionCreateView(generics.CreateAPIView):
         Suggestions.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin=self.request.user
+            admin=UserCustom.objects.get(username = "jinwon97")
         )
         
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class SuggestionUpdateView(generics.UpdateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = SuggestionUpdateSerializer
     queryset = Suggestions.objects.all()
     
     def perform_update(self, serializer):    
         instance = self.get_object()
 
-        if instance.user != self.request.user : raise ValidationError({'error':'not the user'}, status.HTTP_403_FORBIDDEN)
+        # if instance.user != self.request.user : raise ValidationError({'error':'not the user'}, status.HTTP_403_FORBIDDEN)
         
         instance.title = serializer.validated_data['title']
         instance.contents = serializer.validated_data['contents']
@@ -112,15 +116,15 @@ class SuggestionUpdateView(generics.UpdateAPIView):
         
         
         
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class SuggestionDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = Suggestions.objects.all()
     
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         
-        if instance.user != self.request.user :  raise ValidationError({'error':'not the user'}, status.HTTP_403_FORBIDDEN)
+        # if instance.user != self.request.user :  raise ValidationError({'error':'not the user'}, status.HTTP_403_FORBIDDEN)
         
         instance.delete()
     

@@ -1,16 +1,17 @@
-from rest_framework import generics, permissions
+# from rest_framework import permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 from .models import UserCustom
 from .serializers import *
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 
-from django.contrib import auth
+# from django.contrib import auth
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
 from account.customlibs.checkLogin import *
@@ -47,8 +48,8 @@ class SignInView(APIView):
     
     def post(self, request):
         input_data = self.request.data
-        passwordAgain = input_data.get("password_again")
-        input_data.pop("password_again")
+        # passwordAgain = input_data.get("password_again")
+        # input_data.pop("password_again")
         serializer = self.serializer_class(data = self.request.data)
         
         if serializer.is_valid():
@@ -63,10 +64,10 @@ class SignInView(APIView):
         else:
             raise ValidationError({'error':'input value format error'})
         
-        if len(passwordAgain) > 25:
-            raise ValidationError({'error':'input value format error'}) 
+        # if len(passwordAgain) > 25:
+        #     raise ValidationError({'error':'input value format error'}) 
         
-        if password != passwordAgain: return Response({'error' : 'two passwords doesnt match'})
+        # if password != passwordAgain: return Response({'error' : 'two passwords doesnt match'})
         
         if UserCustom.objects.filter(username=username).exists():
             return Response({'error':'username already exists'})
@@ -91,8 +92,8 @@ class LoginView(APIView):
             
             user_info = authenticate(username=username, password=password)
             if user_info != None:
-                auth.login(request, user_info)
-                return Response({'success' : 'login successful'}, status=status.HTTP_200_OK)
+                # auth.login(request, user_info)
+                return Response({'success' : 'login successful'}, {'username' : 'jinwon97'}, status=status.HTTP_200_OK)
             else:
                   return Response({'error' : 'wrong user info'})
         else:
@@ -103,9 +104,9 @@ class LoginView(APIView):
 # @method_decorator(csrf_protect, name='dispatch')        
 class LogoutView(APIView):
     def post(self, request, format = None):
-        username = self.request.data.pop("username")
+        username = UserCustom.objects.get(username = "jinwon97")
         try:
-            auth.logout(request)
+            # auth.logout(request)
             return Response({'success':'logout success'})
         except:
             return Response({'error':'logout failed'})
@@ -123,7 +124,7 @@ class DeleteAccountView(APIView):
         
         if serializer.is_valid():
             try:
-                instance = UserCustom.objects.get(username = self.request.user.username)
+                instance = UserCustom.objects.get(username = UserCustom.objects.get(username = "jinwon97").username)
                 
             except:
                 return Response({"error":"user doesn't exists error"})
@@ -146,7 +147,8 @@ class GetUserView(APIView):
     serializer_class = GetUserData 
 
     def post(self, request, format=None):
-        username = self.request.data.pop("username")
+        # username = self.request.data.pop("username")
+        username = UserCustom.objects.get(username = "jinwon97")
         
         if username:
             user_data = UserCustom.objects.filter(username=username).first()
@@ -160,14 +162,15 @@ class GetUserView(APIView):
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class UpdatePWView(generics.UpdateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UpdatePWSerializer
     
     def patch(self, request, *args, **kwargs):
         
-        user = self.request.user
+        # user = self.request.user
+        user = UserCustom.objects.get(username = "jinwon97")
         
         try:
             userIstance = UserCustom.objects.get(username = user.username)
@@ -187,13 +190,14 @@ class UpdatePWView(generics.UpdateAPIView):
             return Response({serializer.errors}, status.HTTP_400_BAD_REQUEST)
 
 
-@method_decorator(csrf_protect, name = 'dispatch')
+# @method_decorator(csrf_protect, name = 'dispatch')
 class CheckPWView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = PasswordCheckSerializer
     
     def post(self, request):
-        username = self.request.user.username
+        # username = self.request.user.username
+        username = "jinwon97"
         
         serializer = self.serializer_class(data = request.data)
         
@@ -211,7 +215,7 @@ class CheckPWView(APIView):
             return Response({"error":"user info error"})
         
         
-@method_decorator(csrf_protect, name = 'dispatch')
+# @method_decorator(csrf_protect, name = 'dispatch')
 class FindIDView(APIView):
     queryset = UserCustom.objects.all()
     serializer_class = FindIDInputSerializer
@@ -237,27 +241,27 @@ class FindIDView(APIView):
     
     
 
-@method_decorator(csrf_protect, name = 'dispatch')
+# @method_decorator(csrf_protect, name = 'dispatch')
 class ResetPW(APIView):
     serializer_class = ResetPasswordInput
 
     def post(self, request):
-        try:
-            password_again = self.request.data.pop('password_again')
-        except:
-            raise ValidationError({'error':'input error'}, status.HTTP_400_BAD_REQUEST)
+        # try:
+        #     # password_again = self.request.data.pop('password_again')
+        # except:
+        #     raise ValidationError({'error':'input error'}, status.HTTP_400_BAD_REQUEST)
         
         input_data = self.serializer_class(data = request.data)
         
         if not input_data.is_valid(): 
-            print(input_data.errors) 
+
             return Response({"error":"input data error"})
         username = input_data.validated_data['username']
         new_password = input_data.validated_data['password']
         email = input_data.validated_data['email']
         phonenumber = input_data.validated_data['phonenumber']
         
-        if new_password != password_again: raise ValidationError({'error':'password not match'}, status.HTTP_400_BAD_REQUEST)
+        # if new_password != password_again: raise ValidationError({'error':'password not match'}, status.HTTP_400_BAD_REQUEST)
         try:
             instance = UserCustom.objects.get(username = username, phonenumber = phonenumber, email = email)
             instance.set_password(new_password)
