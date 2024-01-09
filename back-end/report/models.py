@@ -221,7 +221,8 @@ class SeoulRent(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     latituded = models.FloatField(blank=True, null=True)
     area_name = models.TextField(blank=True, null=True)
-
+    시도명 = models.TextField(blank=True, null=True)
+    시군구명 = models.TextField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'seoul_rent'

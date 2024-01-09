@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import FileUploadAPIView, ImageUploadAPIView
+from .views import FileUpload
 app_name = 'api'
 urlpatterns = [
-    path('upload-file/', FileUploadAPIView.as_view(), name='upload-file'),
+    path('uploadfile/', FileUpload.as_view(), name='upload-file'),
 ]

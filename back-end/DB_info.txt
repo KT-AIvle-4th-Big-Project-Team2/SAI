@@ -1,0 +1,12 @@
+django.db.backends.mysql
+aivle_database
+admin
+teamletsgo
+database-3.cb2mm8eewern.ap-northeast-2.rds.amazonaws.com
+3306
+django.db.backends.mysql
+aivle_database
+root
+aivle
+localhost
+3306
