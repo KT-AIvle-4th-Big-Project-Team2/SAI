@@ -5,7 +5,7 @@ export const Testimonials = (props) => {
     <div id="testimonials">
       <div className="container">
         <div className="section-title text-center">
-          <h2>예비 사장님들, 그동안 궁금하셨죠?</h2>
+          <h2 style={{fontWeight : 'bold', fontSize : 43}}>예비 사장님, 그동안 궁금하셨죠?</h2>
         </div>
         <div className="row">
           {props.data
@@ -17,8 +17,8 @@ export const Testimonials = (props) => {
                           <img src={d.img} alt="" />
                         ) : ""}
                     </div>
-                    <div>
-                      <h4>{d.text}</h4>
+                    <div style={{marginTop : '20px'}}>
+                      <h4 style={{fontSize : 25}}>{d.text}</h4>
                       <div className="testimonial-meta">{d.name}</div>
                     </div>
                   </div>

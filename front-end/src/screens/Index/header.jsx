@@ -20,8 +20,9 @@ export const Header = (props) => {
                 </p>
                 <a
                   href="/login"
-                  className="btn btn-primary btn-lg page-scroll"
+                  className="btn btn-lg page-scroll"
                   style={{
+                    fontSize : '25px',
                     width: '300px', // 원하는 가로 크기로 조절
                     backgroundColor: 'white', // 배경색을 흰색으로 변경
                     color: '#012A5B', // 글자색을 파란색으로 변경

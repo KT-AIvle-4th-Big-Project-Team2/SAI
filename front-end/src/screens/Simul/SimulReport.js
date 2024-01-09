@@ -253,7 +253,7 @@ const SimulReport = () => {
     <div className="container">  
     
     <Button variant='outlined' sx={{mt : 4, color : '#012A5B'}}>분석 보고서</Button><Button variant='contained' sx={{mt : 4, color: '#FFFFFF', backgroundColor: '#012A5B'}}>시뮬레이션 리포트</Button>
-      <StyledPaper sx={{ height : 'auto', padding : 3}}>
+      <StyledPaper sx={{ height : 'auto', padding : 3, minWidth : '1400px'}}>
           <Box sx={{ml: 4, mb: 3, width: 'fit-content', height: 'auto' }}>
             <Typography style={{ fontSize : 40, fontWeight : 'bold' }}><span style={{ color : '#FFFFFF' }}> SAI 창업 시뮬레이션 리포트</span></Typography>
           </Box>
@@ -335,6 +335,9 @@ const SimulReport = () => {
               </Box>
             </Box>
         </Paper>
+        <Box sx={{mt : 7, ml : 5, mb : 5, mr : 7}}>
+            <Typography>SAI 제공 정보는 각 제공 업체로부터 받는 정보로 참고용으로 이용해 주시길 바랍니다. SAI의 추정 매출은 각 매장의 실제 매출이 아니며, 일정 부분 오차가 존재합니다. 이점을 양해하여 주시기 바라며, 추정 매출의 절댓값보다는 각 매장들의 매출 추이에 더 집중해서 창업 시뮬레이션에 활용해 주시기 바랍니다. 더 양질의 서비스 제공을 위해 앞으로 더 많은 데이터를 수집하고, AI 모델을 정교화하여 정확도를 높여가겠습니다. 또한, 사용자는 그 어떤 정보도 재배포 할 수 없으며 서면 동의 없이 상업적 목적으로 사용될 수 없습니다.</Typography>
+        </Box>
       </StyledPaper>
     </div>
   )
