@@ -61,7 +61,7 @@ class BoardPostCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Board
-        fields = ('title', 'contents')
+        fields = ['title', 'contents', 'user']
 
 class BoardPostUpdateSerializer(serializers.Serializer):
 
