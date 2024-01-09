@@ -4,30 +4,34 @@ from rest_framework import serializers
 
 class DongReportDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Dong_report_data
+        model = MarketSortedDbFin
         fields = '__all__'
 
 class MarketReportDataSerializer(serializers.ModelSerializer):
+    
     class Meta:
-        model = Market_report_data
+        model = MarketSortedDbFin
         fields = '__all__'
+        
+        
+        
         
         
 class seoul_rent_Serializer(serializers.ModelSerializer):
     class Meta:
-        model = seoul_rent_db
+        model = SeoulRent
         fields = '__all__'
         
         
 class vacancyrateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = vacancyrate_db
+        model = Vacancyrate
         fields = '__all__'
 
 
 class franchise_dataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = franchise_data
+        model = FranchiseData
         fields = '__all__'
         
         

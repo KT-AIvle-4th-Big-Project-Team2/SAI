@@ -71,10 +71,10 @@ class dong_report(APIView):
                     ]
         
         
-        queryset_dong_20233 = Dong_report_data.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*col_data)
-        queryset_dong_20232 = Dong_report_data.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*col_data)
-        queryset_dong_20231 = Dong_report_data.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20231 ,서비스_업종_코드_명 = business).values(*col_data)
-        queryset_dong_20224 = Dong_report_data.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
+        queryset_dong_20233 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*col_data)
+        queryset_dong_20232 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*col_data)
+        queryset_dong_20231 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20231 ,서비스_업종_코드_명 = business).values(*col_data)
+        queryset_dong_20224 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
         
         #점포
         
