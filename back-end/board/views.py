@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 
 from .serializers import *
 from account.models import UserCustom
+from rest_framework import status
 
 #******************************************************************************************************************************************************************
 # 게시글 기능
@@ -104,18 +105,18 @@ class BoardSearchView(generics.ListAPIView):
     
     
     
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class BoardPostCreateView(generics.CreateAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCreateSerializer
-        
     def perform_create(self, serializer):
-        username = self.request.data.pop("username")
+        # username = self.request.data.pop("username")
 
         Board.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            user=username
+            # user=username
+            user=UserCustom.objects.get(username = "jinwon97")
         )      
         return Response({'success': 'create post success'})
 
@@ -149,14 +150,15 @@ class BoardPostDeleteView(generics.DestroyAPIView):
     serializer_class = BoardPostSerializer
     
     def delete(self, request, *args, **kwargs):
-        username = self.request.user.username
+        # username = self.request.user.username
+        username = "jinwon97"
         instance = self.get_object()
-        if instance.user != self.request.user:  
-            return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
-        else:
-            instance.delete()
+        # if instance.user != self.request.user:  
+        #     return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        # else:
+        #     instance.delete()
             
-            return Response({'success':'delte success'}, status.HTTP_200_OK)
+        #     return Response({'success':'delte success'}, status.HTTP_200_OK)
     
 
 #******************************************************************************************************************************************************************
@@ -190,9 +192,10 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
         
         Comments.objects.create(
             contents=serializer.validated_data['contents'],
-            user=self.request.user,
+            # user=self.request.user,
+            user = UserCustom.objects.get(username = "jinwon97"),
             board=board_id,
-        )
+            )
         return Response({'success': 'crate comment success'}, status.HTTP_201_CREATED)
 # @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
@@ -204,8 +207,8 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
 
         instance = self.get_object()
         
-        if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
-        
+        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        if instance.user !=UserCustom.objects.get(username = "jinwon97"): raise ValidationError({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
         instance.contents = serializer.validated_data['contents']
 
         instance.save()
@@ -217,7 +220,7 @@ class BoardPostCommentDeleteView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
     
         instance = self.get_object()
-        if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        if instance.user != UserCustom.objects.get(username = "jinwon97"): raise ValidationError({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
         
         instance.delete()
         return Response({'success':'delete success'}, status.HTTP_200_OK)

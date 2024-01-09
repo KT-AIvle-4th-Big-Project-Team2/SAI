@@ -7,15 +7,16 @@ from suggestions.models import *
 from .models import *
 from .serializers import *
 
-from rest_framework import generics, permissions
+# from rest_framework import permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_protect
 
 from urllib.parse import unquote
 
@@ -26,8 +27,9 @@ class WrittenCommentView(APIView):
     serializer_class = PostCommentSerializer
     
     def get(self, *args, **kwargs):
+        # user_id = UserCustom.objects.filter(username = kwargs['username']).values('user_id')[0].get('user_id')
         user_id = UserCustom.objects.filter(username = kwargs['username']).values('user_id')[0].get('user_id')
-        print(user_id)
+        # print(user_id)
         queryset1 = Comments.objects.filter(user_id = user_id)
         queryset2 = CommentsConsult.objects.filter(user_id = user_id)
         

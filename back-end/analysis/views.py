@@ -23,12 +23,12 @@ class dong_ai(APIView):
     
     def post(self, request, *args, **kargs):
     
-        goo = unquote(self.kwargs['goo'])
+        goo = self.kwargs['goo'].upper()
         dong = self.kwargs['dong'].upper()
         business = self.kwargs['business'].upper()
         funds = self.kwargs['funds']
         
-        
+        goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
         
         dong_name = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
         
@@ -126,7 +126,7 @@ class dong_ai(APIView):
         except:
             shapValueOutputTop5 = None
             shapValueOutputBottom5 = None    
-            
+        goo = goo_name
         queryset_avg_seoul = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business).values("점포별_평균_매출_금액")
         avg_zero = 0
         count = 0
@@ -252,7 +252,7 @@ class dong_ai(APIView):
         
         save_data = output_data
         save_data["user"] = user_id
-        print(save_data)
+        
         serialised = AIReportSerializer(data = save_data)
         if serialised.is_valid(): serialised.save()
         else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -269,11 +269,11 @@ class dong_ai(APIView):
 # 23년 상권 예상
 class market_ai(APIView):
     def post(self, request, *args, **kargs):        
-        goo = unquote(self.kwargs['goo'])
+        goo = self.kwargs['goo'].upper()
         market = self.kwargs['market']
         business = self.kwargs['business'].upper()
         funds = self.kwargs['funds']
-        
+        goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
         market_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
         
         business_name = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
@@ -318,7 +318,7 @@ class market_ai(APIView):
         final_model = load_model("analysis/aimodel/market_service_pred_model2")
         prediction = predict_model(final_model, data = data_pd)
         predict_result = prediction['prediction_label']
-
+        goo = goo_name
        
         
         try:

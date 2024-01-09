@@ -1,5 +1,6 @@
 from .models import *
 from .serializers import *
+from account.models import UserCustom
 
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -91,7 +92,7 @@ class AnnouncementSearchView(generics.ListAPIView):
     
     
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class AnnouncementCreateView(generics.CreateAPIView):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = AnnouncementCreateSerializer
@@ -101,14 +102,14 @@ class AnnouncementCreateView(generics.CreateAPIView):
         Announcements.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin=self.request.user
+            admin=UserCustom.objects.get(username = "jinwon97")
         )
         
         
         
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class AnnouncementUpdateView(generics.UpdateAPIView):
-    permission_classes = (permissions.IsAdminUser,)
+    # permission_classes = (permissions.IsAdminUser,)
     serializer_class = AnnouncementUpdateSerializer
     queryset = Announcements.objects.all()
     
@@ -135,9 +136,9 @@ class AnnouncementUpdateView(generics.UpdateAPIView):
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class AnnouncementdeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAdminUser,)
+    # permission_classes = (permissions.IsAdminUser,)
     queryset = Announcements.objects.all()
     
     def destroy(self, request, *args, **kwargs):

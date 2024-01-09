@@ -1,14 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+# from rest_framework import permissions
 
 from urllib.parse import unquote
 
+from account.models import UserCustom
 from .models import *
 from .serializers import *
 
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
@@ -91,9 +94,9 @@ class BoardSearchView(generics.ListAPIView):
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
@@ -106,9 +109,9 @@ class BoardPostCreateView(generics.CreateAPIView):
         
         
         
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostUpdateSerializer
     queryset = BoardConsult.objects.all()
     
@@ -125,7 +128,7 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostDeleteView(generics.DestroyAPIView):
     queryset = BoardConsult.objects.all()
     serializer_class = BoardPostSerializer
@@ -139,9 +142,9 @@ class BoardPostDeleteView(generics.DestroyAPIView):
         
         return Response({'success':'delte success'})
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostSerializer
     queryset = BoardConsult.objects.all()
     
@@ -176,9 +179,9 @@ class BoardPostCommentView(generics.ListAPIView):
     
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostcommentCreateSerializer
         
     def perform_create(self, serializer):
@@ -192,9 +195,9 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
 
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardPostCommentUpdateSerializer
     queryset = CommentsConsult.objects.all()
     
@@ -207,15 +210,15 @@ class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
         return Response({'success' : 'update comment success'}, status.HTTP_200_OK)
     
     
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class BoardPostCommentDeleteView(generics.DestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = CommentsConsult.objects.all()
     
     def delete(self, reqeust, *args, **kwags):
         instance = self.get_object()
         
-        if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
+        if instance.user != UserCustom.objects.get(username = "jinwon97"): raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
         
         instance.delete()
         return Response({'success' : 'delete comment success'}, status.HTTP_200_OK)
