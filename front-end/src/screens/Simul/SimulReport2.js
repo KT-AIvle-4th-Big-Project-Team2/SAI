@@ -17,10 +17,6 @@ import { useTheme } from '@mui/material/styles';
 
 const createGradientStyle = (theme) => ({
   background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
-  borderRadius: 3,
-  padding: theme.spacing(2),
-  marginBottom: theme.spacing(4),
-  height: 'auto',
 });
 
 
@@ -29,50 +25,6 @@ const StyledPaper = styled(Paper)(({ theme }) => createGradientStyle(theme));
 
 const SimulReport2 = () => {
   const theme = useTheme();
-  const data1 = {
-    "name": "nivo",
-    "color": "hsl(249, 70%, 50%)",
-    "children" : [
-    {
-      "name": "변수 요인 1",
-      "color": "hsl(200, 70%, 50%)",
-      "loc": 150
-    },
-    {
-      "name": '변수 요인 2',
-      "color": "hsl(200, 70%, 40%)",
-      "loc": 90
-    },
-    {
-      "name": '변수 요인 3',
-      "color": "hsl(200, 70%, 30%)",
-      "loc": 80
-    }
-  ]
-  }
-  
-  const CircleGraph = () => (
-    <div style={{ height: '550px' }}>
-    <ResponsiveCirclePacking
-      data={data1}
-      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-      id="id"
-      value="loc"
-      colors={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, ' + (70 - 20 * depth) + '%)')}
-      borderColor={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, 50%)')}
-    />
-  </div>
-);
-
-
-  const data2 = [
-    {
-      "id": '9%',
-      "ranges": [0, 100],
-      "measures": [50],
-      "markers": [null], // markers는 필요에 따라 추가
-    },
-  ];
 
   const stores = [
     { id: '2022년 3분기', value: 872, color: 'gray' },

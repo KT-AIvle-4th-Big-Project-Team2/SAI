@@ -11,9 +11,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
-const service = (open, onClose) => {
+const Service = ({open, onClose}) => {
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>이용약관</DialogTitle>
       <DialogContent>
         <Accordion>
@@ -220,4 +220,4 @@ const service = (open, onClose) => {
   )
 }
 
-export default service
+export default Service
