@@ -20,7 +20,7 @@ sensitiveData.close()
 SECRET_KEY = django_secretKey[:-1]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 LOGGING = {
     'version': 1,
@@ -88,7 +88,7 @@ MIDDLEWARE = [
     # django 기본 middleware
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    #"django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -98,7 +98,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 
 CORS_ORIGIN_WHITELIST = [
     frontURL, "http://localhost", "http://127.0.0.1","http://storeaivle.com"
@@ -205,20 +205,20 @@ AUTH_USER_MODEL = 'account.UserCustom'
 
 # Django 보안 관련 설정
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
-    # ],
+# REST_FRAMEWORK = {
+#     # 'DEFAULT_PARSER_CLASSES': [
+#     #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
+#     # ],
     
-    'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.AllowAny',
-    ],
+#     # 'DEFAULT_PERMISSION_CLASSES':[
+#     #     'rest_framework.permissions.AllowAny',
+#     # ],
     
-    # 'DEFAULT_AUTHENTICATON_CLASSES':[
-    #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
+#     # 'DEFAULT_AUTHENTICATON_CLASSES':[
+#     #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
         
-    # ]
-}
+#     # ]
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

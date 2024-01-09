@@ -18,8 +18,8 @@ from pycaret.regression import *
 
 # 행정동
 
-class dong_ai(APIView):
-    serializers_class = AIReportSerializer
+class dong_ai(generics.GenericAPIView):
+    serializer_class = AIReportSerializer
     
     def post(self, request, *args, **kargs):
     
