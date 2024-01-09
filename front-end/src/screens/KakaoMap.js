@@ -1,6 +1,7 @@
 import { drawPolygons } from './DrawPolygons.js';
 import { drawSelectedPolygon } from './DrawPolygons_jachigu.js';
 import { drawPolygonsForCity } from './DrawPolygons_seoul.js'
+import { drawPolygonsWithTrdarCdN } from './DrawPolygons_trdarCdn.js';
 import React, { Component } from 'react';
 import geoJsonData from './geometry.json';
 import geoJsonData_jachigu from './jachigugeojson.json'
@@ -103,6 +104,7 @@ class KakaoMap extends Component {
             isMenu5Open:false,
             selectedMenu: '',
             Gu: '',
+            trdarCdN: '',
             selectedDong: '',
             selectedmarket:'',
             selectedservice:'',
@@ -242,7 +244,7 @@ class KakaoMap extends Component {
                 // 폴리곤 그리기 함수 호출 (이 함수가 지도에 폴리곤을 그리는 로직을 포함한다고 가정)
                 // 수정된 drawSelectedPolygon 호출
                 drawSelectedPolygon(this.map, geoJsonData_jachigu, this.displayMessage, this.state.Gu, this.state.selectedDong, this.polygons);
-               
+
                 console.log("componentDidUpdate called_draw");
                 this.map.setCenter(new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng));
                 this.map.setLevel(4); // 지도 레벨을 3으로 설정
@@ -250,6 +252,38 @@ class KakaoMap extends Component {
             }
         }
         
+        if (prevState.selectedmarket !== this.state.selectedmarket) {
+            // 상권에 해당하는 데이터 찾기
+            // 예를 들어, 상권 데이터에서 상권 코드로 필터링
+            const marketData = geoJsonData.features.find(feature => feature.properties.TRDAR_CD_N === this.state.selectedmarket);
+    
+            console.log("테스트",this.state.selectedmarket);
+            //drawPolygonsWithTrdarCdN(this.map, geoJsonData, this.displayMessage, this.state.selectedmarket);
+            
+            if (marketData) {
+                console.log("여기 찍어지나?",marketData.geometry);
+                // 기존 폴리곤 제거
+                this.polygons.forEach(polygon => polygon.setMap(null));
+                this.polygons = [];
+    
+                // 상권 데이터에서 폴리곤 지오메트리 추출 및 중심 계산
+                const polygonGeometry = marketData.geometry;
+                const polygonCenter2 = calculatePolygonCenter(polygonGeometry);
+    
+                // 지도 중심 이동 및 마커 추가
+                //this.map.setCenter(new window.kakao.maps.LatLng(polygonCenter2.lat, polygonCenter2.lng));
+                //this.addMarker(new window.kakao.maps.LatLng(polygonCenter.lat, polygonCenter.lng));
+
+               
+    
+                // 상권에 해당하는 폴리곤 그리기
+                drawPolygonsWithTrdarCdN(this.map, geoJsonData, this.displayMessage, this.state.selectedmarket, this.polygons);
+    
+                // 지도 레벨 조정
+                this.map.setLevel(4);
+            }
+            
+        }
     }
     
     
