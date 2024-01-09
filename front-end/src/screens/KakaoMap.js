@@ -293,6 +293,139 @@ class KakaoMap extends Component {
                     </button>
                 </nav>
                 
+
+                {/* 행정동 단위 - sidebar1 */}
+                {this.state.selectedMenu === 'sidebar1' && (
+                    <nav className="sidebar1">
+                        {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
+                        {!this.state.Gu && (
+                            <button onClick={() => this.handleBackButtonClick()} className="back-button">
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                            </button>
+                        )}
+
+                        {/* 뒤로가기 버튼2: 행정동 선택창에서 지역구 선택창으로 이동 */}
+                        {this.state.Gu && !this.state.selectedDong && (
+                            <button onClick={() => this.handleBackButtonClick2()} className="back-button">
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                            </button>
+                        )}
+                        {/* 뒤로가기 버튼6: 업종 선택창에서 행정동 선택창으로 이동 */}
+                        {this.state.Gu && this.state.selectedDong &&!this.state.selectedservice && (
+                            <button onClick={() => this.handleBackButtonClick6()} className="back-button">
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                            </button>
+                        )}
+                        {/* 뒤로가기 버튼5: 자본금 입력창에서 업종 선택창으로 이동 */}
+                        {this.state.Gu && this.state.selectedDong &&this.state.selectedservice && (
+                            <button onClick={() => this.handleBackButtonClick5()} className="back-button">
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                            </button>
+                        )}
+                        <div className="additional-text">
+                            <img src={imageSrc} alt={altText} />
+                            <strong>
+                                {this.state.Gu === '' ? '어느 지역구에서 창업하시는지 알려주세요' : 
+                                this.state.selectedDong=== '' ? '어느 행정동에서 창업하시는지 알려주세요' :
+                                this.state.selectedservice=== ''? '어떤 업종으로 창업하시는지 알려주세요 ':
+                                '자본금으로'}
+                            </strong>
+                        </div>
+
+                        {/* 지역구 선택 버튼 */}
+                        {this.state.Gu === ''&&  this.uniqueGuArray.map((gu) => (
+                            <button
+                                key={gu}
+                                onClick={() => {
+                                    this.handleGuChange({ target: { value: gu } });
+                                    this.setState({ isMenu1Open: true });
+                                }}
+                                style={this.state.buttonStyle}
+                            >
+                                {gu}
+                            </button>
+                        ))}
+
+                        {/* 행정동 선택 버튼 */}
+                        {this.state.selectedDong==='' &&this.state.isMenu1Open && this.dongData
+                            .filter(item => item.시군구명 === this.state.Gu)
+                            .map(item => (
+                            <button
+                                key={item.읍면동명}
+                                onClick={() => {
+                                    this.handleDongChange({ target: { value: item.읍면동명 } });
+                                    // 행정동 선택 후 행정동 버튼들을 숨김
+                                    this.setState({ isMenu3Open:true });
+                                }}
+                                style={this.state.buttonStyle}
+                            >
+                                {item.읍면동명}
+                            </button>
+                        ))}
+
+                        {/* 서비스 업종 선택 버튼 */}
+                        {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                {this.serviceList.map((service) => (
+                                    <button
+                                        key={service}
+                                        onClick={() => {
+                                            this.handleServiceChange(service);
+                                            this.setState({ isMenu4Open: true });
+                                        }}
+                                        style={{
+                                            width: '80px',
+                                            height: '80px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            margin: '3px',
+                                        }}
+                                    >
+                                        <img
+                                            src={getServiceIconPath(service)}
+                                            alt={service}
+                                            style={{ width: '35px', height: '35px', marginTop: '7px' }}
+                                        />
+                                        <span>{service}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
+                        {this.state.selectedDong && this.state.isMenu4Open && (<strong>얼마를 생각하시는지 알려주세요</strong>)}
+                        {this.state.selectedDong && this.state.isMenu4Open && (
+                            <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'20px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            {/* 자본금 입력창 */}
+                            <input
+                                type="text"
+                                placeholder="₩ 자본금 입력 (만원)"
+                                value={this.state.capital}
+                                onChange={(e) => this.setState({ capital: e.target.value })}
+                                style={{
+                                    border: 'none',
+                                    borderBottom: '1px solid #6A85E6', // Blue color for the underline
+                                    padding: '5px', // Adjust padding as needed
+                                    marginBottom: '10px' // Adjust margin as needed
+                                }}
+                            />
+                            {/* SAI 창업 도우미 시작하기 버튼 */}
+                            <button type="submit" className="sai-button" style={{marginTop:'20px'}}>
+                                SAI 창업 도우미 시작하기
+                            </button>
+                        </form>
+                        )}
+                    </nav>)
+                }
+
+
+
+
+
+
+
                 {/* 상권 단위 - sidebar2 */}
                 {this.state.selectedMenu === 'sidebar2' && (
                     <nav className="sidebar2">
@@ -315,7 +448,7 @@ class KakaoMap extends Component {
                                 <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
                             </button>
                         )}
-                        {/* 뒤로가기 버튼4: 업종 선택창에서 행정동 선택창으로 이동 */}
+                        {/* 뒤로가기 버튼4: 업종 선택창에서 상권 선택창으로 이동 */}
                         {this.state.Gu && this.state.selectedDong &&this.state.selectedmarket&&!this.state.selectedservice && (
                             <button onClick={() => this.handleBackButtonClick4()} className="back-button">
                                 <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
@@ -386,27 +519,38 @@ class KakaoMap extends Component {
                         ))}
 
                         {/* 서비스 업종 선택 버튼 */}
-                        {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && this.serviceList.map((service) => (
-                            <button
-                                key={service}
-                                onClick={() => {
-                                    this.handleServiceChange(service);
-                                    this.setState({ isMenu4Open: true });
-                                }}
-                                style={{ width:'90px',height:'90px',display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',margin: '3px' }}
-                            >
-                                <img
-                                    src={getServiceIconPath(service)}
-                                    alt={service}
-                                    // 업종 버튼 이미지 스타일 조정
-                                    style={{ width: '35px', height: '35px',marginTop:'7px' }}
-                                />
-                                <span>{service}</span>
-                            </button>
-                        ))}
+                        {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                {this.serviceList.map((service) => (
+                                    <button
+                                        key={service}
+                                        onClick={() => {
+                                            this.handleServiceChange(service);
+                                            this.setState({ isMenu4Open: true });
+                                        }}
+                                        style={{
+                                            width: '80px',
+                                            height: '80px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            margin: '3px',
+                                        }}
+                                    >
+                                        <img
+                                            src={getServiceIconPath(service)}
+                                            alt={service}
+                                            style={{ width: '35px', height: '35px', marginTop: '7px' }}
+                                        />
+                                        <span>{service}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        {this.state.selectedmarket && this.state.isMenu4Open && (<strong>얼마를 생각하시는지 알려주세요</strong>)}
+                        {this.state.selectedmarket && this.state.isMenu4Open &&!this.state.service && (<strong>얼마를 생각하시는지 알려주세요</strong>)}
                         {this.state.selectedmarket && this.state.isMenu4Open && (
                             <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'20px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             {/* 자본금 입력창 */}
@@ -447,24 +591,37 @@ class KakaoMap extends Component {
         // 뒤로가기 버튼 클릭 시, 지역구 선택으로 돌아가기
         this.setState({
             Gu: '',
+            isMenu1Open:false,
         });
     };
     handleBackButtonClick3 = () => {
         // 뒤로가기 버튼 클릭 시, 행정동 선택으로 돌아가기
         this.setState({
             selectedDong: '',
+            isMenu2Open:false
         });
     };
     handleBackButtonClick4 = () => {
         // 뒤로가기 버튼 클릭 시, 상권 선택으로 돌아가기
         this.setState({
             selectedmarket: '',
+            isMenu3Open:false,
         });
     };
     handleBackButtonClick5 = () => {
         // 뒤로가기 버튼 클릭 시, 업종 선택으로 돌아가기
         this.setState({
             selectedservice: '',
+            isMenu4Open: false,
+        });
+    };
+
+    // 행정동 단위분석 전용 뒤로가기버튼
+    handleBackButtonClick6 = () => {
+        // 업종선택화면에서 뒤로가기 버튼 클릭 시,  헹정동선택으로 돌아가기
+        this.setState({
+            selectedDong: '',
+            isMenu2Open:false
         });
     };
 
