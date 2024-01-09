@@ -43,12 +43,12 @@ function NavBarElements() {
 
   return (
       <>
-        <Navbar style={{ background: '#404040' }} data-bs-theme="dark">
+        <Navbar style={{ background: '#EAEAEA' }} data-bs-theme="light">
           <Container className="justify-content-between">
             <Navbar.Brand href="/Home">
               <img
                 src={imgLogo}
-                width="30"
+                width="23"
                 height="30"
                 className="d-inline-block align-top"
                 alt="React Bootstrap logo"
@@ -62,13 +62,9 @@ function NavBarElements() {
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleOpenFeedback}>개선의견</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown title="시뮬레이션" id="basic-nav-dropdown">
+              <NavDropdown title="창업 도우미" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Simul">시뮬레이션</NavDropdown.Item>
                 <NavDropdown.Item href="/SimulReport">시뮬레이션 리포트</NavDropdown.Item>
-              </NavDropdown>
-              <NavDropdown title="창업분석" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Area">지역 분석</NavDropdown.Item>
-                <NavDropdown.Item href="/Sectors">업종 분석</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="게시판" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Board1">창업 정보</NavDropdown.Item>
@@ -78,7 +74,7 @@ function NavBarElements() {
                 <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
                 <NavDropdown.Item href="/Myboard">내가 쓴 글</NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link href="/login">Log out</Nav.Link>
+              <Nav.Link href="/">Log out</Nav.Link>
             </Nav>
           </Container>
         </Navbar>

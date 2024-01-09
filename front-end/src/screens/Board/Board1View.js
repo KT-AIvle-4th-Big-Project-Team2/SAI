@@ -3,17 +3,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
+import { useAuth } from '../../components/Auth/AuthContext';
+
 
 const Board1View = () => {
-  const name = 'tester1'
+  const name = 'jinwon97'
   const [comment, setComment] = useState({contents : ''});
   const [comments, setComments] = useState([]);
   const { post_num } = useParams();
   const navigate = useNavigate();
   const [boardContent, setBoardContent] = useState({}); // Change to object
+  const { csrfToken } = useAuth();
 
   function getBoardContent() {
-    axios.get(`http://127.0.0.1:8000/board/postlist/${post_num}`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);
@@ -24,7 +27,7 @@ const Board1View = () => {
   }
 
   function getcomment() {
-    axios.get(`http://127.0.0.1:8000/board/postlist/${post_num}/comment`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
       .then((response) => {
         setComments(response.data); // Update state with fetched data
         console.log(response.data);
@@ -42,9 +45,10 @@ const Board1View = () => {
   const handleCommentInput = () => {
     console.log(comment)
     const {contents} = comment;
-    axios.post(`http://127.0.0.1:8000/board/postlist/${post_num}/createcomment`, {
-      contents,
-      name,
+    axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
+      Contents: contents,
+      name: name,
+      'X-CSRFToken': csrfToken,
     })
       .then(function (response) {
         console.log(response);
@@ -57,7 +61,7 @@ const Board1View = () => {
   };
 
   const handleCommentDelete = (commentId) => {
-    axios.delete(`http://127.0.0.1:8000/board/postlist/deletecomment/${commentId}`)
+    axios.delete(`http://subdomain.storeaivle.com/board/postlist/deletecomment/${commentId}`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
@@ -70,7 +74,7 @@ const Board1View = () => {
   };
 
   const handleDelete = () => {
-    axios.delete(`http://127.0.0.1:8000/board/postlist/${post_num}/deletepost`)
+    axios.delete(`http://subdomain.storeaivle.com/board/postlist/${post_num}/deletepost`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
@@ -83,7 +87,7 @@ const Board1View = () => {
   };
 
   return (
-    <>
+    <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
         게시판
@@ -152,7 +156,7 @@ const Board1View = () => {
     </Paper>
 
       </Box>
-    </>
+    </div>
   );
 };
 

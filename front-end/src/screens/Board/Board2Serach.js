@@ -33,7 +33,7 @@ const Board2Search = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get(`http://127.0.0.1:8000/Board2/postlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`http://subdomain.storeaivle.com/Board2/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);
@@ -72,7 +72,7 @@ const Board2Search = () => {
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 게시판</h2>
       </Box>
@@ -153,7 +153,7 @@ const Board2Search = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 

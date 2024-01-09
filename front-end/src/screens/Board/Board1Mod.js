@@ -20,7 +20,7 @@ const Board1Mod = () => {
 
     // PATCH 요청을 통해 수정된 데이터로 업데이트
     axios
-      .patch(`http://127.0.0.1:8000/board/postlist/${post_num}/updatepost`, {
+      .patch(`http://subdomain.storeaivle.com/board/postlist/${post_num}/updatepost`, {
         title,
         contents,
         name,
@@ -38,7 +38,7 @@ const Board1Mod = () => {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/board/postlist/${post_num}`)
+      .get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText((prevText) => ({
@@ -54,7 +54,7 @@ const Board1Mod = () => {
   
 
   return (
-    <>
+    <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
         <h2>창업 정보 수정</h2>
       </Box>
@@ -97,7 +97,7 @@ const Board1Mod = () => {
             </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,0 +1,199 @@
+{
+  "Header": {
+    "title": "당신의 창업",
+    "title2" : "SAI 와 함께 스마트하게",
+    "paragraph": "간단한 로그인 만으로 상권 조사에서 창업 시뮬레이션까지 한 번에!"
+  },
+  "About": {
+    "paragraph": "창업을 위해 꼭 알아야 할 내용만 제공하는 분석리포트를 통해 더 빠른 위치 선정이 가능해요.",
+    "Why": [
+      "입지 내 동일 업종 매출 추이 분석",
+      "입지 내 유동 인구 분석",
+      "입지 내 동일 업종 점포 수 변화 추이",
+      "입지 내 주요 생활 시설 및 집객 시설 현황",
+      "입지 내 주거 인구 분석",
+      "입지 내 소비트렌드 분석"
+    ]
+  },
+  "About2": {
+    "paragraph": "창업을 고민 중인 매장의 매출을 미리 알아보고, 매출 영향 요인을 분석해 매장 운영을 예상해보세요.",
+    "Why": [
+      "현 분기 매출 추정",
+      "다음 분기 매출 예측",
+      "동일 업종 평균 대비 매출 비교",
+      "매출 영향 요인 분석",
+      "비슷한 매출이 예상되는 창업 지역 안내"
+    ]
+  },
+  "About3": {
+    "paragraph": "창업을 고민중인 입지와 자본금 내에서 창업이 가능한 프랜차이즈 정보와 예상 창업 비용을 확인해 보세요.",
+    "Why": [
+      "입지 평균 임대료 안내",
+      "프랜차이즈 창업 비용 계산",
+      "프랜차이즈 프랜드 추천"
+    ]
+  },
+  "Gallery": [
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/01-large.jpg",
+      "smallImage": "img/portfolio/01-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/02-large.jpg",
+      "smallImage": "img/portfolio/02-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/03-large.jpg",
+      "smallImage": "img/portfolio/03-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/04-large.jpg",
+      "smallImage": "img/portfolio/04-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/05-large.jpg",
+      "smallImage": "img/portfolio/05-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/06-large.jpg",
+      "smallImage": "img/portfolio/06-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/07-large.jpg",
+      "smallImage": "img/portfolio/07-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/08-large.jpg",
+      "smallImage": "img/portfolio/08-small.jpg"
+    },
+    {
+      "title": "Project Title",
+      "largeImage": "img/portfolio/09-large.jpg",
+      "smallImage": "img/portfolio/09-small.jpg"
+    }
+  ],
+  "Services": [
+    {
+      "icon": "fa fa-wordpress",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-cart-arrow-down",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-cloud-download",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-language",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-plane",
+      "name": "Lorem ipsum dolor",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    },
+    {
+      "icon": "fa fa-pie-chart",
+      "name": "Consectetur adipiscing",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+    }
+  ],
+  "Testimonials": [
+    {
+      "img": "img/testimonials/01.png",
+      "text": "어떤 곳에서 창업을 해야할까?",
+      "name": "“창업을 생각하고 있는데, 어디서 해야 될지 모르겠어요.”"
+    },
+    {
+      "img": "",
+      "text": "",
+      "name": ""
+    },
+    {
+      "img": "",
+      "text": "",
+      "name": ""
+    },
+    {
+      "img": "img/testimonials/02.png",
+      "text": "실제 창업을 한다면 얼마나 매출이 나올까?",
+      "name": "“본격적인 창업 전에 내 매장의 예상 매출이 얼마인지 알고 싶어요.”"
+    },
+    {
+      "img": "img/testimonials/03.png",
+      "text": "내 자본금으로 어떤 매장을 창업할 수 있을까?",
+      "name": "“자본금은 준비되었는데, 어떤 매장을 해야 매출이 잘 나올지 모르겠어요.”"
+    },
+    {
+      "img": "",
+      "text": "",
+      "name": ""
+    }
+  ],
+  "Team": [
+    {
+      "img": "img/team/01.jpg",
+      "name": "John Doe",
+      "job": "Director"
+    },
+    {
+      "img": "img/team/02.jpg",
+      "name": "Mike Doe",
+      "job": "Senior Designer"
+    },
+    {
+      "img": "img/team/03.jpg",
+      "name": "Jane Doe",
+      "job": "Senior Designer"
+    },
+    {
+      "img": "img/team/04.jpg",
+      "name": "Karen Doe",
+      "job": "Project Manager"
+    }
+  ],
+  "Contact": {
+    "address": "4321 California St, San Francisco, CA 12345 ",
+    "phone": "+1 123 456 1234",
+    "email": "info@company.com",
+    "facebook": "fb.com",
+    "twitter": "twitter.com",
+    "youtube": "youtube.com"
+  },
+  "Features": [
+    {
+      "icon": "fa fa-map-location-dot",
+      "title": "창업 입지 분석",
+      "text": ""
+    },
+    {
+      "icon": "fa fa-newspaper",
+      "title": "창업 전망 안내",
+      "text": ""
+    },
+    {
+      "icon": "fa fa-chart-simple",
+      "title": "예상 매출 예측",
+      "text": ""
+    },
+    {
+      "icon": "fa fa-store",
+      "title": "창업 프랜차이즈 추천",
+      "text": ""
+    }
+  ]
+}

@@ -55,7 +55,7 @@ const Notice = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get("http://127.0.0.1:8000/announcements/announcementlist/")
+    axios.get("http://subdomain.storeaivle.com/announcements/announcementlist/")
       .then((response) => {
         setNoticeList([...response.data]);
         console.log(response.data);
@@ -108,7 +108,7 @@ const Notice = () => {
 
 
   return (
-      <>
+    <div className="container">
         <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
           <h2 >공지사항</h2>
         </Box>
@@ -189,7 +189,7 @@ const Notice = () => {
       </Link>
     </IconButton>
       </Box>
-      </>
+    </div>
   );
 }
 

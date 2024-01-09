@@ -35,8 +35,9 @@ const Board1 = () => {
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
 
+  /*
   function getBoard() {
-    axios.get("http://127.0.0.1:8000/board/postlist/")
+    axios.get("https://subdomain.storeaivle.com/board/postlist/")
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);
@@ -45,7 +46,36 @@ const Board1 = () => {
         console.log(error);
       });
   };
-
+  */
+  function getBoard() {
+    fetch("http://subdomain.storeaivle.com/board/postlist/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBoardList([...data]);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
+  /*
+  function getBoard() {
+    axios.get("https://subdomain.storeaivle.com/board/postlist/")
+      .then((response) => {
+        setBoardList([...response.data]);
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+*/
   useEffect(() => {
     getBoard(); // 1) 게시글 목록 조회 함수 호출
   }, []);
@@ -88,9 +118,9 @@ const Board1 = () => {
 
 
   return (
-    <>      
+    <div className="container">      
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보 게시판</h2>
+        <h2>창업 정보 게시판 변경</h2>
     </Box>
     <DivLine />
 
@@ -170,7 +200,7 @@ const Board1 = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 

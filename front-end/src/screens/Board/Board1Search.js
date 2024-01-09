@@ -36,7 +36,7 @@ const Board1Search = () => {
   const {searchKeyword} = useParams();
 
   function getNotice() {
-    axios.get(`http://127.0.0.1:8000/board/postlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`http://subdomain.storeaivle.com/board/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);
@@ -75,7 +75,7 @@ const Board1Search = () => {
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (
-    <>
+    <div className="container">
 
       <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
         <TableContainer component={Paper} style={{ height: '100%' }}>
@@ -153,7 +153,7 @@ const Board1Search = () => {
       </Link>
     </IconButton>
       </Box>
-    </>
+    </div>
   );
 }
 
