@@ -5,10 +5,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [userData, setUserData] = useState(null);
-  const [csrfToken, setCsrfToken] = useState('');
-  const setCsrfTokenHandler = (token) => {
-    setCsrfToken(token);
-  };
 
   const loginHandler = () => {
     setIsLogin(true);
@@ -23,13 +19,21 @@ export const AuthProvider = ({ children }) => {
     setUserData(data);
   };
 
-  return (
-    <AuthContext.Provider value={{ isLogin, loginHandler, logoutHandler, userData, setUserInfo, csrfToken, setCsrfTokenHandler,}}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const contextValue = {
+    isLogin,
+    loginHandler,
+    logoutHandler,
+    userData,
+    setUserInfo,
+  };
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

@@ -61,15 +61,7 @@ ol {
   webkit-padding: 0;
   moz-padding: 0;
 }
-hr {
-  height: 2px;
-  width: 70px;
-  text-align: center;
-  position: relative;
-  background: #1e7a46;
-  margin-bottom: 20px;
-  border: 0;
-}
+
 /* Navigation */
 #menu {
   padding: 15px;
@@ -149,16 +141,6 @@ hr {
   margin-bottom: 15px;
   padding-bottom: 15px;
 }
-.section-title h2::after {
-  position: absolute;
-  content: "";
-  background: linear-gradient(to right, #5ca9fb 0%, #6372ff 100%);
-  height: 4px;
-  width: 60px;
-  bottom: 0;
-  margin-left: -30px;
-  left: 50%;
-}
 .section-title p {
   font-size: 18px;
 }
@@ -234,7 +216,7 @@ a:focus,
 .intro p {
   color: #fff;
   font-size: 22px;
-  font-weight: 300;
+  font-weight: 600;
   line-height: 30px;
   margin: 0 auto;
   margin-bottom: 60px;
@@ -249,13 +231,13 @@ header .intro-text {
   background: #f6f6f6;
 }
 #features i.fa {
-  font-size: 38px;
+  font-size: 75px;
   margin-bottom: 20px;
   transition: all 0.5s;
   color: #fff;
-  width: 100px;
-  height: 100px;
-  padding: 30px 0;
+  width: 150px;
+  height: 150px;
+  padding: 35px 0;
   border-radius: 50%;
   background: linear-gradient(to right, #6372ff 0%, #5ca9fb 100%);
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.05);
@@ -273,18 +255,9 @@ header .intro-text {
   margin-bottom: 15px;
   padding-bottom: 15px;
 }
-#about h2::after {
-  position: absolute;
-  content: "";
-  background: linear-gradient(to right, #5ca9fb 0%, #6372ff 100%);
-  height: 4px;
-  width: 60px;
-  bottom: 0;
-  left: 0;
-}
 #about .about-text li {
   margin-bottom: 6px;
-  margin-left: 6px;
+  margin-left: 1px;
   list-style: none;
   padding: 0;
 }
@@ -305,7 +278,7 @@ header .intro-text {
 }
 #about p {
   line-height: 24px;
-  margin: 30px 0;
+  margin: 5px 0;
 }
 /* Services Section */
 #services {
@@ -318,16 +291,6 @@ header .intro-text {
 }
 #services h2 {
   color: #fff;
-}
-#services .section-title h2::after {
-  position: absolute;
-  content: "";
-  background: rgba(255, 255, 255, 0.3);
-  height: 4px;
-  width: 60px;
-  bottom: 0;
-  margin-left: -30px;
-  left: 50%;
 }
 #services i.fa {
   font-size: 42px;
@@ -420,8 +383,8 @@ header .intro-text {
 .testimonial-image,
 .testimonial-image img {
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 .testimonial-content {
@@ -436,7 +399,7 @@ header .intro-text {
 .testimonial-meta {
   margin-top: 10px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 550;
   color: #666;
 }
 /* Team Section */
@@ -474,15 +437,6 @@ header .intro-text {
   margin-top: 10px;
   margin-bottom: 15px;
   padding-bottom: 15px;
-}
-#contact .section-title h2::after {
-  position: absolute;
-  content: "";
-  background: rgba(255, 255, 255, 0.3);
-  height: 4px;
-  width: 60px;
-  bottom: 0;
-  left: 30px;
 }
 #contact h3 {
   color: #fff;

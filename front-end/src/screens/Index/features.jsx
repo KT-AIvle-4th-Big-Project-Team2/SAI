@@ -5,7 +5,7 @@ export const Features = (props) => {
     <div id="features" className="text-center" style={{backgroundColor: 'white', marginTop: '100px'}}>
       <div className="container">
         <div className="col-md-10 offset-md-1 section-title">
-          <h2>막막한 창업 준비, SAI가 도와드릴께요</h2>
+          <h2 style={{fontWeight : 'bold', fontSize : 40}}>막막한 창업 준비, SAI가 도와드릴게요</h2>
         </div>
         <div className="row" style={{marginTop: '100px', marginBottom: '100px'}}>
           {props.data

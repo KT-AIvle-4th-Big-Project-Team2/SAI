@@ -30,8 +30,6 @@ const Index = () => {
       <About data={landingPageData.About} />
       <About2 data={landingPageData.About2} />
       <About3 data={landingPageData.About3} />
-      <Team data={landingPageData.Team} />
-      <Contact data={landingPageData.Contact} />
     </div>
   );
 };

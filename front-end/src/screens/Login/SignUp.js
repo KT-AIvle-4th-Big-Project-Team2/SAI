@@ -124,14 +124,14 @@ export default function SignUp() {
     // 이름 유효성 검사
       const nameRegex = /^[가-힣a-zA-Z]+$/;
       if (!nameRegex.test(name) || name.length < 1) {
-        setNameError('올바른 형식을 입력해주세요.');
+        setNameError('올바른 이름을 입력해주세요.');
       } else {
         setNameError('');
       }
 
       const ageRegex = /^(?=.*[0-9])/;
       if (!ageRegex.test(age) || age.length < 1) {
-        setNameError('올바른 이름을 입력해주세요.');
+        setNameError('올바른 나이을 입력해주세요.');
       } else {
         setNameError('');
       }
