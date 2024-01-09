@@ -46,7 +46,7 @@ export default function SignUp() {
   const [registerError, setRegisterError] = useState('');
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const joinData = {
@@ -56,6 +56,7 @@ export default function SignUp() {
       rePassword: data.get('rePassword'),
       age: data.get('age')
     };
+    /*
     const { email, name, password, rePassword, age } = joinData;
     axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
       name,
@@ -63,7 +64,40 @@ export default function SignUp() {
       email,
       age
     })
-
+*/
+    const { email, name, password, rePassword, age } = joinData;
+    try {
+      const signUpResponse = await fetch("http://subdomain.storeaivle.com/accounts/signin/", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          // 'X-CSRFToken': csrfToken, // CSRF 토큰이 필요한 경우 포함
+        },
+        body: JSON.stringify({
+          username: joinData.username,
+          name: joinData.name,
+          password: joinData.password,
+          email: joinData.email,
+          phonenumber: "01033334444",
+          age: joinData.age,
+          gender: "M"
+        }),
+        credentials: 'include', // 필요한 경우 쿠키를 포함하기 위해 설정
+      });
+  
+      if (signUpResponse.ok) {
+        // 회원가입 성공 처리
+        const responseData = await signUpResponse.json();
+        console.log("회원가입 성공:", responseData);
+        // 추가적인 회원가입 성공 후 처리 로직
+      } else {
+        // 회원가입 실패 처리
+        console.error("회원가입 실패");
+      }
+    } catch (error) {
+      console.error("네트워크 오류:", error);
+    }
 
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
