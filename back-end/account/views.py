@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from .models import UserCustom
 from .serializers import *
 
-from django.contrib import auth
+# from django.contrib import auth
 
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
@@ -21,16 +21,14 @@ from account.customlibs.checkLogin import *
 
 logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
 
-
-
-
+#**********SESSSION**********#
 # @method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
 # class GetCSRFToken(APIView):
 #     permission_classes = (permissions.AllowAny,)
 #     def get(self, request, format = None):
 #         return Response({'success' : 'CSRF Cookie set'})
 
-
+#**********SESSSION**********#
 # @method_decorator(csrf_protect, name='dispatch')
 # class CheckAuthenticatedView(APIView):
 #     permission_classes = (permissions.IsAuthenticated,)
@@ -46,7 +44,7 @@ logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
 #             return Response({'error': 'Something went wrong during checking authentication status'})
 
 
-
+#**********SESSSION**********#
 # @method_decorator(csrf_protect, name='dispatch')
 class SignInView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -54,7 +52,8 @@ class SignInView(APIView):
     
     def post(self, request):
         input_data = self.request.data
-        passwordAgain = input_data.pop("password_again")
+        #**********SESSSION**********#
+        # passwordAgain = input_data.pop("password_again")
         serializer = self.serializer_class(data = self.request.data)
         
         if serializer.is_valid():
@@ -68,8 +67,8 @@ class SignInView(APIView):
             
         else:
             raise ValidationError({'error':'input value format error'})
-        
-        if password != passwordAgain: return Response({'error' : 'two passwords doesnt match'})
+        #**********SESSSION**********#
+        # if password != passwordAgain: return Response({'error' : 'two passwords doesnt match'})
         
         if UserCustom.objects.filter(username=username).exists():
             return Response({'error':'username already exists'})

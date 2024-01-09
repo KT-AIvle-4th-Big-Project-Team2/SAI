@@ -2,7 +2,7 @@ from account.models import LogInfo
 from rest_framework.response import Response
 from datetime import datetime, timedelta
 
-def LoginTrue(username):
+def Login(username):
     try:
         user_logInfo = LogInfo.objects.get(user_id__username = username)
         user_logInfo.isLogedIn = True
@@ -11,7 +11,7 @@ def LoginTrue(username):
     except:
         return False
     
-def LoginFalse(username):
+def Logout(username):
     try:
         user_logInfo = LogInfo.objects.get(user_id__username = username)
         user_logInfo.isLogedIn = False
