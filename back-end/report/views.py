@@ -18,7 +18,7 @@ class dong_report(APIView):
     
     def get(self, request):
         
-        dong_name = "천호3동"
+        dong_name = "신촌동"
         business = "한식음식점"
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
@@ -75,10 +75,91 @@ class dong_report(APIView):
         queryset_dong_20232 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_dong_20231 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20231 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_dong_20224 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
+        queryset_dong_20223 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong_name,기준_년분기_코드 = 20223 ,서비스_업종_코드_명 = business).values(*col_data)
         
-        #점포
         
-        store_count = []
+        
+        
+        #2.점포
+        
+        # 전년 동분기 대비
+        Compared_to_the_same_quarter_last_year = queryset_dong_20233[0]["점포_수"] - queryset_dong_20223[0]["점포_수"]
+        # 전분기 대비
+        compared_to_the_previous_quarter = queryset_dong_20233[0]["점포_수"] - queryset_dong_20232[0]["점포_수"]
+        
+        if Compared_to_the_same_quarter_last_year > 0:
+            status_of_business_districts = "증가"
+            business_districts = "발달"
+        else : 
+            status_of_business_districts = "감소"
+            business_districts = "쇠퇴"
+            
+        
+        store_count = {
+            "20223store_count" : queryset_dong_20223[0]["점포_수"],
+            "20224store_count" : queryset_dong_20224[0]["점포_수"],
+            "20231store_count" : queryset_dong_20231[0]["점포_수"],
+            "20232store_count" : queryset_dong_20232[0]["점포_수"],
+            "20233store_count" : queryset_dong_20233[0]["점포_수"],
+            #전년 동분기 수치
+            "csql1" : Compared_to_the_same_quarter_last_year,
+            # 전 분기 수치
+            "cpq1" :   compared_to_the_previous_quarter,
+            # 안내 텍스트
+            "sbd1" : status_of_business_districts,
+            "bd1" : business_districts
+        }
+        
+        # 개업 점포수 
+        op_Compared_to_the_same_quarter_last_year =  queryset_dong_20233[0]["개업_점포_수"] -  queryset_dong_20223[0]["개업_점포_수"]
+        op_compared_to_the_previous_quarter = queryset_dong_20233[0]["개업_점포_수"] -  queryset_dong_20232[0]["개업_점포_수"]
+        if op_Compared_to_the_same_quarter_last_year > 0:
+            op_status_of_business_districts = "증가"
+            op_business_districts = "활발하"
+        else : 
+            op_status_of_business_districts = "감소"
+            op_business_districts = "침체되"
+            
+        open_shop = {
+            "20223openstore" : queryset_dong_20223[0]["개업_점포_수"],
+            "20224openstore" : queryset_dong_20224[0]["개업_점포_수"],
+            "20231openstore" : queryset_dong_20231[0]["개업_점포_수"],
+            "20232openstore" : queryset_dong_20232[0]["개업_점포_수"],
+            "20233openstore" : queryset_dong_20233[0]["개업_점포_수"],
+            "csql2" : op_Compared_to_the_same_quarter_last_year,
+            "cpq2" :   op_compared_to_the_previous_quarter,
+            "sbd2" : op_status_of_business_districts,
+            "bd2" : op_business_districts
+                    
+        }
+        
+        
+        
+        # 폐업 점포수 
+        cl_Compared_to_the_same_quarter_last_year =  queryset_dong_20233[0]["폐업_점포_수"] -  queryset_dong_20223[0]["폐업_점포_수"]
+        cl_compared_to_the_previous_quarter = queryset_dong_20233[0]["폐업_점포_수"] -  queryset_dong_20232[0]["폐업_점포_수"]
+        if cl_Compared_to_the_same_quarter_last_year > 0:
+            cl_status_of_business_districts = "증가"
+            cl_business_districts = "활발하"
+        else : 
+            cl_status_of_business_districts = "감소"
+            cl_business_districts = "침체되"
+        
+        closed_shop = {
+            "20223closestore" : queryset_dong_20223[0]["폐업_점포_수"],
+            "20224closestore" : queryset_dong_20224[0]["폐업_점포_수"],
+            "20231closestore" : queryset_dong_20231[0]["폐업_점포_수"],
+            "20232closestore" : queryset_dong_20232[0]["폐업_점포_수"],
+            "20233closestore" : queryset_dong_20233[0]["폐업_점포_수"],
+            "csql3" : cl_Compared_to_the_same_quarter_last_year,
+            "cpq3" :   cl_compared_to_the_previous_quarter,
+            "sbd3" : cl_status_of_business_districts,
+            "bd3" : cl_business_districts
+        }
+        
+        
+        
+        
         
         #매출
         
@@ -88,6 +169,38 @@ class dong_report(APIView):
         
         #배후지
         
+        # 관공서
+        government_office = queryset_dong_20233[0].get("관공서_수", 0)
+        # 금융기관
+        financial_institution = queryset_dong_20233[0].get("은행_수", 0)
+        # 병원
+        hospital = queryset_dong_20233[0].get("종합병원_수", 0) + queryset_dong_20233[0].get("일반_병원_수", 0)
+        # 학교
+        school = queryset_dong_20233[0].get("유치원_수", 0) + queryset_dong_20233[0].get("초등학교_수", 0)+ queryset_dong_20233[0].get("중학교_수", 0)+ queryset_dong_20233[0].get("고등학교_수", 0) +queryset_dong_20233[0].get("대학교_수", 0)
+        # 유통점
+        distribution_store = queryset_dong_20233[0].get("백화점_수", 0)+ queryset_dong_20233[0].get("슈퍼마켓_수", 0)
+        # 극장
+        theaters = queryset_dong_20233[0].get("극장_수", 0)
+        # 숙박시설
+        accommodation_facilities = queryset_dong_20233[0].get("숙박_시설_수", 0)
+        # 교통시설
+        Transportation_facilities = queryset_dong_20233[0].get("공항_수", 0) + queryset_dong_20233[0].get("철도_역_수", 0) + queryset_dong_20233[0].get("버스_터미널_수", 0) + queryset_dong_20233[0].get("지하철_역_수", 0) +queryset_dong_20233[0].get("버스_정거장_수", 0)
+        
+        
+        
+        background = {
+            "go" : int(government_office),
+            "fi" : int(financial_institution),
+            "ho" : int(hospital),
+            "sc" : int(school),
+            "ds" : int(distribution_store) ,
+            "th" : int(theaters),
+            "ac" : int(accommodation_facilities),
+            "tf" : int(Transportation_facilities)
+        }
+        
+        max_value_key = max(background, key=background.get)
+        max_value = background[max_value_key]
         
         #소비트렌드
         
@@ -96,7 +209,10 @@ class dong_report(APIView):
         
         
         
-        return Response(queryset_dong_20233, status=status.HTTP_200_OK)
+        
+        last_data = [store_count ,open_shop , closed_shop , background ]
+        
+        return Response(last_data, status=status.HTTP_200_OK)
         
 
 
