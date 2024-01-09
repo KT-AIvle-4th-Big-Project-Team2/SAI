@@ -11,7 +11,8 @@ urlpatterns = [
     #path("dongreport/", views.rent_cost.as_view()),
     
     
-    #path("dongreport/", views.dong_report.as_view()),
-    path("dongreport/", views.franchisedata.as_view()),
+    path("dongreport/", views.dong_report.as_view()),
+    #path("dongreport/", views.franchisedata.as_view()),
+    #path("dongreport/", views.franchisedata.as_view()),
     
     ]
