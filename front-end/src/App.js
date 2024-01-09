@@ -37,7 +37,7 @@ import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
 import Header from './header';
 import SimulReport2 from './screens/Simul/SimulReport2';
-import Footer from './components/Footer';
+import Footer from './components/footer';
 
 
 
