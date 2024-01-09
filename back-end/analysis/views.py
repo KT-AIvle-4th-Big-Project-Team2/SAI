@@ -76,54 +76,56 @@ class dong_ai(APIView):
         prediction = predict_model(final_model, data = data_pd)
         predict_result = prediction['prediction_label']
         
-        
-        shapValue = DongServiceEstimateShapValues.objects.filter(행정동_코드 = dong, 서비스_업종_코드 = business).first()
-        shapValue = DongServiceEstimateShapValuesSerializer(shapValue).data
-        del shapValue['행정동_코드']
-        del shapValue['서비스_업종_코드']
-        
-        # shapValue = dict(sorted(shapValue.items(), key=lambda item: abs(item[1]), reverse=True))
-
-        # shapValueOutputTop5 = {}
-        # count = 0
-        # for key, item in shapValue.items():
-        #     shapValueOutputTop5[key] = int(item)
-        #     count += 1
-        #     if count == 5:break
-        
-        
-        # shapValueOutputBottom5 = {}
-        # count = 0
-        # for key, item in reversed(shapValue.items()):
-        #     if int(item) == 0:
-        #         pass
-        #     else:
-        #         shapValueOutputBottom5[key] = int(item)
-        #         count += 1
-        #         if count == 5:break
-        
-        shapValue = dict(sorted(shapValue.items(), key=lambda item: item[1], reverse=True))
-
-        shapValueOutputTop5 = {}
-        count = 0
-        for key, item in shapValue.items():
-            if item == 0:
-                continue
-            shapValueOutputTop5[key] = item
-            count += 1
-            if count == 5:
-                break
-
-        shapValueOutputBottom5 = {}
-        count = 0
-        for key, item in reversed(shapValue.items()):
-            if item == 0:
-                continue
-            shapValueOutputBottom5[key] = item
-            count += 1
-            if count == 5:
-                break
+        try:
+            shapValue = DongServiceEstimateShapValues.objects.filter(행정동_코드 = dong, 서비스_업종_코드 = business).first()
+            shapValue = DongServiceEstimateShapValuesSerializer(shapValue).data
+            del shapValue['행정동_코드']
+            del shapValue['서비스_업종_코드']
             
+            # shapValue = dict(sorted(shapValue.items(), key=lambda item: abs(item[1]), reverse=True))
+
+            # shapValueOutputTop5 = {}
+            # count = 0
+            # for key, item in shapValue.items():
+            #     shapValueOutputTop5[key] = int(item)
+            #     count += 1
+            #     if count == 5:break
+            
+            
+            # shapValueOutputBottom5 = {}
+            # count = 0
+            # for key, item in reversed(shapValue.items()):
+            #     if int(item) == 0:
+            #         pass
+            #     else:
+            #         shapValueOutputBottom5[key] = int(item)
+            #         count += 1
+            #         if count == 5:break
+            
+            shapValue = dict(sorted(shapValue.items(), key=lambda item: item[1], reverse=True))
+
+            shapValueOutputTop5 = {}
+            count = 0
+            for key, item in shapValue.items():
+                if item == 0:
+                    continue
+                shapValueOutputTop5[key] = item
+                count += 1
+                if count == 5:
+                    break
+
+            shapValueOutputBottom5 = {}
+            count = 0
+            for key, item in reversed(shapValue.items()):
+                if item == 0:
+                    continue
+                shapValueOutputBottom5[key] = item
+                count += 1
+                if count == 5:
+                    break
+        except:
+            shapValueOutputTop5 = None
+            shapValueOutputBottom5 = None    
             
         queryset_avg_seoul = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business).values("점포별_평균_매출_금액")
         avg_zero = 0
@@ -179,17 +181,17 @@ class dong_ai(APIView):
         analysis_mp = "증가" if (mp - mp_1yb) > 0 else "감소"
         
         
-        if seoul_diff > 80:
+        if seoul_diff >= 80:
             analysis = "양호"
         
-        elif seoul_diff < 20:
+        elif seoul_diff <= 20:
             analysis = "위험"
         else:
             analysis = "보통"
         
         queryset_similar = DongServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('행정동_코드', 'prediction_label') # 4분기?
         
-        difference = [float('inf'), float('inf')]
+        #difference = [float('inf'), float('inf')]
         for i in queryset_similar:
             num = i['prediction_label']
             diff = abs(num - estimate_result.values)
@@ -319,61 +321,63 @@ class market_ai(APIView):
 
        
         
-        
-        shapValue = MarketServiceEstimateShapValues.objects.filter(상권_코드 = market, 서비스_업종_코드 = business).first()
-        
-        shapValue = MarketServiceEstimateShapValuesSerializer(shapValue).data
-        
-        del shapValue['상권_코드']
-        del shapValue['서비스_업종_코드']
+        try:
+            shapValue = MarketServiceEstimateShapValues.objects.filter(상권_코드 = market, 서비스_업종_코드 = business).first()
+            
+            shapValue = MarketServiceEstimateShapValuesSerializer(shapValue).data
+            
+            del shapValue['상권_코드']
+            del shapValue['서비스_업종_코드']
 
-        # shapValue = dict(sorted(shapValue.items(), reverse=True))
+            # shapValue = dict(sorted(shapValue.items(), reverse=True))
 
-        
-        
-        #dict(sorted(shapValue.items(), key=lambda item: item[1], reverse=True)[:5])
-        #dict(sorted(shapValue.items(), key=lambda item: item[1])[:5])
-        
-        shapValue = dict(sorted(shapValue.items(), key=lambda item: item[1], reverse=True))
+            
+            
+            #dict(sorted(shapValue.items(), key=lambda item: item[1], reverse=True)[:5])
+            #dict(sorted(shapValue.items(), key=lambda item: item[1])[:5])
+            
+            shapValue = dict(sorted(shapValue.items(), key=lambda item: item[1], reverse=True))
 
-        shapValueOutputTop5 = {}
-        count = 0
-        for key, item in shapValue.items():
-            if item == 0:
-                continue
-            shapValueOutputTop5[key] = item
-            count += 1
-            if count == 5:
-                break
+            shapValueOutputTop5 = {}
+            count = 0
+            for key, item in shapValue.items():
+                if item == 0:
+                    continue
+                shapValueOutputTop5[key] = item
+                count += 1
+                if count == 5:
+                    break
 
-        shapValueOutputBottom5 = {}
-        count = 0
-        for key, item in reversed(shapValue.items()):
-            if item == 0:
-                continue
-            shapValueOutputBottom5[key] = item
-            count += 1
-            if count == 5:
-                break
-        
-        # shapValueOutputTop5 = {} 
-        # count = 0
-        # for key, item in shapValue.items():
-        #     shapValueOutputTop5[key] = int(item)
-        #     count += 1
-        #     if count == 5:break
-        
-        
-        # shapValueOutputBottom5 = {} #
-        # count = 0
-        # for key, item in reversed(shapValue.items()):
-        #     if int(item) == 0:
-        #         pass
-        #     else:
-        #         shapValueOutputBottom5[key] = int(item)
-        #         count += 1
-        #         if count == 5:break
-        
+            shapValueOutputBottom5 = {}
+            count = 0
+            for key, item in reversed(shapValue.items()):
+                if item == 0:
+                    continue
+                shapValueOutputBottom5[key] = item
+                count += 1
+                if count == 5:
+                    break
+            
+            # shapValueOutputTop5 = {} 
+            # count = 0
+            # for key, item in shapValue.items():
+            #     shapValueOutputTop5[key] = int(item)
+            #     count += 1
+            #     if count == 5:break
+            
+            
+            # shapValueOutputBottom5 = {} #
+            # count = 0
+            # for key, item in reversed(shapValue.items()):
+            #     if int(item) == 0:
+            #         pass
+            #     else:
+            #         shapValueOutputBottom5[key] = int(item)
+            #         count += 1
+            #         if count == 5:break
+        except:
+            shapValueOutputTop5 = None
+            shapValueOutputBottom5 = None
         queryset_avg_seoul = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business).values("점포별_평균_매출_금액")
         avg_zero = 0
         count = 0
@@ -560,6 +564,8 @@ class AIReportDeleteView(APIView):
         if queryset.user.username != username: raise ValidationError({'wrong user no auth'}, status.HTTP_401_UNAUTHORIZED)
         
         queryset.delete()
+        
+        return Response('Report deleted', status.HTTP_200_OK)
     
     
     

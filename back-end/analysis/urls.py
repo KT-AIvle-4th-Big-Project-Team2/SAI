@@ -6,4 +6,5 @@ urlpatterns = [
     path("marketai/<str:goo>/<str:market>/<str:business>/<int:funds>", views.market_ai.as_view()),
     path("reportlist", views.AIReportListView.as_view()),
     path("reportlist/<int:num>", views.AIReportView.as_view()),
+    path("reportlist/delete/<int:num>", views.AIReportDeleteView.as_view()),
 ]
