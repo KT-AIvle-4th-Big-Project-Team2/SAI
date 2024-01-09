@@ -334,7 +334,7 @@ class KakaoMap extends Component {
                                 this.state.selectedDong=== '' ? '어느 행정동에서 창업하시는지 알려주세요' :
                                 this.state.selectedmarket=== '' ? '어떤 상권에서 창업하시는지 알려주세요':
                                 this.state.selectedservice=== ''? '어떤 업종으로 창업하시는지 알려주세요 ':
-                                '자본금으로 얼마를 생각하는지 알려주세요'}
+                                '자본금으로'}
                             </strong>
                         </div>
 
@@ -406,6 +406,7 @@ class KakaoMap extends Component {
                         ))}
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
+                        {this.state.selectedmarket && this.state.isMenu4Open && (<strong>얼마를 생각하시는지 알려주세요</strong>)}
                         {this.state.selectedmarket && this.state.isMenu4Open && (
                             <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'20px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             {/* 자본금 입력창 */}
