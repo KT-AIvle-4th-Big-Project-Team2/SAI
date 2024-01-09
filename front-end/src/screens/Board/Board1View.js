@@ -3,14 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
+import { useAuth } from '../../components/Auth/AuthContext';
+
 
 const Board1View = () => {
-  const name = 'tester1'
+  const name = 'jinwon97'
   const [comment, setComment] = useState({contents : ''});
   const [comments, setComments] = useState([]);
   const { post_num } = useParams();
   const navigate = useNavigate();
   const [boardContent, setBoardContent] = useState({}); // Change to object
+  const { csrfToken } = useAuth();
 
   function getBoardContent() {
     axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
@@ -43,8 +46,9 @@ const Board1View = () => {
     console.log(comment)
     const {contents} = comment;
     axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
-      contents,
-      name,
+      Contents: contents,
+      name: name,
+      'X-CSRFToken': csrfToken,
     })
       .then(function (response) {
         console.log(response);

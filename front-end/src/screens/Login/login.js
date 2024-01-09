@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import {
   Avatar,
   Button,
@@ -34,6 +35,7 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
+//const [cookies, setCookie, removeCookie] = useCookies(['my-cookie']);
 
 /*
 export default function SignIn() {
@@ -76,6 +78,8 @@ export default function SignIn() {
         });
     };
   */
+ // 예시: CSRF 토큰을 가져오는 함수
+
 
     export default function SignIn() {
       const { loginHandler, setUserInfo, setCsrfTokenHandler } = useAuth();
@@ -87,33 +91,57 @@ export default function SignIn() {
           email: data.get('email'),
           password: data.get('password'),
         };
-        console.log(joinData);
-        const csrfToken = getCsrfToken(); // CSRF 토큰을 가져오는 함수를 정의해야 함
-        
+    
         try {
-          const response = await fetch("http://subdomain.storeaivle.com/accounts/login/", {
-            method: "POST",
+          // CSRF 토큰을 받는 요청을 먼저 보냅니다.
+          const csrfResponse = await fetch("http://subdomain.storeaivle.com/accounts/getcsrf/", {
+            method: "GET",
             headers: {
-              'Content-Type': 'application/json',
               'Accept': 'application/json',
-              'X-CSRFToken': csrfToken, // X-CSRFToken 헤더에 CSRF 토큰을 추가
             },
-            body: JSON.stringify({
-              username: joinData.email,
-              password: joinData.password
-            }),
-            credentials: 'include', // 자격 증명을 포함시킵니다.
+            credentials: 'include',
           });
     
-          if (response.ok) {
-            const data = await response.json();
-            console.log("CSRF token received:", response.headers.get('Set-Cookie'));
-            loginHandler();
-            setUserInfo(data);
-            console.log(data);
+          if (csrfResponse.ok) {
+            const csrfData = await csrfResponse.json();
+            const csrfToken = csrfData.csrf_token;
+            console.log(csrfData);
+            console.log(csrfToken);
+            // 사용 예시
+            
+            // CSRF 토큰을 설정합니다.
+            setCsrfTokenHandler(csrfToken);
+          
+            // 로그인 요청을 보냅니다.
+            const loginResponse = await fetch("http://subdomain.storeaivle.com/accounts/login/", {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRFToken': csrfToken,
+              },
+              body: JSON.stringify({
+                username: joinData.email,
+                password: joinData.password
+              }),
+              credentials: 'include',
+            });
+          
+            if (loginResponse.ok) {
+              const data = await loginResponse.json();
+              
+              console.log("Login successful:", data);
+              console.log(csrfToken);
+              
+              loginHandler();
+              setUserInfo(data);
+            } else {
+              console.error("Login failed:", loginResponse.status);
+            }
           } else {
-            console.error("Response not OK", response.status);
+            console.error("Failed to fetch CSRF token:", csrfResponse.status);
           }
+          
         } catch (error) {
           console.error("Network error:", error);
         }
