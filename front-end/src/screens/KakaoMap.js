@@ -62,7 +62,7 @@ class KakaoMap extends Component {
         this.uniqueGuArray = Array.from(new Set(Data.map(item => item.시군구명)));
         this.dongData = Data;
         this.marketData=Data2;
-        this.serviceList= ['한식음식점', '커피-음료', '분식전문점', '호프-간이주점', '치킨전문점', '중식음식점', '패스트푸드점', '제과점', '일식음식점', '양식음식점', '편의점', '일반의류', '화장품', '의약품', '일반교습학원', '미용실'];
+        this.serviceList= ['한식음식점', '커피-음료', '분식전문점', '호프-주점', '치킨전문점', '중식음식점', '패스트푸드', '제과점', '일식음식점', '양식음식점', '편의점', '일반의류', '화장품', '의약품', '일반학원', '미용실'];
         this.markers = [];  // 마커를 저장할 배열
     }
     
@@ -190,41 +190,32 @@ class KakaoMap extends Component {
     
     
     render() {
-        let imageSrc = '';
-        let altText='';
-    // progress 이미지 설정
-        if (this.state.Gu === '') {
-            imageSrc = progress0Image;
-            altText='진행상태1';
-        } else if (this.state.selectedDong==='' &&this.state.isMenu1Open) {
-            imageSrc = progress1Image;
-            altText='진행상태2'; 
-        } else if (this.state.selectedmarket==='' && this.state.isMenu2Open) {
-            imageSrc = progress2Image;
-            altText='진행상태3';
-        } else if (this.state.selectedservice==='' && this.state.isMenu3Open) {
-            imageSrc = progress3Image;
-            altText='진행상태4';
-        } else if (this.state.isMenu4Open) {
-            imageSrc = progress4Image;
-            altText='진행상태5';
-        } else if (this.state.isMenu5Open) {
-            imageSrc = progress5Image;
-            altText='진행상태6';
-        } 
+        let imageSrc0 = progress0Image;
+        let imageSrc1 = progress1Image;
+        let imageSrc2 = progress2Image;
+        let imageSrc3 = progress3Image;
+        let imageSrc4 = progress4Image;
+        let imageSrc5 = progress5Image;
+        let altText0='진행상태0';
+        let altText1='진행상태1';
+        let altText2='진행상태2';
+        let altText3='진행상태3';
+        let altText4='진행상태4';
         
         return (
             <div className="map-container">
             
                 <nav className={this.state.selectedMenu === '' ? 'startbar' : 'startbar hidden'}>
                     {/* username */}
-                    {/* <strong>{this.props.username}님, 반가워요!<br/>창업을 고민하시는 분석 단위를 선택해 주세요.<br/></strong> */}
-                    <div style={{marginLeft : 25, marginTop : 25}}>
-                    <span style={{fontWeight : 'bold'}}>오진원님, 반가워요!<br/></span> 
-                    <span style={{fontWeight : 'bold'}}>창업을 고민하시는 분석 단위를 선택해 주세요.<br/></span> 
+                    <div style={{marginLeft : 35, marginTop : 50}}>
+                    <span style={{fontWeight : 'bold',fontSize:'18px'}}>오진원님, 반가워요!<br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'18px'}}>창업을 고민하시는 <br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'18px',color: '#0500FF'}}>분석 단위</span> 
+                    <span style={{fontWeight : 'bold',fontSize:'18px'}}>를 선택해 주세요. <br/></span> 
                     </div>
                     
                     {/* 행정동 단위로 분석하기 버튼 클릭 시 selectedMenu를 'sidebar1'로 설정 */}
+                    <div style={{marginLeft : 15}}>
                     <button onClick={() => this.setState({ selectedMenu: 'sidebar1' })}>
                         행정동 단위로 분석하기
                     </button>
@@ -232,12 +223,14 @@ class KakaoMap extends Component {
                     <button onClick={() => this.setState({ selectedMenu: 'sidebar2' })}>
                         상권 단위로 분석하기
                     </button>
+                    </div>
                 </nav>
                 
 
                 {/* 행정동 단위 - sidebar1 */}
                 {this.state.selectedMenu === 'sidebar1' && (
                     <nav className="sidebar1">
+                        <div style={{marginLeft:'17px',marginTop:'15px'}}>
                         {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
                         {!this.state.Gu && (
                             <button onClick={() => this.handleBackButtonClick()} className="back-button">
@@ -263,18 +256,25 @@ class KakaoMap extends Component {
                                 <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
                             </button>
                         )}
-                        <div className="additional-text">
-                            <img src={imageSrc} alt={altText} />
-                            <strong>
-                                {this.state.Gu === '' ? '어느 지역구에서 창업하시는지 알려주세요' : 
-                                this.state.selectedDong=== '' ? '어느 행정동에서 창업하시는지 알려주세요' :
-                                this.state.selectedservice=== ''? '어떤 업종으로 창업하시는지 알려주세요 ':
-                                '자본금으로'}
-                            </strong>
                         </div>
 
                         {/* 지역구 선택 버튼 */}
-                        {this.state.Gu === ''&&  this.uniqueGuArray.map((gu) => (
+                        <div style={{marginLeft:'17px'}}>
+                        {this.state.Gu === '' && (
+                            <div>
+                                <img src={imageSrc1} alt={altText1} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px'}}>어느 지역구</strong>
+                                <strong style={{fontSize:'18px'}}>에서<br/></strong>
+                                <strong style={{fontSize:'18px'}}>창업하시는지 알려주세요.</strong>
+                            </div>
+                        )}
+                        {this.state.Gu === '' && (<br/>)}
+                        {this.state.Gu === '' && this.uniqueGuArray.map((gu) => (
+                            
                             <button
                                 key={gu}
                                 onClick={() => {
@@ -286,8 +286,22 @@ class KakaoMap extends Component {
                                 {gu}
                             </button>
                         ))}
-
+                        </div>
+                        
                         {/* 행정동 선택 버튼 */}
+                        <div style={{marginLeft:'17px'}}>
+                        {this.state.selectedDong==='' &&this.state.isMenu1Open && (
+                            <div>
+                                <img src={imageSrc2} alt={altText2} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어느 행정동</strong>
+                                <strong style={{fontSize:'18px'}}>에서<br/>창업하시는지 알려주세요.</strong>
+                            </div>
+                        )}
+                        {this.state.selectedDong==='' &&this.state.isMenu1Open && (<br/>)}
                         {this.state.selectedDong==='' &&this.state.isMenu1Open && this.dongData
                             .filter(item => item.시군구명 === this.state.Gu)
                             .map(item => (
@@ -303,10 +317,24 @@ class KakaoMap extends Component {
                                 {item.읍면동명}
                             </button>
                         ))}
+                        </div>
 
                         {/* 서비스 업종 선택 버튼 */}
+                        <div style={{marginLeft:'17px'}}>
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
-                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                            <div>
+                                <img src={imageSrc4} alt={altText3} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어떤 업종</strong>
+                                <strong style={{fontSize:'18px'}}>으로<br/>창업하시는지 알려주세요.</strong>
+                            </div>
+                        )}
+                        {/* {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)} */}
+                        {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap'}}>
                                 {this.serviceList.map((service) => (
                                     <button
                                         key={service}
@@ -315,30 +343,44 @@ class KakaoMap extends Component {
                                             this.setState({ isMenu4Open: true });
                                         }}
                                         style={{
-                                            width: '80px',
-                                            height: '80px',
+                                            width: '84px',
+                                            height: '82px',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             margin: '3px',
+                                            marginLeft:'5px',
                                         }}
                                     >
                                         <img
                                             src={getServiceIconPath(service)}
                                             alt={service}
-                                            style={{ width: '35px', height: '35px', marginTop: '7px' }}
+                                            style={{ width: '34px', height: '34px', marginTop: '7px',marginBottom:'5px' }}
                                         />
                                         <span>{service}</span>
                                     </button>
                                 ))}
                             </div>
                         )}
+                        </div>
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        {this.state.selectedDong && this.state.isMenu4Open && (<strong>얼마를 생각하시는지 알려주세요</strong>)}
+                        <div style={{marginLeft:'17px',marginRight:'14px'}}>
                         {this.state.selectedDong && this.state.isMenu4Open && (
-                            <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'20px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div>
+                                <img src={imageSrc5} alt={altText4} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>자본금</strong>
+                                <strong style={{fontSize:'18px'}}>으로<br/>얼마를 생각하지는지 알려주세요.</strong>
+                            </div>
+                        )}
+                        {this.state.selectedDong && this.state.isMenu4Open && (<br/>)}
+                        {this.state.selectedDong && this.state.isMenu4Open && (
+                            <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'50px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             {/* 자본금 입력창 */}
                             <input
                                 type="text"
@@ -353,11 +395,12 @@ class KakaoMap extends Component {
                                 }}
                             />
                             {/* SAI 창업 도우미 시작하기 버튼 */}
-                            <button type="submit" className="sai-button" style={{marginTop:'20px'}}>
+                            <button type="submit" className="sai-button" style={{marginTop:'20px',fontSize:'16px'}}>
                                 SAI 창업 도우미 시작하기
                             </button>
                         </form>
                         )}
+                        </div>
                     </nav>)
                 }
 
@@ -367,9 +410,13 @@ class KakaoMap extends Component {
 
 
 
+
+
                 {/* 상권 단위 - sidebar2 */}
+
                 {this.state.selectedMenu === 'sidebar2' && (
                     <nav className="sidebar2">
+                        <div style={{marginLeft:'17px', marginTop:'15px'}}>
                         {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
                         {!this.state.Gu && (
                             <button onClick={() => this.handleBackButtonClick()} className="back-button">
@@ -401,18 +448,22 @@ class KakaoMap extends Component {
                                 <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
                             </button>
                         )}
-                        <div className="additional-text">
-                            <img src={imageSrc} alt={altText} />
-                            <strong>
-                                {this.state.Gu === '' ? '어느 지역구에서 창업하시는지 알려주세요' : 
-                                this.state.selectedDong=== '' ? '어느 행정동에서 창업하시는지 알려주세요' :
-                                this.state.selectedmarket=== '' ? '어떤 상권에서 창업하시는지 알려주세요':
-                                this.state.selectedservice=== ''? '어떤 업종으로 창업하시는지 알려주세요 ':
-                                '자본금으로'}
-                            </strong>
                         </div>
 
                         {/* 지역구 선택 버튼 */}
+                        <div style={{marginLeft:'17px'}}>
+                        {this.state.Gu === '' && (
+                            <div>
+                                <img src={imageSrc1} alt={altText0} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px' }}>어느 지역구</strong>
+                                <strong>에서<br/>창업하시는지 알려주세요</strong>
+                            </div>
+                        )}
+                        {this.state.Gu === ''&&(<br/>)}
                         {this.state.Gu === ''&&  this.uniqueGuArray.map((gu) => (
                             <button
                                 key={gu}
@@ -425,8 +476,22 @@ class KakaoMap extends Component {
                                 {gu}
                             </button>
                         ))}
+                        </div>
 
                         {/* 행정동 선택 버튼 */}
+                        <div style={{marginLeft:'17px'}}>
+                        {this.state.selectedDong==='' &&this.state.isMenu1Open && (
+                            <div>
+                                <img src={imageSrc2} alt={altText1} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px' }}>어느 행정동</strong>
+                                <strong>에서<br/>창업하시는지 알려주세요</strong>
+                            </div>
+                        )}
+                        {this.state.selectedDong==='' &&this.state.isMenu1Open && (<br/>)}
                         {this.state.selectedDong==='' &&this.state.isMenu1Open && this.dongData
                             .filter(item => item.시군구명 === this.state.Gu)
                             .map(item => (
@@ -442,7 +507,22 @@ class KakaoMap extends Component {
                                 {item.읍면동명}
                             </button>
                         ))}
+                        </div>
+
                         {/* 상권 선택 버튼 */}
+                        <div style={{marginLeft:'17px'}}>
+                        {this.state.selectedmarket==='' && this.state.isMenu2Open && (
+                            <div>
+                                <img src={imageSrc3} alt={altText2} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px' }}>어느 상권</strong>
+                                <strong>에서<br/>창업하시는지 알려주세요</strong>
+                            </div>
+                        )}
+                        {this.state.selectedmarket==='' && this.state.isMenu2Open && (<br/>)}
                         {this.state.selectedmarket==='' && this.state.isMenu2Open && this.marketData
                             .filter(item => item.행정동_코드_명 === this.state.selectedDong)
                             .map(item => (
@@ -458,8 +538,22 @@ class KakaoMap extends Component {
                                 {item.상권_코드_명}
                             </button>
                         ))}
+                        </div>
 
                         {/* 서비스 업종 선택 버튼 */}
+                        <div style={{marginLeft:'17px'}}>
+                        {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
+                            <div>
+                                <img src={imageSrc4} alt={altText3} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px' }}>어떤 업종</strong>
+                                <strong>으로<br/>창업하시는지 알려주세요</strong>
+                            </div>
+                        )}
+                        {/* {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)} */}
                         {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {this.serviceList.map((service) => (
@@ -470,30 +564,45 @@ class KakaoMap extends Component {
                                             this.setState({ isMenu4Open: true });
                                         }}
                                         style={{
-                                            width: '80px',
-                                            height: '80px',
+                                            width: '84px',
+                                            height: '82px',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             margin: '3px',
+                                            marginLeft:'5px',
                                         }}
                                     >
                                         <img
                                             src={getServiceIconPath(service)}
                                             alt={service}
-                                            style={{ width: '35px', height: '35px', marginTop: '7px' }}
+                                            style={{ width: '34px', height: '34px', marginTop: '7px',marginBottom:'5px' }}
                                         />
                                         <span>{service}</span>
                                     </button>
                                 ))}
                             </div>
                         )}
+                        </div>
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        {this.state.selectedmarket && this.state.isMenu4Open &&!this.state.service && (<strong>얼마를 생각하시는지 알려주세요</strong>)}
+                        <div style={{marginLeft:'17px', marginRight:'14px'}}>
                         {this.state.selectedmarket && this.state.isMenu4Open && (
-                            <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'20px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div>
+                                <img src={imageSrc5} alt={altText4} style={{
+                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                    maxWidth: '100%',  // 최대 가로 길이 설정
+                                    height: 'auto'     // 세로 비율 유지
+                                }}/>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px' }}>자본금</strong>
+                                <strong>으로<br/>얼마를 생각하시는지 알려주세요.</strong>
+                            </div>
+                        )}
+                        
+                        {/* {this.state.selectedmarket && this.state.isMenu4Open &&(<br/>)} */}
+                        {this.state.selectedmarket && this.state.isMenu4Open && (
+                            <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'50px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             {/* 자본금 입력창 */}
                             <input
                                 type="text"
@@ -504,15 +613,18 @@ class KakaoMap extends Component {
                                     border: 'none',
                                     borderBottom: '1px solid #6A85E6', // Blue color for the underline
                                     padding: '5px', // Adjust padding as needed
-                                    marginBottom: '10px' // Adjust margin as needed
+                                    marginBottom: '10px', // Adjust margin as needed
                                 }}
+                            
                             />
+                            
                             {/* SAI 창업 도우미 시작하기 버튼 */}
                             <button type="submit" className="sai-button" style={{marginTop:'20px'}}>
                                 SAI 창업 도우미 시작하기
                             </button>
                         </form>
                         )}
+                        </div>
                     </nav>)
                 }
 
