@@ -9,11 +9,11 @@ import './Pretendard-1.3.9/web/static/pretendard.css'; // 상대 경로로 CSS �
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#8398CA',
+      main: '#012A5B',
       gray: '#EEEEEE',
       orange: '#FF6B00',
       dark: '#012A5B',
-      pink: '#F25278',
+      pink: '#F25278',<ㄴ
       blue: '#0055FF'
     },
   },

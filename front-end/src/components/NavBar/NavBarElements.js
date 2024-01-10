@@ -58,23 +58,19 @@ function NavBarElements() {
             </Navbar.Brand>
           {isLogin ? (
             <Nav>
-              <NavDropdown title="알림마당" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
-                <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleOpenFeedback}>개선의견</NavDropdown.Item>
-              </NavDropdown>
               <NavDropdown title="창업 도우미" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/Home">시뮬레이션</NavDropdown.Item>
                 <NavDropdown.Item href="/SimulReport">시뮬레이션 리포트</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown title="게시판" id="basic-nav-dropdown">
+              <NavDropdown title="커뮤니티" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
+                <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
                 <NavDropdown.Item href="/Board1">창업 정보</NavDropdown.Item>
                 <NavDropdown.Item href="/Board2">창업 게시판</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="마이페이지" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
-                <NavDropdown.Item href="/Myboard">내가 쓴 글</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleOpenFeedback}>개선의견</NavDropdown.Item>
               </NavDropdown>
               <Nav.Link href="/">Logout</Nav.Link>
             </Nav>

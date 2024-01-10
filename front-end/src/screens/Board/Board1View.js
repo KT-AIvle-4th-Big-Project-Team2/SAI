@@ -113,13 +113,13 @@ const Board1View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button  variant="outlined" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr : 2, color : '#000000' }}>
+        <Button  variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
           글 수정
         </Button>
-        <Button  variant="outlined" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#000000' }}>
+        <Button  variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#FFFFFF' }}>
           글 삭제
         </Button>
-        <Button  variant="outlined" href="/Board1" sx={{ mb: 2, color : '#000000' }}>
+        <Button  variant="contained" href="/Board1" sx={{ mb: 2 }}>
           글 목록
         </Button>
       </Box>
@@ -150,7 +150,7 @@ const Board1View = () => {
         sx={{ mb: 2 }}
         onChange={(e) => setComment((prevText) => ({ ...prevText, contents: e.target.value }))}
       />
-      <Button variant="outlined" sx={{ color : '#000000' }} onClick={handleCommentInput} href={`/Board1View/${post_num}` }>
+      <Button variant="contained" sx={{ bgcolor : '#012A5B', color : '#FFFFFF' }} onClick={handleCommentInput} href={`/Board1View/${post_num}` }>
         댓글 달기
       </Button>
     </Paper>
