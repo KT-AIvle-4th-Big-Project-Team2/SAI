@@ -22,7 +22,7 @@ class dong_ai(generics.GenericAPIView):
     serializer_class = AIReportSerializer
     
     def post(self, request, *args, **kargs):
-    
+        
         goo = self.kwargs['goo'].upper()
         dong = self.kwargs['dong'].upper()
         business = self.kwargs['business'].upper()
@@ -551,7 +551,7 @@ class AIReportView(APIView):
         return Response(serializer.data, status.HTTP_200_OK)
 class AIReportDeleteView(APIView):
     
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         
         report_id = kwargs['num']
         username = request.data.get("username")

@@ -2,15 +2,12 @@ from .models import *
 from .serializers import *
 from account.models import UserCustom
 
-from rest_framework import generics, permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
-
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
 
 from urllib.parse import unquote
 
@@ -92,28 +89,30 @@ class AnnouncementSearchView(generics.ListAPIView):
     
     
 
-# @method_decorator(csrf_protect, name='dispatch')
-class AnnouncementCreateView(generics.CreateAPIView):
-    permission_classes = (permissions.IsAdminUser,)
+
+class AnnouncementCreateView(APIView):
+
     serializer_class = AnnouncementCreateSerializer
-        
-    def perform_create(self, serializer):
+    
+    def post(self, request, serializer):
+        if not UserCustom.objects.get(self.request.data.get("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
         
         Announcements.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin=UserCustom.objects.get(username = "jinwon97")
+            admin=UserCustom.objects.get(username = self.request.data.get("username"))
         )
         
         
         
-# @method_decorator(csrf_protect, name='dispatch')
+
 class AnnouncementUpdateView(generics.UpdateAPIView):
-    # permission_classes = (permissions.IsAdminUser,)
+
     serializer_class = AnnouncementUpdateSerializer
     queryset = Announcements.objects.all()
     
     def perform_update(self, request):    
+        if not UserCustom.objects.get(self.request.data("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
         instance = self.get_object()
         
         serializer = self.serializer_class(data = self.request.data, partial = True)
@@ -136,13 +135,14 @@ class AnnouncementUpdateView(generics.UpdateAPIView):
     
     
     
-# @method_decorator(csrf_protect, name='dispatch')
-class AnnouncementdeleteView(generics.DestroyAPIView):
-    # permission_classes = (permissions.IsAdminUser,)
+
+class AnnouncementdeleteView(APIView):
+
     queryset = Announcements.objects.all()
     
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
+        if not UserCustom.objects.get(self.request.data("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
+        instance = Announcements.objects.get(kwargs['pk'])
         
         instance.delete()
         
