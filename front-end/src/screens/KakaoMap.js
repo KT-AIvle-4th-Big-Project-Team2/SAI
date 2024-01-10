@@ -116,19 +116,19 @@ class KakaoMap extends Component {
             selectedservice:'',
             capital:'',
             buttonStyle: {
-                width: '7.6em', // Set the desired width
-                minWidth:'7.6em',
-                maxWidth:'7.6em',
-                minHeight: '29%', // Set the desired height
-                height: '3.4em',
-                fontSize:'108%',
+                width: '7.1em', // Set the desired width
+                minWidth:'7.1em',
+                maxWidth:'7.1em',
+                minHeight: '25%', // Set the desired height
+                height: '2.8em',
+                fontSize:'103%',
                 // Add other common styles if needed
             },
             buttonStyle2: {
-                minWidth: '7.6em', // Set the desired width
-                minHeight: '29%', // Set the desired height
-                height:'3.4em',
-                fontSize:'110%',
+                minWidth: '7.1em', // Set the desired width
+                minHeight: '25%', // Set the desired height
+                height:'2.8em',
+                fontSize:'103%',
                 // Add other common styles if needed
             },
             
@@ -137,16 +137,24 @@ class KakaoMap extends Component {
         this.polygons = []; // 폴리곤 객체를 저장할 배열 초기화
         // 지역구 및 행정동 데이터 처리
         this.uniqueGuArray = Array.from(new Set(Data.map(item => item.시군구명)));
+        this.uniqueGuArray.sort();
         this.uniqueGuArray2 = Array.from(new Set(Data3.map(item => item.자치구_코드_명)));
+        this.uniqueGuArray2.sort()
         this.uniqueDongArray=Array.from(new Set(Data3.map(item => item.행정동_코드_명)));
+        this.uniqueDongArray.sort();
         this.dongData = Data;
         this.marketinfo=Data3;
         this.codeMarketInfo=code_market;
         this.codeServiceInfo=code_service;
         this.codeGuInfo=code_gu;
         this.codeDongInfo=code_dong;
-        this.serviceList= ['한식음식점', '커피-음료', '분식전문점', '호프-주점', '치킨전문점', '중식음식점', '패스트푸드', '제과점', '일식음식점', '양식음식점', '편의점', '일반의류', '화장품', '의약품', '일반학원', '미용실'];
+        this.userGu='';
+        this.userDong='';
+        this.userMarket='';
+        this.userService='';
+        this.serviceList= ['미용실', '분식전문점',  '양식음식점','의약품', '일반의류', '일반학원', '일식음식점', '제과점','중식음식점', '커피-음료', '치킨전문점', '패스트푸드', '편의점', '한식음식점', '화장품', '호프-주점'];
         this.markers = [];  // 마커를 저장할 배열
+        
     }
     
     addMarker = (position) => {
@@ -346,7 +354,7 @@ class KakaoMap extends Component {
                 {/* 행정동 단위 - sidebar1 */}
                 {this.state.selectedMenu === 'sidebar1' && (
                     <nav className="sidebar1">
-                        <div style={{marginLeft:'17px',marginTop:'15px'}}>
+                        <div style={{marginLeft:'12px',marginTop:'15px'}}>
                         {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
                         {!this.state.Gu && (
                             <button onClick={() => this.handleBackButtonClick()} className="back-button">
@@ -375,7 +383,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 지역구 선택 버튼 */}
-                        <div style={{marginLeft:'17px'}}>
+                        <div style={{marginLeft:'12px'}}>
                         {this.state.Gu === '' && (
                             <div>
                                 <img src={imageSrc1} alt={altText1} style={{
@@ -405,38 +413,40 @@ class KakaoMap extends Component {
                         </div>
                         
                         {/* 행정동 선택 버튼 */}
-                        <div style={{marginLeft:'17px'}}>
-                        {this.state.selectedDong==='' &&this.state.isMenu1Open && (
-                            <div>
-                                <img src={imageSrc2} alt={altText2} style={{
-                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
-                                    maxWidth: '100%',  // 최대 가로 길이 설정
-                                    height: 'auto'     // 세로 비율 유지
-                                }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어느 행정동</strong>
-                                <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요.</strong>
-                            </div>
-                        )}
-                        {this.state.selectedDong==='' &&this.state.isMenu1Open && (<br/>)}
-                        {this.state.selectedDong==='' &&this.state.isMenu1Open && this.dongData
-                            .filter(item => item.시군구명 === this.state.Gu)
-                            .map(item => (
-                            <button
-                                key={item.읍면동명}
-                                onClick={() => {
-                                    this.handleDongChange({ target: { value: item.읍면동명 } });
-                                    // 행정동 선택 후 행정동 버튼들을 숨김
-                                    this.setState({ isMenu3Open:true });
-                                }}
-                                style={this.state.buttonStyle}
-                            >
-                                {item.읍면동명}
-                            </button>
-                        ))}
+                        <div style={{marginLeft:'12px'}}>
+                            {this.state.selectedDong==='' &&this.state.isMenu1Open && (
+                                <div>
+                                    <img src={imageSrc2} alt={altText2} style={{
+                                        width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                        maxWidth: '100%',  // 최대 가로 길이 설정
+                                        height: 'auto'     // 세로 비율 유지
+                                    }}/>
+                                    <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어느 행정동</strong>
+                                    <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요.</strong>
+                                </div>
+                            )}
+                            {this.state.selectedDong==='' &&this.state.isMenu1Open && (<br/>)}
+                            {this.state.selectedDong==='' &&this.state.isMenu1Open && this.dongData
+                                .filter(item => item.시군구명 === this.state.Gu)
+                                .map(item => item.읍면동명)
+                                .sort()
+                                .map((dongName, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            this.handleDongChange({ target: { value: dongName } });
+                                            // 행정동 선택 후 행정동 버튼들을 숨김
+                                            this.setState({ isMenu3Open:true });
+                                        }}
+                                        style={this.state.buttonStyle}
+                                    >
+                                        {dongName}
+                                    </button>
+                                ))}
                         </div>
 
                         {/* 서비스 업종 선택 버튼 */}
-                        <div style={{marginLeft:'17px'}}>
+                        <div style={{marginLeft:'12px'}}>
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div>
                                 <img src={imageSrc345} alt={altText3} style={{
@@ -459,14 +469,14 @@ class KakaoMap extends Component {
                                             this.setState({ isMenu4Open: true });
                                         }}
                                         style={{
-                                            width: '26%',
-                                            height: '80%',
+                                            width: '25%',
+                                            height: '77%',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            margin: '3%',
-                                            marginTop:'1%',
+                                            margin: '2.8%',
+                                            marginTop:'0.9%',
                                             
                                         }}
                                     >
@@ -483,7 +493,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        <div style={{marginLeft:'17px',marginRight:'14px'}}>
+                        <div style={{marginLeft:'12px',marginRight:'14px'}}>
                         {this.state.selectedDong && this.state.isMenu4Open && (
                             <div>
                                 <img src={imageSrc5} alt={altText4} style={{
@@ -533,7 +543,7 @@ class KakaoMap extends Component {
 
                 {this.state.selectedMenu === 'sidebar2' && (
                     <nav className="sidebar2">
-                        <div style={{marginLeft:'17px', marginTop:'15px'}}>
+                        <div style={{marginLeft:'12px', marginTop:'15px'}}>
                         {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
                         {!this.state.Gu && (
                             <button onClick={() => this.handleBackButtonClick()} className="back-button">
@@ -568,7 +578,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 지역구 선택 버튼 */}
-                        <div style={{marginLeft:'17px'}}>
+                        <div style={{marginLeft:'12px'}}>
                         {this.state.Gu === '' && (
                             <div>
                                 <img src={imageSrc1} alt={altText0} style={{
@@ -598,79 +608,82 @@ class KakaoMap extends Component {
 
 
                         {/* 행정동 선택 버튼 */}
-                        <div style={{ marginLeft: '17px' }}>
-                        {this.state.selectedDong === '' && this.state.isMenu1Open && (
-                            <div>
-                                <img src={imageSrc2} alt={altText1} style={{
-                                    width: '100%',
-                                    maxWidth: '100%',
-                                    height: 'auto'
-                                }} />
-                                <strong style={{ color: '#0500FF', marginBottom: '5px', fontSize: '155%' }}>어느 행정동</strong>
-                                <strong style={{ fontSize: '155%' }}>에서<br />창업하시는지 알려주세요.</strong>
-                            </div>
-                        )}
-                        {this.state.selectedDong === '' && this.state.isMenu1Open && (<br />)}
-                        {this.state.selectedDong === '' && this.state.isMenu1Open && (
-                            <div>
-                                {this.uniqueGuArray2
-                                    .filter(gu2 => gu2 === this.state.Gu)
-                                    .map(gu2 => (
-                                        <div key={gu2}>
-                                            {Array.from(new Set(this.marketinfo
-                                                .filter(item => item.자치구_코드_명 === gu2)
-                                                .map(item => item.행정동_코드_명)
-                                            )).map(dong => (
-                                                <button
-                                                    key={dong}
-                                                    onClick={() => {
-                                                        this.handleDongChange({ target: { value: dong } });
-                                                        this.setState({ isMenu2Open: true });
-                                                    }}
-                                                    style={this.state.buttonStyle}
-                                                >
-                                                    {dong}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    ))}
-                            </div>
-                        )}
+                        <div style={{ marginLeft: '12px' }}>
+                            {this.state.selectedDong === '' && this.state.isMenu1Open && (
+                                <div>
+                                    <img src={imageSrc2} alt={altText1} style={{
+                                        width: '100%',
+                                        maxWidth: '100%',
+                                        height: 'auto'
+                                    }} />
+                                    <strong style={{ color: '#0500FF', marginBottom: '5px', fontSize: '155%' }}>어느 행정동</strong>
+                                    <strong style={{ fontSize: '155%' }}>에서<br />창업하시는지 알려주세요.</strong>
+                                </div>
+                            )}
+                            {this.state.selectedDong === '' && this.state.isMenu1Open && (<br />)}
+                            {this.state.selectedDong === '' && this.state.isMenu1Open && (
+                                <div>
+                                    {this.uniqueGuArray2
+                                        .filter(gu2 => gu2 === this.state.Gu)
+                                        .map(gu2 => (
+                                            <div key={gu2}>
+                                                {Array.from(new Set(this.marketinfo
+                                                    .filter(item => item.자치구_코드_명 === gu2)
+                                                    .map(item => item.행정동_코드_명)
+                                                )).sort() // 가나다순 정렬 추가
+                                                    .map(dong => (
+                                                        <button
+                                                            key={dong}
+                                                            onClick={() => {
+                                                                this.handleDongChange({ target: { value: dong } });
+                                                                this.setState({ isMenu2Open: true });
+                                                            }}
+                                                            style={this.state.buttonStyle}
+                                                        >
+                                                            {dong}
+                                                        </button>
+                                                    ))}
+                                            </div>
+                                        ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* 상권 선택 버튼 */}
-                        <div style={{marginLeft:'17px'}}>
-                        {this.state.selectedmarket==='' && this.state.isMenu2Open && (
-                            <div>
-                                <img src={imageSrc3} alt={altText2} style={{
-                                    width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
-                                    maxWidth: '100%',  // 최대 가로 길이 설정
-                                    height: 'auto'     // 세로 비율 유지
-                                }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어느 상권</strong>
-                                <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요</strong>
-                            </div>
-                        )}
-                        {this.state.selectedmarket==='' && this.state.isMenu2Open && (<br/>)}
-                        {this.state.selectedmarket === '' && this.state.isMenu2Open && this.marketinfo
-                        .filter(item => item.행정동_코드_명 === this.state.selectedDong)
-                        .map(item => (
-                            <button
-                                key={item.상권_코드_명}
-                                onClick={() => {
-                                    this.handleMarketChange({ target: { value: item.상권_코드_명 } });
-                                    // 상권 선택 후 상권 버튼들을 숨김
-                                    this.setState({ isMenu3Open: true });
-                                }}
-                                style={this.state.buttonStyle2}
-                            >
-                                {item.상권_코드_명}
-                            </button>
-                        ))}
+                        <div style={{marginLeft:'12px'}}>
+                            {this.state.selectedmarket==='' && this.state.isMenu2Open && (
+                                <div>
+                                    <img src={imageSrc3} alt={altText2} style={{
+                                        width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
+                                        maxWidth: '100%',  // 최대 가로 길이 설정
+                                        height: 'auto'     // 세로 비율 유지
+                                    }}/>
+                                    <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어느 상권</strong>
+                                    <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요</strong>
+                                </div>
+                            )}
+                            {this.state.selectedmarket === '' && this.state.isMenu2Open && (<br/>)}
+                            {this.state.selectedmarket === '' && this.state.isMenu2Open && this.marketinfo
+                                .filter(item => item.행정동_코드_명 === this.state.selectedDong)
+                                .map(item => item.상권_코드_명)
+                                .sort()
+                                .map((marketName, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            this.handleMarketChange({ target: { value: marketName } });
+                                            // 상권 선택 후 상권 버튼들을 숨김
+                                            this.setState({ isMenu3Open: true });
+                                        }}
+                                        style={this.state.buttonStyle2}
+                                    >
+                                        {marketName}
+                                    </button>
+                                ))}
                         </div>
 
                         {/* 서비스 업종 선택 버튼 */}
-                        <div style={{marginLeft:'17px'}}>
+                        <div style={{marginLeft:'12px'}}>
                         {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div>
                                 <img src={imageSrc4} alt={altText3} style={{
@@ -693,14 +706,14 @@ class KakaoMap extends Component {
                                             this.setState({ isMenu4Open: true });
                                         }}
                                         style={{
-                                            width: '26%',
-                                            height: '80%',
+                                            width: '25%',
+                                            height: '77%',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            margin: '3%',
-                                            marginTop:'1%',
+                                            margin: '2.8%',
+                                            marginTop:'0.9%',
                                             
                                         }}
                                     >
@@ -717,7 +730,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        <div style={{marginLeft:'17px', marginRight:'14px'}}>
+                        <div style={{marginLeft:'12px', marginRight:'14px'}}>
                         {this.state.selectedmarket && this.state.isMenu4Open && (
                             <div>
                                 <img src={imageSrc5} alt={altText4} style={{
@@ -730,7 +743,7 @@ class KakaoMap extends Component {
                             </div>
                         )}
                         
-                        {/* {this.state.selectedmarket && this.state.isMenu4Open &&(<br/>)} */}
+                        {this.state.selectedmarket && this.state.isMenu4Open &&(<br/>)}
                         {this.state.selectedmarket && this.state.isMenu4Open && (
                             <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'50px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             {/* 자본금 입력창 */}
@@ -841,7 +854,7 @@ class KakaoMap extends Component {
     
     // SAI 창업 도우미 시작 함수 구현
     startSAIHelper() {
-    // this.state.capital을 이용하여 자본금에 관련된 로직을 처리
+    
     const capitalValue = parseInt(this.state.capital, 10);
 
     // 예를 들어, 자본금이 유효한지 확인하는 로직 등을 추가
@@ -849,42 +862,36 @@ class KakaoMap extends Component {
         alert('유효한 자본금을 입력하세요.');
         return;
     }
-
-    // 각 state 값을 변환하고 저장
-    const convertedGu = this.convertToCode('Gu', this.state.Gu);
-    const convertedDong = this.convertToCode('Dong', this.state.selectedDong);
-    const convertedMarket = this.convertToCode('Market', this.state.selectedmarket);
-    const convertedService = this.convertToCode('Service', this.state.selectedservice);
-
-    // 변환된 값을 state에 업데이트
-    this.setState({
-        Gu: convertedGu,
-        selectedDong: convertedDong,
-        selectedmarket: convertedMarket,
-        selectedservice: convertedService,
-        capital: this.state.capital, // 기존 자본금은 그대로 유지
-    }, () => {
-        // 업데이트된 state 값 콘솔에 출력
-        console.log('선택된 지역구:', this.state.Gu);
-        console.log('선택된 행정동:', this.state.selectedDong);
-        console.log('선택된 상권:', this.state.selectedmarket);
-        console.log('선택된 서비스 업종:', this.state.selectedservice);
-        console.log('입력된 자본금:', this.state.capital);
-    });
-
-    console.log('선택된 지역구:', this.state.Gu);
-    console.log('선택된 행정동:', this.state.selectedDong);
-    console.log('선택된 상권:', this.state.selectedmarket);
-    console.log('선택된 서비스 업종:', this.state.selectedservice);
+    
+    console.log('선택된 지역구 코드값:', this.state.userGu);
+    console.log('선택된 행정동 코드값:', this.state.userDong);
+    console.log('선택된 상권 코드값:', this.state.userMarket);
+    console.log('선택된 업종 코드값:', this.state.userService);
     console.log('입력된 자본금:', this.state.capital);
+    
+        // 각 state 값을 변환하고 저장
+    // this.setState((prevState) => {
+    //     const newState = {
+    //         userGu: this.codeGuInfo[prevState.Gu],
+    //         userDong: this.codeDongInfo[prevState.selectedDong],
+    //         userService: this.codeServiceInfo[prevState.selectedservice],
+    //         capital:this.capital,
+    //     };
+
+    //     // 추가: selectedmarket이 빈 문자열이 아닌 경우에만 업데이트
+    //     if (prevState.selectedmarket !== '') {
+    //         newState.userMarket = this.codeMarkerInfo[prevState.selectedmarket];
+    //     }
+
+    //     return newState;
+    // }, () => {
+        // console.log('선택된 지역구 코드값:', this.state.userGu);
+        // console.log('선택된 행정동 코드값:', this.state.userDong);
+        // console.log('선택된 상권 코드값:', this.state.userMarket);
+        // console.log('선택된 업종 코드값:', this.state.userService);
+        // console.log('입력된 자본금:', this.state.capital);
+    // });
     }
-
-    // 변환 함수
-    convertToCode = (type, value) => {
-    const mapping = this.marketinfo[type];
-    return mapping[value] || value;
-    };  
-
 }
 
 export default KakaoMap;
