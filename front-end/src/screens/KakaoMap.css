@@ -14,8 +14,8 @@
     position: absolute; /* 절대 위치 지정 */
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
-    width: 330px; /* Set your desired width */
-    height: 90%; /* Set your desired height */
+    width: 26%; /* Set your desired width */
+    height: 93%; /* Set your desired height */
     background-color: #fff; /* 배경색 */
     z-index: 2;
     border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
@@ -77,8 +77,8 @@ button.selected {
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
     background-color: #fff; /* 배경색 */
-    width: 330px; /* Set your desired width */
-    height: 90%; /* Set your desired height */
+    width: 26%; /* Set your desired width */
+    height: 93%; /* Set your desired height */
     padding: 10px; /* 내부 여백 */
     box-sizing: border-box; /* 총 너비 계산 방식 */
     z-index:2;
@@ -92,8 +92,8 @@ button.selected {
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
     background-color: #fff; /* 배경색 */
-    width: 330px; /* Set your desired width */
-    height: 90%; /* Set your desired height */
+    width: 26%; /* Set your desired width */
+    height: 93%; /* Set your desired height */
     padding: 10px; /* 내부 여백 */
     box-sizing: border-box; /* 총 너비 계산 방식 */
     z-index:2;
