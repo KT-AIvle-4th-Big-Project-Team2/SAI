@@ -18,8 +18,8 @@ class dong_report(APIView):
     
     def get(self, request):
         
-        dong = "북가좌2동"
-        business = "제과점"
+        dong = "대조동"
+        business = "한식음식점"
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
@@ -82,6 +82,8 @@ class dong_report(APIView):
         # 동 순위 계산
         queryset_dong_goo = SeoulRent.objects.filter(dong_name = dong).values("시군구명")
         queryset_dong_list = SeoulRent.objects.filter(시군구명 = queryset_dong_goo[0]["시군구명"]).values("dong_name")
+        
+        #return Response(queryset_dong_list)
         
         dong_count= len(queryset_dong_list)
 
@@ -470,13 +472,19 @@ class dong_report(APIView):
             "소비트렌드 기타" : consumption_trend["Other"],
             "소비트렌드 텍스트 ": most_trend
         }
-
+        #queryset_dong_20233
         return Response(response_data, status=status.HTTP_200_OK)
         
+        #return Response(response_data, status=status.HTTP_200_OK)
+        
         
 
 
-
+class MarketReportView(APIView):
+    def get(self, request):
+        market_data = MarketSortedDbFin.objects.all()
+        serializer = MarketReportDataSerializer(market_data, many=True)
+        return Response(serializer.data)
 
 class market_report(APIView):
     
@@ -542,60 +550,71 @@ class market_report(APIView):
         queryset_market_20224 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_market_20223 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20223 ,서비스_업종_코드_명 = business).values(*col_data)
         
-        queryset_market_20233 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).all()
+        #queryset_market_20233 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).all()
         
-        serialized_data = MarketReportDataSerializer('json', queryset_market_20233)
-        return Response(serialized_data, status=status.HTTP_200_OK)
+        #queryset_market_20233 = MarketSortedDbFin.objects.all()
         
         #1. 종합의견
 
-        # 동 순위 계산
-        queryset_dong_goo = MarketSortedDbFin.objects.filter(상권_코드_명 = market).values("행정동_코드_명")
-        # queryset_dong_list = MarketSortedDbFin.objects.filter(행정동_코드_명 = queryset_dong_goo[0]["행정동_코드_명"]).values("상권_구분_코드_명")
+        # 상권 순위 계산
+        temp_result = []
         
-        # dong_count= len(queryset_dong_list)
-
-        # dong_names = [entry["상권_구분_코드_명"] for entry in queryset_dong_list]
-
-        # # 점포 매출액 유동인구
-        # dong_col = ["상권_구분_코드_명","점포_수","당월_매출_금액","총_유동인구_수"]
-        # dong_rank = []
-        # for i in dong_names :
-        #     queryset_dong_data = DongSortedDbFin.objects.filter(상권_구분_코드_명 = i,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*dong_col)
-        #     dong_rank.append(queryset_dong_data)
-
-        # # 빈리스트 제거
-        # dong_rank = [entry for entry in dong_rank if entry]
+        queryset_dong_goo = MarketSortedDbFin.objects.filter(상권_코드_명 = market).values("자치구_코드_명")
+        queryset_dong_list = MarketSortedDbFin.objects.filter(자치구_코드_명 = queryset_dong_goo[0]["자치구_코드_명"]).values("상권_코드_명")
+        #queryset_dong_list = MarketSortedDbFin.objects.filter(자치구_코드_명 = queryset_dong_goo[0]["자치구_코드_명"]).all()
         
+        unique_data = list({item['상권_코드_명']: item for item in queryset_dong_list}.values())
         
-        # #dong rank 데이터
-        # dong_rank_data = []
+        #return Response(unique_data, status=status.HTTP_200_OK)
+        
+        dong_count= len(unique_data)
 
-        # sorted_data = sorted(dong_rank, key=lambda x: x[0]["점포_수"], reverse=True)
-        # index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_구분_코드_명"] == market), None)
-        # dong_rank_data.append(index_of_dong+1)
-        
-        
+        dong_names = [entry["상권_코드_명"] for entry in unique_data]
 
-        # sorted_data = sorted(dong_rank, key=lambda x: x[0]["당월_매출_금액"], reverse=True)
-        # index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_구분_코드_명"] == market), None)
-        # dong_rank_data.append(index_of_dong+1)
-        
-        # sorted_data = sorted(dong_rank, key=lambda x: x[0]["총_유동인구_수"], reverse=True)
-        # index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_구분_코드_명"] == market), None)
-        # dong_rank_data.append(index_of_dong+1)
-        
-
-        # #전분기
-        # Quarterly_sales = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20232[0]["당월_매출_금액"])//10000)
-
-        # #전년도 분기 대비
-        # Sales_compared_to_the_same_quarter_last_year = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20223[0]["당월_매출_금액"])//10000)
 
         
-        # #종합 의견
+        # 점포 매출액 유동인구
+        dong_col = ["상권_코드_명","점포_수","당월_매출_금액","총_유동인구_수"]
+        dong_rank = []
+        for i in dong_names :
+            queryset_dong_data = MarketSortedDbFin.objects.filter(상권_코드_명 = i,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*dong_col)
+            dong_rank.append(queryset_dong_data)
 
-        # general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year]
+        # 빈리스트 제거
+        dong_rank = [entry for entry in dong_rank if entry]
+        
+        
+        
+        
+        #dong rank 데이터
+        dong_rank_data = []
+
+        sorted_data = sorted(dong_rank, key=lambda x: x[0]["점포_수"], reverse=True)
+        index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_코드_명"] == market), None)
+        dong_rank_data.append(index_of_dong+1)
+        
+        
+
+        sorted_data = sorted(dong_rank, key=lambda x: x[0]["당월_매출_금액"], reverse=True)
+        index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_코드_명"] == market), None)
+        dong_rank_data.append(index_of_dong+1)
+        
+        sorted_data = sorted(dong_rank, key=lambda x: x[0]["총_유동인구_수"], reverse=True)
+        index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_코드_명"] == market), None)
+        dong_rank_data.append(index_of_dong+1)
+        
+        
+
+        #전분기
+        Quarterly_sales = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20232[0]["당월_매출_금액"])//10000)
+
+        #전년도 분기 대비
+        Sales_compared_to_the_same_quarter_last_year = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20223[0]["당월_매출_금액"])//10000)
+
+        
+        #종합 의견
+
+        general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year]
         
         
         #general_opinion = [data]
@@ -865,11 +884,11 @@ class market_report(APIView):
             most_trend ="문화"
         
         response_data = {
-            # "점포순위" : dong_rank_data[0],
-            # "매출순위" : dong_rank_data[1],
-            # "유동인구순위" : dong_rank_data[2],
-            # "전분기대비매출액" : general_opinion[0],
-            # "전년도분기대비매출액" : general_opinion[1],
+            "점포순위" : dong_rank_data[0],
+            "매출순위" : dong_rank_data[1],
+            "유동인구순위" : dong_rank_data[2],
+            "전분기대비매출액" : general_opinion[0],
+            "전년도분기대비매출액" : general_opinion[1],
 
             "best 매출 성별 연령대" : sales_data[0],
             "best 매출 요일" : sales_data[1],
@@ -940,7 +959,7 @@ class market_report(APIView):
             "소비트렌드 텍스트 ": most_trend
         }
 
-        return Response(queryset_market_20233, status=status.HTTP_200_OK)
+        return Response(response_data, status=status.HTTP_200_OK)
         
 
 

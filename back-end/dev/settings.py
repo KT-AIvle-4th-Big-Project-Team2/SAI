@@ -6,13 +6,14 @@ SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Dja
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -48,7 +49,8 @@ INSTALLED_APPS = [
     'adminPage',
     'analysis',
     "fileupload",
-    
+    "filedownload",
+    "gallery",
     # rest API
     "rest_framework",
     "rest_framework.authtoken", # django + REST framework Token authentication
@@ -58,7 +60,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/frontURL_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -106,7 +108,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/DB_info.txt')
+sensitiveDataPath = ('C:/Users/user/Desktop/key/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
@@ -217,15 +219,16 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_URL = '/static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ################################
 #         쿠키 관련 설정
