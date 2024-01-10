@@ -583,8 +583,8 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px' }}>어느 상권</strong>
-                                <strong>에서<br/>창업하시는지 알려주세요</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어느 상권</strong>
+                                <strong style={{fontSize:'18px'}}>에서<br/>창업하시는지 알려주세요</strong>
                             </div>
                         )}
                         {this.state.selectedmarket==='' && this.state.isMenu2Open && (<br/>)}
