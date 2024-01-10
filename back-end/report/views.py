@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
+from analysis.models import DongServiceDataEstimateTestFullFin, MarketServiceDataEstimateTestFull
 # Create your views here.
 
 
@@ -18,8 +19,12 @@ class dong_report(APIView):
     
     def get(self, request, *args, **kwargs):
         
-        dong = "대치2동"
-        business = "한식음식점"
+        dong = unquote(kwargs['dong'])
+        business = unquote(kwargs['business'])
+        
+        dong = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
+        
+        business = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
@@ -566,14 +571,13 @@ class market_report(APIView):
     
     def get(self, request, *args, **kwargs):
         
-        # market = "회현역"
-        # business = "한식음식점"
+
         
-        market = kwargs["market"]
-        business = kwargs["business"]
+        market = unquote(kwargs["market"])
+        business = unquote(kwargs["business"])
         
-        market = "삼성역"
-        business = "한식음식점"
+        market = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
+        business = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드=business).first().서비스_업종_코드_명
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
