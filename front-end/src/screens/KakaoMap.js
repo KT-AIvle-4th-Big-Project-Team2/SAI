@@ -856,45 +856,41 @@ class KakaoMap extends Component {
     handleCapitalSubmit = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);
-        this.setState({ capital: capitalValue });
-        // 추가 코드: userDong 상태 변수에 selectedDong의 값 할당
-        this.setState({ 
-                userGu: this.codeGuInfo[this.state.Gu],
-                userDong: this.codeDongInfo[this.state.selectedDong],
-                userService:this.codeServiceInfo[this.state.selectedservice],
+    
+        this.setState((prevState) => ({
+            capital: capitalValue,
+            userGu: this.codeGuInfo[prevState.Gu],
+            userDong: this.codeDongInfo[prevState.selectedDong],
+            userService: this.codeServiceInfo[prevState.selectedservice],
+        }), () => {
+            console.log('자치구:', this.state.userGu);
+            console.log('행정동:', this.state.userDong);
+            console.log('업종:', this.state.userService);
+            console.log('자본금:', this.state.capital);
+            // 나머지 코드들...
         });
-    
-        // 추가 코드: userDong과 capital을 콘솔에 출력
-        console.log('자치구:', this.state.userGu);
-        console.log('행정동:', this.state.userDong);
-        console.log('업종:', this.state.userService);
-        console.log('자본금:', this.state.capital);
-    
-        // 추가 코드: 다른 동작 수행 가능
-        // 예를 들어, 서버로 데이터 전송이나 다른 상태 변수 업데이트 등
     };
+
     handleCapitalSubmit2 = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);
-        this.setState({ capital: capitalValue });
-        // 추가 코드: userDong 상태 변수에 selectedDong의 값 할당
-        this.setState({ 
-                userGu: this.codeGuInfo[this.state.Gu],
-                userDong: this.codeDongInfo[this.state.selectedDong],
-                userMarket:this.codeMarketInfo[this.state.selectedmarket],
-                userService:this.codeServiceInfo[this.state.selectedservice],
+    
+        this.setState((prevState) => ({
+            capital: capitalValue,
+            userGu: this.codeGuInfo[prevState.Gu],
+            userDong: this.codeDongInfo[prevState.selectedDong],
+            userMarket: this.codeMarketInfo[prevState.selectedmarket],
+            userService: this.codeServiceInfo[prevState.selectedservice],
+        }), () => {
+            console.log('자치구:', this.state.userGu);
+            console.log('행정동:', this.state.userDong);
+            console.log('상권:', this.state.userMarket);
+            console.log('업종:', this.state.userService);
+            console.log('자본금:', this.state.capital);
+            // 나머지 코드들...
         });
-    
-        // 추가 코드: userDong과 capital을 콘솔에 출력
-        console.log('자치구:', this.state.userGu);
-        console.log('행정동:', this.state.userDong);
-        console.log('상권:', this.state.userMarket);
-        console.log('업종:', this.state.userService);
-        console.log('자본금:', this.state.capital);
-    
-        // 추가 코드: 다른 동작 수행 가능
-        // 예를 들어, 서버로 데이터 전송이나 다른 상태 변수 업데이트 등
     };
+    
     // SAI 창업 도우미 시작 함수 구현
     // startSAIHelper() {
     
