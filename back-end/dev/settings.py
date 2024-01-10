@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/frontURL_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -108,7 +108,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('C:/Users/user/Desktop/key/DB_info.txt')
+sensitiveDataPath = ('C:/Users/suhwan/Desktop/key/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 

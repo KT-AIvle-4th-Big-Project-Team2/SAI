@@ -18,7 +18,7 @@ class dong_report(APIView):
     
     def get(self, request):
         
-        dong = "대조동"
+        dong = "대치2동"
         business = "한식음식점"
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
@@ -93,7 +93,7 @@ class dong_report(APIView):
         dong_col = ["행정동_코드_명","점포_수","당월_매출_금액","총_유동인구_수"]
         dong_rank = []
         for i in dong_names :
-            queryset_dong_data = DongSortedDbFin.objects.filter(행정동_코드_명 = i,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*dong_col)
+            queryset_dong_data = DongSortedDbFin.objects.filter(행정동_코드_명 = i,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*dong_col)
             dong_rank.append(queryset_dong_data)
 
         # 빈리스트 제거
@@ -110,6 +110,7 @@ class dong_report(APIView):
         
 
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["당월_매출_금액"], reverse=True)
+        total_sales = sum(entry[0]["당월_매출_금액"] for entry in sorted_data)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["행정동_코드_명"] == dong), None)
         dong_rank_data.append(index_of_dong+1)
         
@@ -119,16 +120,41 @@ class dong_report(APIView):
         
 
         #전분기
-        Quarterly_sales = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20232[0]["당월_매출_금액"])//10000)
+        Quarterly_sales = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20232[0]["당월_매출_금액"])//10000//dong_count)
 
         #전년도 분기 대비
-        Sales_compared_to_the_same_quarter_last_year = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20223[0]["당월_매출_금액"])//10000)
+        Sales_compared_to_the_same_quarter_last_year = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20223[0]["당월_매출_금액"])//10000//dong_count)
 
         
+        #현재 평균 매출
+        now_sales = int(queryset_dong_20233[0]["당월_매출_금액"] //10000//dong_count)
+        
+
+        if (total_sales / dong_count) > now_sales :
+            sales_text = "감소"
+        else :
+            sales_text = "증가"
+
+
+    
+
+        #전분기 유동 인구 
+
+        Quarterly_floating_population =  queryset_dong_20233[0]["총_유동인구_수"] -  queryset_dong_20232[0]["총_유동인구_수"]
+
+        # 전년도 분기 대비 유동인구 
+        floating_population_compared_to_the_same_quarter_last_year = queryset_dong_20233[0]["총_유동인구_수"] -  queryset_dong_20223[0]["총_유동인구_수"]
+
+        #현재 유동 인구
+        now_floating_population = queryset_dong_20233[0]["총_유동인구_수"]
+
         #종합 의견
 
-        general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year]
-        #general_opinion = [data]
+        general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year,now_sales ,Quarterly_floating_population ,
+                           floating_population_compared_to_the_same_quarter_last_year ,now_floating_population ]
+        
+        
+
 
 
         #1-1 best 매출
@@ -186,7 +212,7 @@ class dong_report(APIView):
 
 
         #유동인구
-        floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
+        best_floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
 
 
 
@@ -274,6 +300,20 @@ class dong_report(APIView):
         
         #매출
         
+        # 유동인구
+        floating_population = {
+            "20223floating_population" : int(queryset_dong_20223[0]["총_유동인구_수"]),
+            "20224floating_population" : int(queryset_dong_20224[0]["총_유동인구_수"]),
+            "20231floating_population" : int(queryset_dong_20231[0]["총_유동인구_수"]),
+            "20232floating_population" : int(queryset_dong_20232[0]["총_유동인구_수"]),
+            "20233floating_population" : int(queryset_dong_20233[0]["총_유동인구_수"]),
+            
+        }
+
+        if floating_population["20233floating_population"] - floating_population["20223floating_population"] > 0 :
+            floating_population_text = "증가"
+        else :
+            floating_population_text = "감소"
         
         #주거 인구
 
@@ -324,7 +364,24 @@ class dong_report(APIView):
         # 상위 3개 항목을 추출
         top3 = sorted_background[:3]
 
-        
+        for i in range(len(top3)):
+            if top3[i][0] == "go":
+                top3[i] = ("관공서", top3[i][1])
+            elif top3[i][0] == "fi":
+                top3[i] = ("금융기관", top3[i][1])
+            elif top3[i][0] == "ho":
+                top3[i] = ("병원", top3[i][1])
+            elif top3[i][0] == "sc":
+                top3[i] = ("학교", top3[i][1])
+            elif top3[i][0] == "ds":
+                top3[i] = ("유통점", top3[i][1])
+            elif top3[i][0] == "th":
+                top3[i] = ("극장", top3[i][1])
+            elif top3[i][0] == "ac":
+                top3[i] = ("숙박시설", top3[i][1])
+            elif top3[i][0] == "tf":
+                top3[i] = ("교통시설", top3[i][1])        
+    
 
         #소비트렌드
 
@@ -390,107 +447,126 @@ class dong_report(APIView):
         if max_value_key == "Education":
             most_trend ="교육"
         if max_value_key == "entertainment":
-            most_trend ="문화"
+            most_trend ="오락"
         if max_value_key == "Leisure":
             most_trend ="여가"
         if max_value_key == "Other":
             most_trend ="기타"
         
         response_data = {
-            "자치구내 동 개수"  : dong_count,
-            "점포순위" : dong_rank_data[0],
-            "매출순위" : dong_rank_data[1],
-            "유동인구순위" : dong_rank_data[2],
-            "전분기대비매출액" : general_opinion[0],
-            "전년도분기대비매출액" : general_opinion[1],
+            "dongname" : dong,
+            "dongcount" : dong_count,
 
-            "best 매출 성별 연령대" : sales_data[0],
-            "best 매출 요일" : sales_data[1],
-            "best 매출 시간대" : sales_data[2],
-            "best 유동 성별 인구" : floating_population[0],
-            "best 유동 연령대 인구" : floating_population[1],
-            "best 유동 요일 인구" : floating_population[2],
-            "best 유동 시간대 인구" : floating_population[3],
+            "saletext" : sales_text,
+            "floatingpopulationtext" : floating_population_text,
 
-            "20223 점포수" : store_count["20223store_count"],
-            "20224 점포수" : store_count["20224store_count"],
-            "20231 점포수" : store_count["20231store_count"],
-            "20232 점포수" : store_count["20232store_count"],
-            "20233 점포수" : store_count["20233store_count"],
-            "전년도 점포수 동분기 비교 수치 " : store_count["csql1"],
-            "전분기 점포수 비교 수치 " : store_count["cpq1"],
-            "점포수 증/감 텍스트" : store_count["sbd1"],
-            "점포수 발/쇠 텍스트" : store_count["bd1"],
+            "storeranking" : dong_rank_data[0],
+            "saleranking" : dong_rank_data[1],
+            "Floating_population_ranking" : dong_rank_data[2],
+            "Quarterlysales" : general_opinion[0],
+            "nowsales" : general_opinion[2],
+            "Salescomparedtothesamequarterlastyear" : general_opinion[1],
 
-            "20223 개업점포수" : open_shop["20223openstore"],
-            "20224 개업점포수" : open_shop["20224openstore"],
-            "20231 개업점포수" : open_shop["20231openstore"],
-            "20232 개업점포수" : open_shop["20232openstore"],
-            "20233 개업점포수" : open_shop["20233openstore"],
-            "전년도 개업점포수 동분기 비교 수치 " : open_shop["csql2"],
-            "전분기 개업점포수 비교 수치 " : open_shop["cpq2"],
-            "개업점포수 증/감 텍스트" : open_shop["sbd2"],
-            "개업점포수 발/쇠 텍스트" : open_shop["bd2"],
+            # 전분기 전년도대비 현재
+            "Quarterlyfloatingpopulation" : general_opinion[3],
+            "nowfloatingpopulation" : general_opinion[5],
+            "floatingpopulationcomparedtothesamequarterlastyear" : general_opinion[4],
 
-            "20223 폐업점포수" : closed_shop["20223closestore"],
-            "20224 폐업점포수" : closed_shop["20224closestore"],
-            "20231 폐업점포수" : closed_shop["20231closestore"],
-            "20232 폐업점포수" : closed_shop["20232closestore"],
-            "20233 폐업점포수" : closed_shop["20233closestore"],
-            "전년도 폐업점포수 동분기 비교 수치 " : closed_shop["csql3"],
-            "전분기 폐업점포수 비교 수치 " : closed_shop["cpq3"],
-            "폐업점포수 증/감 텍스트" : closed_shop["sbd3"],
-            "폐업점포수 발/쇠 텍스트" : closed_shop["bd3"],
+            "best_gender_age_group" : sales_data[0],
+            "best_sales_day" : sales_data[1],
+            "best_sales_time" : sales_data[2],
 
-            "관공서" : background["go"],
-            "금융기관" : background["fi"],
-            "병원" : background["ho"],
-            "학교" : background["sc"],
-            "유통점" : background["ds"],
-            "극장" : background["th"],
-            "숙박시설" : background["ac"],
-            "교통시설" : background["tf"],
-            "배후지 1등 텍스트" : top3[0][0],
-            "배후지 2등 텍스트" : top3[1][0],
-            "배후지 3등 텍스트" : top3[2][0],
+            "bestgendermax" : best_floating_population[0],
+            "bestpopulationagegroup" : best_floating_population[1],
+            "bestpopulationday" : best_floating_population[2],
+            "bestpopulationtime" : best_floating_population[3],
+
+            "20223store_count" : store_count["20223store_count"],
+            "20224store_count" : store_count["20224store_count"],
+            "20231store_count" : store_count["20231store_count"],
+            "20232store_count" : store_count["20232store_count"],
+            "20233store_count" : store_count["20233store_count"],
+            "csql1" : store_count["csql1"],
+            "cpq1" : store_count["cpq1"],
+            "sbd1text" : store_count["sbd1"],
+            "bd1text" : store_count["bd1"],
+
+            "20223openstore" : open_shop["20223openstore"],
+            "20224openstore" : open_shop["20224openstore"],
+            "20231openstore" : open_shop["20231openstore"],
+            "20232openstore" : open_shop["20232openstore"],
+            "20233openstore" : open_shop["20233openstore"],
+            "csql2" : open_shop["csql2"],
+            "cpq2" : open_shop["cpq2"],
+            "sbd2text" : open_shop["sbd2"],
+            "bd2text" : open_shop["bd2"],
+
+            "20223closestore" : closed_shop["20223closestore"],
+            "20224closestore" : closed_shop["20224closestore"],
+            "20231closestore" : closed_shop["20231closestore"],
+            "20232closestore" : closed_shop["20232closestore"],
+            "20233closestore" : closed_shop["20233closestore"],
+            "csql3" : closed_shop["csql3"],
+            "cpq3" : closed_shop["cpq3"],
+            "sbd3text" : closed_shop["sbd3"],
+            "bd3text" : closed_shop["bd3"],
+
+            "Governmentoffices" : background["go"],
+            "Financialinstitutions" : background["fi"],
+            "hospital" : background["ho"],
+            "school" : background["sc"],
+            "Distribution" : background["ds"],
+            "Theater" : background["th"],
+            "Accommodation" : background["ac"],
+            "TransportationFacility" : background["tf"],
+            "backgroundfirsttext" : top3[0][0],
+            "backgroundsecondtext" : top3[1][0],
+            "backgroundthirdtext" : top3[2][0],
+
+            "20223floating_population" : floating_population["20223floating_population"],
+            "20224floating_population" : floating_population["20224floating_population"],
+            "20231floating_population" : floating_population["20231floating_population"],
+            "20232floating_population" : floating_population["20232floating_population"],
+            "20233floating_population" : floating_population["20233floating_population"],
 
             
-            "20223 주거인구" : residential_population["20223residential_population"],
-            "20224 주거인구" : residential_population["20224residential_population"],
-            "20231 주거인구" : residential_population["20231residential_population"],
-            "20232 주거인구" : residential_population["20232residential_population"],
-            "20233 주거인구" : residential_population["20233residential_population"],
+            "20223residential_population" : residential_population["20223residential_population"],
+            "20224residential_population" : residential_population["20224residential_population"],
+            "20231residential_population" : residential_population["20231residential_population"],
+            "20232residential_population" : residential_population["20232residential_population"],
+            "20233residential_population" : residential_population["20233residential_population"],
 
-            "소비트렌드 음식" : consumption_trend["food"],
-            "소비트렌드 의류" : consumption_trend["Clothing"],
-            "소비트렌드 생활용품" : consumption_trend["Household"],
-            "소비트렌드 의료" : consumption_trend["Medical"],
-            "소비트렌드 교통" : consumption_trend["Transportation"],
-            "소비트렌드 교육" : consumption_trend["Education"],
-            "소비트렌드 문화" : consumption_trend["entertainment"],
-            "소비트렌드 여가" : consumption_trend["Leisure"],
-            "소비트렌드 기타" : consumption_trend["Other"],
-            "소비트렌드 텍스트 ": most_trend
+            "trendfood" : consumption_trend["food"],
+            "trendClothing" : consumption_trend["Clothing"],
+            "trendHousehold" : consumption_trend["Household"],
+            "trendMedical" : consumption_trend["Medical"],
+            "trendTransportation" : consumption_trend["Transportation"],
+            "trendEducation" : consumption_trend["Education"],
+            "trendentertainment" : consumption_trend["entertainment"],
+            "trendLeisure" : consumption_trend["Leisure"],
+            "trendOther" : consumption_trend["Other"],
+            
+            "trendText": most_trend
         }
-        #queryset_dong_20233
+
         return Response(response_data, status=status.HTTP_200_OK)
         
-        #return Response(response_data, status=status.HTTP_200_OK)
         
         
 
 
-class MarketReportView(APIView):
-    def get(self, request):
-        market_data = MarketSortedDbFin.objects.all()
-        serializer = MarketReportDataSerializer(market_data, many=True)
-        return Response(serializer.data)
+# class MarketReportView(APIView):
+#     def get(self, request):
+#         market_data = MarketSortedDbFin.objects.all()
+#         serializer = MarketReportDataSerializer(market_data, many=True)
+#         return Response(serializer.data)
+
 
 class market_report(APIView):
     
     def get(self, request):
         
-        market = "회현역"
+        market = "삼성역"
         business = "한식음식점"
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
@@ -550,34 +626,33 @@ class market_report(APIView):
         queryset_market_20224 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_market_20223 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20223 ,서비스_업종_코드_명 = business).values(*col_data)
         
-        #queryset_market_20233 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).all()
-        
-        #queryset_market_20233 = MarketSortedDbFin.objects.all()
         
         #1. 종합의견
 
         # 상권 순위 계산
-        temp_result = []
         
         queryset_dong_goo = MarketSortedDbFin.objects.filter(상권_코드_명 = market).values("자치구_코드_명")
+
         queryset_dong_list = MarketSortedDbFin.objects.filter(자치구_코드_명 = queryset_dong_goo[0]["자치구_코드_명"]).values("상권_코드_명")
-        #queryset_dong_list = MarketSortedDbFin.objects.filter(자치구_코드_명 = queryset_dong_goo[0]["자치구_코드_명"]).all()
         
+        
+
         unique_data = list({item['상권_코드_명']: item for item in queryset_dong_list}.values())
         
-        #return Response(unique_data, status=status.HTTP_200_OK)
         
-        dong_count= len(unique_data)
 
+        
         dong_names = [entry["상권_코드_명"] for entry in unique_data]
 
+        #return Response(dong_names)
+        market_count= len(dong_names)
 
         
         # 점포 매출액 유동인구
         dong_col = ["상권_코드_명","점포_수","당월_매출_금액","총_유동인구_수"]
         dong_rank = []
         for i in dong_names :
-            queryset_dong_data = MarketSortedDbFin.objects.filter(상권_코드_명 = i,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*dong_col)
+            queryset_dong_data = MarketSortedDbFin.objects.filter(상권_코드_명 = i,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*dong_col)
             dong_rank.append(queryset_dong_data)
 
         # 빈리스트 제거
@@ -596,6 +671,7 @@ class market_report(APIView):
         
 
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["당월_매출_금액"], reverse=True)
+        total_sales = sum(entry[0]["당월_매출_금액"] for entry in sorted_data)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_코드_명"] == market), None)
         dong_rank_data.append(index_of_dong+1)
         
@@ -604,19 +680,43 @@ class market_report(APIView):
         dong_rank_data.append(index_of_dong+1)
         
         
-
-        #전분기
-        Quarterly_sales = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20232[0]["당월_매출_금액"])//10000)
-
-        #전년도 분기 대비
-        Sales_compared_to_the_same_quarter_last_year = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20223[0]["당월_매출_금액"])//10000)
-
         
+
+
+        #전분기 평균 매출
+        Quarterly_sales = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20232[0]["당월_매출_금액"])//10000//market_count)
+
+        #전년도 분기 대비 평균 매출
+        Sales_compared_to_the_same_quarter_last_year = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20223[0]["당월_매출_금액"])//10000//market_count)
+
+        #현재 평균 매출
+        now_sales = int(queryset_market_20233[0]["당월_매출_금액"] //10000//market_count)
+        
+
+        if (total_sales / market_count) > now_sales :
+            sales_text = "감소"
+        else :
+            sales_text = "증가"
+
+
+        #전분기 유동 인구 
+
+        Quarterly_floating_population =  queryset_market_20233[0]["총_유동인구_수"] -  queryset_market_20232[0]["총_유동인구_수"]
+
+        # 전년도 분기 대비 유동인구 
+        floating_population_compared_to_the_same_quarter_last_year = queryset_market_20233[0]["총_유동인구_수"] -  queryset_market_20223[0]["총_유동인구_수"]
+
+        #현재 유동 인구
+        now_floating_population = queryset_market_20233[0]["총_유동인구_수"]
+
         #종합 의견
 
-        general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year]
+        general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year,now_sales ,Quarterly_floating_population ,
+                           floating_population_compared_to_the_same_quarter_last_year ,now_floating_population ]
         
         
+       
+
         #general_opinion = [data]
 
 
@@ -675,7 +775,7 @@ class market_report(APIView):
 
 
         #유동인구
-        floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
+        best_floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
 
 
 
@@ -763,15 +863,30 @@ class market_report(APIView):
         
         #매출
         
+        # 유동인구 
+        floating_population = {
+            "20223floating_population" : int(queryset_market_20223[0]["총_유동인구_수"]),
+            "20224floating_population" : int(queryset_market_20224[0]["총_유동인구_수"]),
+            "20231floating_population" : int(queryset_market_20231[0]["총_유동인구_수"]),
+            "20232floating_population" : int(queryset_market_20232[0]["총_유동인구_수"]),
+            "20233floating_population" : int(queryset_market_20233[0]["총_유동인구_수"]),
+            
+        }
+
+        if floating_population["20233floating_population"] - floating_population["20223floating_population"] > 0 :
+            floating_population_text = "증가"
+        else :
+            floating_population_text = "감소"
+
         
         #주거 인구
 
         residential_population = {
-            "20223residential_population" : queryset_market_20223[0]["총_상주인구_수"],
-            "20224residential_population" : queryset_market_20224[0]["총_상주인구_수"],
-            "20231residential_population" : queryset_market_20231[0]["총_상주인구_수"],
-            "20232residential_population" : queryset_market_20232[0]["총_상주인구_수"],
-            "20233residential_population" : queryset_market_20233[0]["총_상주인구_수"],
+            "20223residential_population" : int(queryset_market_20223[0]["총_상주인구_수"]),
+            "20224residential_population" : int(queryset_market_20224[0]["총_상주인구_수"]),
+            "20231residential_population" : int(queryset_market_20231[0]["총_상주인구_수"]),
+            "20232residential_population" : int(queryset_market_20232[0]["총_상주인구_수"]),
+            "20233residential_population" : int(queryset_market_20233[0]["총_상주인구_수"]),
         }
 
 
@@ -786,7 +901,7 @@ class market_report(APIView):
         hospital = queryset_market_20233[0].get("종합병원_수", 0) + queryset_market_20233[0].get("일반_병원_수", 0)
         # 학교
         school = queryset_market_20233[0].get("유치원_수", 0) + queryset_market_20233[0].get("초등학교_수", 0)+ queryset_market_20233[0].get("중학교_수", 0)+ queryset_market_20233[0].get("고등학교_수", 0) +queryset_market_20233[0].get("대학교_수", 0)
-        # queryset_market_20233
+        # 유통점
         distribution_store = queryset_market_20233[0].get("백화점_수", 0)+ queryset_market_20233[0].get("슈퍼마켓_수", 0)
         # 극장
         theaters = queryset_market_20233[0].get("극장_수", 0)
@@ -813,6 +928,24 @@ class market_report(APIView):
         # 상위 3개 항목을 추출
         top3 = sorted_background[:3]
 
+
+        for i in range(len(top3)):
+            if top3[i][0] == "go":
+                top3[i] = ("관공서", top3[i][1])
+            elif top3[i][0] == "fi":
+                top3[i] = ("금융기관", top3[i][1])
+            elif top3[i][0] == "ho":
+                top3[i] = ("병원", top3[i][1])
+            elif top3[i][0] == "sc":
+                top3[i] = ("학교", top3[i][1])
+            elif top3[i][0] == "ds":
+                top3[i] = ("유통점", top3[i][1])
+            elif top3[i][0] == "th":
+                top3[i] = ("극장", top3[i][1])
+            elif top3[i][0] == "ac":
+                top3[i] = ("숙박시설", top3[i][1])
+            elif top3[i][0] == "tf":
+                top3[i] = ("교통시설", top3[i][1])        
     
 
         #소비트렌드
@@ -877,86 +1010,105 @@ class market_report(APIView):
         if max_value_key == "Education":
             most_trend ="교육"
         if max_value_key == "entertainment":
-            most_trend ="문화"
+            most_trend ="오락"
         if max_value_key == "Leisure":
             most_trend ="여가"
         if max_value_key == "Culture":
             most_trend ="문화"
         
         response_data = {
-            "점포순위" : dong_rank_data[0],
-            "매출순위" : dong_rank_data[1],
-            "유동인구순위" : dong_rank_data[2],
-            "전분기대비매출액" : general_opinion[0],
-            "전년도분기대비매출액" : general_opinion[1],
+            "marketname" : market,
+            "marketcount" : market_count,
 
-            "best 매출 성별 연령대" : sales_data[0],
-            "best 매출 요일" : sales_data[1],
-            "best 매출 시간대" : sales_data[2],
-            "best 유동 성별 인구" : floating_population[0],
-            "best 유동 연령대 인구" : floating_population[1],
-            "best 유동 요일 인구" : floating_population[2],
-            "best 유동 시간대 인구" : floating_population[3],
+            "saletext" : sales_text,
+            "floatingpopulationtext" : floating_population_text,
 
-            "20223 점포수" : store_count["20223store_count"],
-            "20224 점포수" : store_count["20224store_count"],
-            "20231 점포수" : store_count["20231store_count"],
-            "20232 점포수" : store_count["20232store_count"],
-            "20233 점포수" : store_count["20233store_count"],
-            "전년도 점포수 동분기 비교 수치 " : store_count["csql1"],
-            "전분기 점포수 비교 수치 " : store_count["cpq1"],
-            "점포수 증/감 텍스트" : store_count["sbd1"],
-            "점포수 발/쇠 텍스트" : store_count["bd1"],
+            "storeranking" : dong_rank_data[0],
+            "saleranking" : dong_rank_data[1],
+            "Floating_population_ranking" : dong_rank_data[2],
+            "Quarterlysales" : general_opinion[0],
+            "nowsales" : general_opinion[2],
+            "Salescomparedtothesamequarterlastyear" : general_opinion[1],
 
-            "20223 개업점포수" : open_shop["20223openstore"],
-            "20224 개업점포수" : open_shop["20224openstore"],
-            "20231 개업점포수" : open_shop["20231openstore"],
-            "20232 개업점포수" : open_shop["20232openstore"],
-            "20233 개업점포수" : open_shop["20233openstore"],
-            "전년도 개업점포수 동분기 비교 수치 " : open_shop["csql2"],
-            "전분기 개업점포수 비교 수치 " : open_shop["cpq2"],
-            "개업점포수 증/감 텍스트" : open_shop["sbd2"],
-            "개업점포수 발/쇠 텍스트" : open_shop["bd2"],
+            # 전분기 전년도대비 현재
+            "Quarterlyfloatingpopulation" : general_opinion[3],
+            "nowfloatingpopulation" : general_opinion[5],
+            "floatingpopulationcomparedtothesamequarterlastyear" : general_opinion[4],
 
-            "20223 폐업점포수" : closed_shop["20223closestore"],
-            "20224 폐업점포수" : closed_shop["20224closestore"],
-            "20231 폐업점포수" : closed_shop["20231closestore"],
-            "20232 폐업점포수" : closed_shop["20232closestore"],
-            "20233 폐업점포수" : closed_shop["20233closestore"],
-            "전년도 폐업점포수 동분기 비교 수치 " : closed_shop["csql3"],
-            "전분기 폐업점포수 비교 수치 " : closed_shop["cpq3"],
-            "폐업점포수 증/감 텍스트" : closed_shop["sbd3"],
-            "폐업점포수 발/쇠 텍스트" : closed_shop["bd3"],
+            "best_gender_age_group" : sales_data[0],
+            "best_sales_day" : sales_data[1],
+            "best_sales_time" : sales_data[2],
 
-            "관공서" : background["go"],
-            "금융기관" : background["fi"],
-            "병원" : background["ho"],
-            "학교" : background["sc"],
-            "유통점" : background["ds"],
-            "극장" : background["th"],
-            "숙박시설" : background["ac"],
-            "교통시설" : background["tf"],
-            "배후지 1등 텍스트" : top3[0][0],
-            "배후지 2등 텍스트" : top3[1][0],
-            "배후지 3등 텍스트" : top3[2][0],
+            "bestgendermax" : best_floating_population[0],
+            "bestpopulationagegroup" : best_floating_population[1],
+            "bestpopulationday" : best_floating_population[2],
+            "bestpopulationtime" : best_floating_population[3],
+
+            "20223store_count" : store_count["20223store_count"],
+            "20224store_count" : store_count["20224store_count"],
+            "20231store_count" : store_count["20231store_count"],
+            "20232store_count" : store_count["20232store_count"],
+            "20233store_count" : store_count["20233store_count"],
+            "csql1" : store_count["csql1"],
+            "cpq1" : store_count["cpq1"],
+            "sbd1text" : store_count["sbd1"],
+            "bd1text" : store_count["bd1"],
+
+            "20223openstore" : open_shop["20223openstore"],
+            "20224openstore" : open_shop["20224openstore"],
+            "20231openstore" : open_shop["20231openstore"],
+            "20232openstore" : open_shop["20232openstore"],
+            "20233openstore" : open_shop["20233openstore"],
+            "csql2" : open_shop["csql2"],
+            "cpq2" : open_shop["cpq2"],
+            "sbd2text" : open_shop["sbd2"],
+            "bd2text" : open_shop["bd2"],
+
+            "20223closestore" : closed_shop["20223closestore"],
+            "20224closestore" : closed_shop["20224closestore"],
+            "20231closestore" : closed_shop["20231closestore"],
+            "20232closestore" : closed_shop["20232closestore"],
+            "20233closestore" : closed_shop["20233closestore"],
+            "csql3" : closed_shop["csql3"],
+            "cpq3" : closed_shop["cpq3"],
+            "sbd3text" : closed_shop["sbd3"],
+            "bd3text" : closed_shop["bd3"],
+
+            "Governmentoffices" : background["go"],
+            "Financialinstitutions" : background["fi"],
+            "hospital" : background["ho"],
+            "school" : background["sc"],
+            "Distribution" : background["ds"],
+            "Theater" : background["th"],
+            "Accommodation" : background["ac"],
+            "TransportationFacility" : background["tf"],
+            "backgroundfirsttext" : top3[0][0],
+            "backgroundsecondtext" : top3[1][0],
+            "backgroundthirdtext" : top3[2][0],
+
+            "20223floating_population" : floating_population["20223floating_population"],
+            "20224floating_population" : floating_population["20224floating_population"],
+            "20231floating_population" : floating_population["20231floating_population"],
+            "20232floating_population" : floating_population["20232floating_population"],
+            "20233floating_population" : floating_population["20233floating_population"],
 
             
-            "20223 주거인구" : residential_population["20223residential_population"],
-            "20224 주거인구" : residential_population["20224residential_population"],
-            "20231 주거인구" : residential_population["20231residential_population"],
-            "20232 주거인구" : residential_population["20232residential_population"],
-            "20233 주거인구" : residential_population["20233residential_population"],
+            "20223residential_population" : residential_population["20223residential_population"],
+            "20224residential_population" : residential_population["20224residential_population"],
+            "20231residential_population" : residential_population["20231residential_population"],
+            "20232residential_population" : residential_population["20232residential_population"],
+            "20233residential_population" : residential_population["20233residential_population"],
 
-            "소비트렌드 음식" : consumption_trend["food"],
-            "소비트렌드 의류" : consumption_trend["Clothing"],
-            "소비트렌드 생활용품" : consumption_trend["Household"],
-            "소비트렌드 의료" : consumption_trend["Medical"],
-            "소비트렌드 교통" : consumption_trend["Transportation"],
-            "소비트렌드 교육" : consumption_trend["Education"],
-            "소비트렌드 문화" : consumption_trend["entertainment"],
-            "소비트렌드 여가" : consumption_trend["Leisure"],
-            "소비트렌드 문화" : consumption_trend["Culture"],
-            "소비트렌드 텍스트 ": most_trend
+            "trendfood" : consumption_trend["food"],
+            "trendClothing" : consumption_trend["Clothing"],
+            "trendHousehold" : consumption_trend["Household"],
+            "trendMedical" : consumption_trend["Medical"],
+            "trendTransportation" : consumption_trend["Transportation"],
+            "trendEducation" : consumption_trend["Education"],
+            "trendentertainment" : consumption_trend["entertainment"],
+            "trendLeisure" : consumption_trend["Leisure"],
+            "trendCulture" : consumption_trend["Culture"],
+            "trendText": most_trend
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
@@ -964,65 +1116,21 @@ class market_report(APIView):
 
 
 
-class rent_cost(APIView):
-    def get(self, request):
-        #goo = unquote(self.kwargs['goo'])
-        #dong = self.kwargs['dong'].upper()
-        dong1 = "청운효자동" # null
-        dong2 = "사직동" # one
-        dong3 = "미아동" # two
-        
-        #business = self.kwargs['business'].upper()
-        #funds = self.kwargs['seedMoney']
-        
-        
-        #dong_name = seoul_rent_db.objects.all()
-
-        # 임대료 데이터 초기 설정 
-        rent_cost_last_data = 0
-        
-        queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
-        
-        # 행정동 입력 →  seoul_rent ( dong_name → 지명 확인) 
-
-        vacancy_data = ["임대료","평균임대면적"]
-
-        area_name = len(queryset_estimate)
-
-        #임대료 데이터가 존재하거나 하나일 경우
-        if len(queryset_estimate) == 1 :
-            # temp_data = vacancyrate 상세지역
-            temp_data = queryset_estimate[0]["area_name"]
-            
-            print(temp_data)
-            
-            # temp = "" 이면 임대료 정보 x
-            if temp_data != "":
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-            else :
-                rent_cost_last_data = -1
-        
-        # 임대료 데이터가 중복일 경우
-        else :
-            rent_cost_last_data = len(queryset_estimate) 
-    
-             
-            for i in range(len(queryset_estimate) ):
-                temp_data = queryset_estimate[i]["area_name"]
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-                print(rent_cost_last_data)
-
-            rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
-                
-        
-        return Response(rent_cost_last_data, status=status.HTTP_200_OK)
-        
 # class rent_cost(APIView):
-    
 #     def get(self, request):
+#         #goo = unquote(self.kwargs['goo'])
+#         #dong = self.kwargs['dong'].upper()
+#         dong1 = "청운효자동" # null
+#         dong2 = "사직동" # one
+#         dong3 = "미아동" # two
         
+#         #business = self.kwargs['business'].upper()
+#         #funds = self.kwargs['seedMoney']
+        
+        
+#         #dong_name = seoul_rent_db.objects.all()
+
+#         # 임대료 데이터 초기 설정 
 #         rent_cost_last_data = 0
         
 #         queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
@@ -1062,92 +1170,136 @@ class rent_cost(APIView):
                 
         
 #         return Response(rent_cost_last_data, status=status.HTTP_200_OK)
-                
-def rent_cost_data(name_dong):
-        rent_cost_last_data =1
         
-        queryset_estimate = seoul_rent_db.objects.filter(dong_name=name_dong).values("area_name")
+# # class rent_cost(APIView):
+    
+# #     def get(self, request):
         
-        vacancy_data = ["임대료","평균임대면적"]
+# #         rent_cost_last_data = 0
+        
+# #         queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
+        
+# #         # 행정동 입력 →  seoul_rent ( dong_name → 지명 확인) 
 
-        area_name = len(queryset_estimate)
+# #         vacancy_data = ["임대료","평균임대면적"]
 
-        #임대료 데이터가 존재하거나 하나일 경우
-        if len(queryset_estimate) == 1 :
-            # temp_data = vacancyrate 상세지역
-            temp_data = queryset_estimate[0]["area_name"]
+# #         area_name = len(queryset_estimate)
+
+# #         #임대료 데이터가 존재하거나 하나일 경우
+# #         if len(queryset_estimate) == 1 :
+# #             # temp_data = vacancyrate 상세지역
+# #             temp_data = queryset_estimate[0]["area_name"]
             
-            # temp = "" 이면 임대료 정보 x
-            if temp_data != "":
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-            else :
-                rent_cost_last_data = -1
+# #             print(temp_data)
+            
+# #             # temp = "" 이면 임대료 정보 x
+# #             if temp_data != "":
+# #                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
+# #                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
+# #             else :
+# #                 rent_cost_last_data = -1
         
-        # 임대료 데이터가 중복일 경우
-        else :
-            rent_cost_last_data = len(queryset_estimate) 
+# #         # 임대료 데이터가 중복일 경우
+# #         else :
+# #             rent_cost_last_data = len(queryset_estimate) 
     
              
-            for i in range(len(queryset_estimate) ):
-                temp_data = queryset_estimate[i]["area_name"]
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-                print(rent_cost_last_data)
+# #             for i in range(len(queryset_estimate) ):
+# #                 temp_data = queryset_estimate[i]["area_name"]
+# #                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
+# #                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
+# #                 print(rent_cost_last_data)
 
-            rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
+# #             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
+                
         
-        return rent_cost_last_data
+# #         return Response(rent_cost_last_data, status=status.HTTP_200_OK)
+                
+# def rent_cost_data(name_dong):
+#         rent_cost_last_data =1
+        
+#         queryset_estimate = seoul_rent_db.objects.filter(dong_name=name_dong).values("area_name")
+        
+#         vacancy_data = ["임대료","평균임대면적"]
+
+#         area_name = len(queryset_estimate)
+
+#         #임대료 데이터가 존재하거나 하나일 경우
+#         if len(queryset_estimate) == 1 :
+#             # temp_data = vacancyrate 상세지역
+#             temp_data = queryset_estimate[0]["area_name"]
+            
+#             # temp = "" 이면 임대료 정보 x
+#             if temp_data != "":
+#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
+#                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
+#             else :
+#                 rent_cost_last_data = -1
+        
+#         # 임대료 데이터가 중복일 경우
+#         else :
+#             rent_cost_last_data = len(queryset_estimate) 
+    
+             
+#             for i in range(len(queryset_estimate) ):
+#                 temp_data = queryset_estimate[i]["area_name"]
+#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
+#                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
+#                 print(rent_cost_last_data)
+
+#             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
+        
+#         return rent_cost_last_data
            
         
-# 프랜차이즈 작업 더 필요
-class franchisedata(APIView):
+# # 프랜차이즈 작업 더 필요
+# class franchisedata(APIView):
     
     
-    def get(self, request):
+#     def get(self, request):
         
-        dongname = "미아동"
-        Sectors = "치킨"
-        rentcost = rent_cost_data(dongname)
+#         dongname = "미아동"
+#         Sectors = "치킨"
+#         rentcost = rent_cost_data(dongname)
         
-        seedmoney = 50000
+#         seedmoney = 50000
         
 
-        franchise_col = ["브랜드명","평균매출금액","가맹금액","교육금액","보증금액","기타금액","합계금액"]
+#         franchise_col = ["브랜드명","평균매출금액","가맹금액","교육금액","보증금액","기타금액","합계금액"]
         
-        #queryset_franch1 = franchise_data.objects.filter(합계금액__lte = seedmoney).all()
-        # 시드 머니에 임대료 +  보증금 (임대료 *10) 제외
-        seedmoney = seedmoney - (rentcost*11)
+#         #queryset_franch1 = franchise_data.objects.filter(합계금액__lte = seedmoney).all()
+#         # 시드 머니에 임대료 +  보증금 (임대료 *10) 제외
+#         seedmoney = seedmoney - (rentcost*11)
         
-        queryset_franch1 = franchise_data.objects.filter(중분류서비스 = "치킨",합계금액__lte = seedmoney).order_by('평균매출금액').values(*franchise_col)
+#         queryset_franch1 = franchise_data.objects.filter(중분류서비스 = "치킨",합계금액__lte = seedmoney).order_by('평균매출금액').values(*franchise_col)
         
-        franchise_sort_data = queryset_franch1[::-1]
-        #franchise_data[0]
-        response_data= {
-            "임대료" : rent_cost
-        }
+#         franchise_sort_data = queryset_franch1[::-1]
+#         #franchise_data[0]
+#         response_data= {
+#             "임대료" : rent_cost
+#         }
         
-        fran_response_last =   [franchise_sort_data[0],franchise_sort_data[1],rent_cost]
+#         fran_response_last =   [franchise_sort_data[0],franchise_sort_data[1],rent_cost]
         
-        #franchise_sort_data[0]["브랜드명"]
-        #franchise_sort_data[0]["평균매출금액"]
-        #franchise_sort_data[0]["가맹금액"]
-        #franchise_sort_data[0]["교육금액"]
-        #franchise_sort_data[0]["보증금액"]
-        #franchise_sort_data[0]["기타금액"]
-        #franchise_sort_data[0]["합계금액"]
+#         #franchise_sort_data[0]["브랜드명"]
+#         #franchise_sort_data[0]["평균매출금액"]
+#         #franchise_sort_data[0]["가맹금액"]
+#         #franchise_sort_data[0]["교육금액"]
+#         #franchise_sort_data[0]["보증금액"]
+#         #franchise_sort_data[0]["기타금액"]
+#         #franchise_sort_data[0]["합계금액"]
         
         
-        return Response({"임대료" : rent_cost , "프랜차이즈 1 브랜드" : franchise_sort_data[0]["브랜드명"],
-                         "프랜차이즈 1 평균매출금액" : franchise_sort_data[0]["평균매출금액"],"프랜차이즈 1 가맹금액" : franchise_sort_data[0]["가맹금액"],
-                         "프랜차이즈 1 교육금액" : franchise_sort_data[0]["교육금액"],"프랜차이즈 1 보증금액" : franchise_sort_data[0]["보증금액"],
-                         "프랜차이즈 1 기타금액" : franchise_sort_data[0]["기타금액"],"프랜차이즈 1 합계금액" : franchise_sort_data[0]["합계금액"],
-                         "프랜차이즈 2 브랜드" : franchise_sort_data[1]["브랜드명"],
-                         "프랜차이즈 2 평균매출금액" : franchise_sort_data[1]["평균매출금액"],"프랜차이즈 2 가맹금액" : franchise_sort_data[1]["가맹금액"],
-                         "프랜차이즈 2 교육금액" : franchise_sort_data[1]["교육금액"],"프랜차이즈 2 보증금액" : franchise_sort_data[1]["보증금액"],
-                         "프랜차이즈 2 기타금액" : franchise_sort_data[1]["기타금액"],"프랜차이즈 2 합계금액" : franchise_sort_data[1]["합계금액"],
+#         return Response({"임대료" : rent_cost , "프랜차이즈 1 브랜드" : franchise_sort_data[0]["브랜드명"],
+#                          "프랜차이즈 1 평균매출금액" : franchise_sort_data[0]["평균매출금액"],"프랜차이즈 1 가맹금액" : franchise_sort_data[0]["가맹금액"],
+#                          "프랜차이즈 1 교육금액" : franchise_sort_data[0]["교육금액"],"프랜차이즈 1 보증금액" : franchise_sort_data[0]["보증금액"],
+#                          "프랜차이즈 1 기타금액" : franchise_sort_data[0]["기타금액"],"프랜차이즈 1 합계금액" : franchise_sort_data[0]["합계금액"],
+#                          "프랜차이즈 2 브랜드" : franchise_sort_data[1]["브랜드명"],
+#                          "프랜차이즈 2 평균매출금액" : franchise_sort_data[1]["평균매출금액"],"프랜차이즈 2 가맹금액" : franchise_sort_data[1]["가맹금액"],
+#                          "프랜차이즈 2 교육금액" : franchise_sort_data[1]["교육금액"],"프랜차이즈 2 보증금액" : franchise_sort_data[1]["보증금액"],
+#                          "프랜차이즈 2 기타금액" : franchise_sort_data[1]["기타금액"],"프랜차이즈 2 합계금액" : franchise_sort_data[1]["합계금액"],
                          
-                         }, status=status.HTTP_200_OK)
+#                          }, status=status.HTTP_200_OK)
         
-        #return  Response({franchise_sort_data[1]["평균매출금액"]}) 
+#         #return  Response({franchise_sort_data[1]["평균매출금액"]}) 
     
