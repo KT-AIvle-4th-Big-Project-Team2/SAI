@@ -3,6 +3,44 @@
     height: 100vh; /* 전체 뷰포트 높이 */
 }
 
+
+.hidden {
+    display: none;
+}
+
+.startbar {
+    margin-top: 1%;
+    margin-left: 3%;
+    position: absolute; /* 절대 위치 지정 */
+    top: 0; /* 상단에 위치 */
+    left: 0; /* 좌측에 위치 */
+    width: 330px; /* Set your desired width */
+    height: 90%; /* Set your desired height */
+    background-color: #fff; /* 배경색 */
+    z-index: 2;
+    border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
+    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
+
+    /* 기타 스타일 속성 추가 가능 */
+}
+
+
+.startbar strong {
+    margin-top: 22%;
+    margin-left: 7%;
+}
+.startbar button {
+    width: 82%;
+    height: 9vh;
+    font-size: 1em;
+    margin-top: 40px;
+    margin-bottom: -4em;
+    margin-left: 20px;
+    border: 1px solid #333; /* 테두리를 두껍게 설정 */
+    font-weight: bold; /* 글자에 볼더 처리 */
+    /* 추가 스타일 속성 추가 가능 */
+}
+
 .title {
     /* 여기에 원하는 스타일을 추가하세요 */
     color: blue; /* 텍스트 색상을 빨간색으로 설정 */
@@ -12,44 +50,90 @@
     /* 다른 스타일을 필요에 따라 추가하세요 */
   }
   
+  button {
+    font-size: 13px;
+    margin: 5px;
+    padding: 8px;
+    cursor: pointer;
+    background-color: #fff ;
+    color:  #012a5b;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+}
+button:hover {
+    background-color: #6A85E6; /* 마우스를 올렸을 때의 색상 */
+    color: #fff;
+    /* 기타 스타일 속성 추가 가능 */
+}
+button.selected {
+    background-color: #3498db;
+    color: #fff;
+}
 
-.sidebar {
+.sidebar1 {
     margin-top: 1%;
-    margin-left: 1%;
+    margin-left: 3%;
     position: absolute; /* 절대 위치 지정 */
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
     background-color: #fff; /* 배경색 */
-    height: 30%;
-    width: 20%;
+    width: 330px; /* Set your desired width */
+    height: 90%; /* Set your desired height */
     padding: 10px; /* 내부 여백 */
     box-sizing: border-box; /* 총 너비 계산 방식 */
-    z-index:10;
+    z-index:2;
+    border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
+    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
+}
+.sidebar2 {
+    margin-top: 1%;
+    margin-left: 3%;
+    position: absolute; /* 절대 위치 지정 */
+    top: 0; /* 상단에 위치 */
+    left: 0; /* 좌측에 위치 */
+    background-color: #fff; /* 배경색 */
+    width: 330px; /* Set your desired width */
+    height: 90%; /* Set your desired height */
+    padding: 10px; /* 내부 여백 */
+    box-sizing: border-box; /* 총 너비 계산 방식 */
+    z-index:2;
+    border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
+    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
 }
 
 .menu-item {
-    display: block; /* 블록 레벨 요소로 표시 */
-    margin-top: 5px;
-    margin-bottom: 5px; /* 하단 여백 */
+    display: flex;  /* Flexbox 사용 */
+    flex-direction: column;  /* 세로 방향으로 정렬 */
+    align-items: center;  /* 중앙 정렬 */
+}
+
+.button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-image {
+    width: 50px;  /* 이미지 원하는 크기로 조절 */
+    height: 50px;
+}
+.back-button {
+    border: none; /* Remove the border */
+    background: none; /* Remove the background color */
+    padding: 0; /* Remove padding */
+    cursor: pointer; /* Add a pointer cursor for better UX */
+}
+
+.button-text {
+    margin-top: 5px;  /* 이미지와 텍스트 사이 간격 조절 */
 }
 
 .map {
     height: 100%; /* 전체 높이 차지 */
    
 }
-/* 팝업 메뉴 스타일 (초기에는 숨김) */
-.menu-popup {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  }
-  
-  /* 팝업 메뉴를 보이게 함 */
-  .menu-container:hover .menu-popup {
-    display: block;
-  }
+
+
   
   .menu-container-outer {
     position: absolute; /* 절대 위치 지정 */
@@ -62,4 +146,17 @@
     background-color: #fff; /* 배경색을 흰색으로 설정 */
     width: 200px; /* 새로운 메뉴 영역의 너비 설정 */
     /* 다른 스타일을 필요에 따라 추가하세요 */
+}
+/* Style for the "창업도우미 시작하기" button */
+.sai-button {
+    background-color: #6A85E6; /* Blue color for the button */
+    color: #fff; /* White text color */
+    padding: 13px 26px; /* Adjust padding as needed */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.sai-button:hover {
+    background-color: #4055a8; /* Darker blue color on hover */
 }

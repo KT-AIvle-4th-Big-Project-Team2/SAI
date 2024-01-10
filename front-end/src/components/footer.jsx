@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Box, Typography } from "@mui/material/";
 import { Link } from 'react-router-dom';
-import Service from './Service';
+import Service from './service';
 import PrivacyPolicy from './PrivacyPolicy';
 
 
