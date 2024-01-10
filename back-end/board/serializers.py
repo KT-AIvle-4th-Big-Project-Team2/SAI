@@ -56,18 +56,15 @@ class BoardSearchSerializer(serializers.ModelSerializer):
 
 class BoardPostCreateSerializer(serializers.ModelSerializer):
 
-    title = serializers.CharField()
-    contents = serializers.CharField()
-    
     class Meta:
         model = Board
-        fields = ('title', 'contents')
+        fields = ['title', 'contents','user__username']
 
 class BoardPostUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Board
-        fields = ['title', 'contents']
+        fields = ['title', 'contents', ]
 
         
 class BoardPostcommentCreateSerializer(serializers.ModelSerializer):

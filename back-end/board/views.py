@@ -96,10 +96,13 @@ class BoardPostCreateView(APIView):
     serializer_class = BoardPostCreateSerializer
     def post(self, request, serializer):
         
-        try:
-            userinstance = UserCustom.objects.get(username = self.request.data('username'))
-        except:
-            return Response({'error':'no user found'}, status.HTTP_400_BAD_REQUEST)
+        # try:
+        #     userinstance = UserCustom.objects.get(username = self.request.data('username'))
+        # except:
+        #     return Response({'error':'no user found'}, status.HTTP_400_BAD_REQUEST)
+        
+        
+        serializer = self.serializer_class(data = self.request.data)
         
         Board.objects.create(
             title=serializer.validated_data['title'],
