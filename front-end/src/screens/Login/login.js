@@ -92,6 +92,7 @@ export default function SignIn() {
           password: data.get('password'),
         };
     
+        /*
         try {
           // CSRF 토큰을 받는 요청을 먼저 보냅니다.
           const csrfResponse = await fetch("http://subdomain.storeaivle.com/accounts/getcsrf/", {
@@ -146,7 +147,38 @@ export default function SignIn() {
           console.error("Network error:", error);
         }
       };
+      */
 
+      try {
+        // 로그인 요청을 보냅니다.
+        const loginResponse = await fetch("http://subdomain.storeaivle.com/accounts/login/", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            username: joinData.email,
+            password: joinData.password
+          }),
+          credentials: 'include',
+        });
+      
+        if (loginResponse.ok) {
+          const data = await loginResponse.json();
+          
+          console.log("Login successful:", data);
+          
+          loginHandler();
+          setUserInfo(data);
+        } else {
+          console.error("Login failed:", loginResponse.status);
+        }
+        
+      } catch (error) {
+        console.error("Network error:", error);
+      }
+    };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
