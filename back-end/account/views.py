@@ -17,7 +17,7 @@ from django.contrib.auth import authenticate
 from account.customlibs.checkLogin import *
 
 
-logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
+#logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
 
 # @method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
 # class GetCSRFToken(APIView):
