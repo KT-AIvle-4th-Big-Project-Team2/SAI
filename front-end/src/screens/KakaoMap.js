@@ -115,6 +115,10 @@ class KakaoMap extends Component {
             selectedmarket:'',
             selectedservice:'',
             capital:'',
+            userGu:'',
+            userDong:'',
+            userMarket:'',
+            userService:'',
             buttonStyle: {
                 width: '7.1em', // Set the desired width
                 minWidth:'7.1em',
@@ -148,10 +152,7 @@ class KakaoMap extends Component {
         this.codeServiceInfo=code_service;
         this.codeGuInfo=code_gu;
         this.codeDongInfo=code_dong;
-        this.userGu='';
-        this.userDong='';
-        this.userMarket='';
-        this.userService='';
+        
         this.serviceList= ['미용실', '분식전문점',  '양식음식점','의약품', '일반의류', '일반학원', '일식음식점', '제과점','중식음식점', '커피-음료', '치킨전문점', '패스트푸드', '편의점', '한식음식점', '화장품', '호프-주점'];
         this.markers = [];  // 마커를 저장할 배열
         
@@ -745,7 +746,7 @@ class KakaoMap extends Component {
                         
                         {this.state.selectedmarket && this.state.isMenu4Open &&(<br/>)}
                         {this.state.selectedmarket && this.state.isMenu4Open && (
-                            <form onSubmit={this.handleCapitalSubmit} style={{marginTop:'50px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <form onSubmit={this.handleCapitalSubmit2} style={{marginTop:'50px',display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             {/* 자본금 입력창 */}
                             <input
                                 type="text"
@@ -845,29 +846,71 @@ class KakaoMap extends Component {
         this.setState({selectedservice:service});
     };
     // 자본금 입력 폼 제출 이벤트 핸들러
+    // handleCapitalSubmit = (event) => {
+    //     event.preventDefault();
+    //     // SAI 창업 도우미 시작 함수 호출
+    //     this.startSAIHelper();
+        
+    //     this.setState({ capital: '' });
+    // };
     handleCapitalSubmit = (event) => {
         event.preventDefault();
-        // SAI 창업 도우미 시작 함수 호출
-        this.startSAIHelper();
-        this.setState({ capital: '' });
+        const capitalValue = parseInt(this.state.capital, 10);
+        this.setState({ capital: capitalValue });
+        // 추가 코드: userDong 상태 변수에 selectedDong의 값 할당
+        this.setState({ 
+                userGu: this.codeGuInfo[this.state.Gu],
+                userDong: this.codeDongInfo[this.state.selectedDong],
+                userService:this.codeServiceInfo[this.state.selectedservice],
+        });
+    
+        // 추가 코드: userDong과 capital을 콘솔에 출력
+        console.log('자치구:', this.state.userGu);
+        console.log('행정동:', this.state.userDong);
+        console.log('업종:', this.state.userService);
+        console.log('자본금:', this.state.capital);
+    
+        // 추가 코드: 다른 동작 수행 가능
+        // 예를 들어, 서버로 데이터 전송이나 다른 상태 변수 업데이트 등
     };
+    handleCapitalSubmit2 = (event) => {
+        event.preventDefault();
+        const capitalValue = parseInt(this.state.capital, 10);
+        this.setState({ capital: capitalValue });
+        // 추가 코드: userDong 상태 변수에 selectedDong의 값 할당
+        this.setState({ 
+                userGu: this.codeGuInfo[this.state.Gu],
+                userDong: this.codeDongInfo[this.state.selectedDong],
+                userMarket:this.codeMarketInfo[this.state.selectedmarket],
+                userService:this.codeServiceInfo[this.state.selectedservice],
+        });
     
+        // 추가 코드: userDong과 capital을 콘솔에 출력
+        console.log('자치구:', this.state.userGu);
+        console.log('행정동:', this.state.userDong);
+        console.log('상권:', this.state.userMarket);
+        console.log('업종:', this.state.userService);
+        console.log('자본금:', this.state.capital);
+    
+        // 추가 코드: 다른 동작 수행 가능
+        // 예를 들어, 서버로 데이터 전송이나 다른 상태 변수 업데이트 등
+    };
     // SAI 창업 도우미 시작 함수 구현
-    startSAIHelper() {
+    // startSAIHelper() {
     
-    const capitalValue = parseInt(this.state.capital, 10);
+    // const capitalValue = parseInt(this.state.capital, 10);
 
-    // 예를 들어, 자본금이 유효한지 확인하는 로직 등을 추가
-    if (isNaN(capitalValue) || capitalValue <= 0) {
-        alert('유효한 자본금을 입력하세요.');
-        return;
-    }
+    // // 예를 들어, 자본금이 유효한지 확인하는 로직 등을 추가
+    // if (isNaN(capitalValue) || capitalValue <= 0) {
+    //     alert('유효한 자본금을 입력하세요.');
+    //     return;
+    // }
     
-    console.log('선택된 지역구 코드값:', this.state.userGu);
-    console.log('선택된 행정동 코드값:', this.state.userDong);
-    console.log('선택된 상권 코드값:', this.state.userMarket);
-    console.log('선택된 업종 코드값:', this.state.userService);
-    console.log('입력된 자본금:', this.state.capital);
+    // console.log('선택된 지역구 코드값:', this.state.userGu);
+    // console.log('선택된 행정동 코드값:', this.state.userDong);
+    // console.log('선택된 상권 코드값:', this.state.userMarket);
+    // console.log('선택된 업종 코드값:', this.state.userService);
+    // console.log('입력된 자본금:', this.state.capital);
     
         // 각 state 값을 변환하고 저장
     // this.setState((prevState) => {
@@ -891,7 +934,7 @@ class KakaoMap extends Component {
         // console.log('선택된 업종 코드값:', this.state.userService);
         // console.log('입력된 자본금:', this.state.capital);
     // });
-    }
+    // }
 }
 
 export default KakaoMap;
