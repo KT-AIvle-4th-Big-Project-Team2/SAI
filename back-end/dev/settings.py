@@ -22,7 +22,7 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com","storeaivle.com"]
 
 # Application definition
 
@@ -81,7 +81,7 @@ MIDDLEWARE = [
 #CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com","http://localhost:3000"
+    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com","http://localhost:3000","http://3.38.115.132 "
 ]
 
 ROOT_URLCONF = "dev.urls"
