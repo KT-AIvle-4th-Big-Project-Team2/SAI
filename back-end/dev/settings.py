@@ -22,7 +22,7 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com","storeaivle.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com","storeaivle.com",]
 
 # Application definition
 
@@ -77,8 +77,19 @@ MIDDLEWARE = [
     
 ]
 
-#CORS_ALLOW_ALL_ORIGINS = True
-#CORS_ALLOW_CREDENTIALS = True
+# CORS 설정
+CORS_ALLOW_ALL_ORIGINS = False  # 모든 오리진 요청을 허용하지 않음
+CORS_ALLOW_CREDENTIALS = True   # 인증된 요청을 허용
+
+# 기존 CORS_ORIGIN_WHITELIST에서 중복되는 항목을 제거하고 CORS_ALLOWED_ORIGINS에 추가
+CORS_ALLOWED_ORIGINS = [
+    frontURL, 
+    "http://localhost", 
+    "http://127.0.0.1",
+    "http://storeaivle.com",
+    "http://localhost:3000",
+    "http://3.38.115.132"
+]
 
 CORS_ORIGIN_WHITELIST = [
     frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com","http://localhost:3000","http://3.38.115.132 "
