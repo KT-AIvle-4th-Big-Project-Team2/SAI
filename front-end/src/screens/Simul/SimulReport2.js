@@ -27,11 +27,11 @@ const SimulReport2 = () => {
   const theme = useTheme();
 
   const stores = [
-    { id: '2022년 3분기', value: 872, color: 'gray' },
-    { id: '2022년 4분기', value: 882, color: 'gray' },
-    { id: '2023년 1분기', value: 881, color: 'gray' },
-    { id: '2023년 2분기', value: 889, color: 'gray' },
-    { id: '2023년 3분기', value: 895, color: 'blue' },
+    { id: '2022년 3분기', value: 872, color: '#9B9B9B' },
+    { id: '2022년 4분기', value: 882, color: '#9B9B9B' },
+    { id: '2023년 1분기', value: 881, color: '#9B9B9B' },
+    { id: '2023년 2분기', value: 889, color: '#9B9B9B' },
+    { id: '2023년 3분기', value: 895, color: '#236cff' },
   ];
   
   const StoreGraph = () => (
@@ -58,11 +58,11 @@ const SimulReport2 = () => {
   );
 
   const opens = [
-    { id: '2022년 3분기', value: 22, color: 'gray' },
-    { id: '2022년 4분기', value: 34, color: 'gray' },
-    { id: '2023년 1분기', value: 24, color: 'gray' },
-    { id: '2023년 2분기', value: 18, color: 'gray' },
-    { id: '2023년 3분기', value: 19, color: 'blue' },
+    { id: '2022년 3분기', value: 872, color: '#9B9B9B' },
+    { id: '2022년 4분기', value: 882, color: '#9B9B9B' },
+    { id: '2023년 1분기', value: 881, color: '#9B9B9B' },
+    { id: '2023년 2분기', value: 889, color: '#9B9B9B' },
+    { id: '2023년 3분기', value: 895, color: '#236cff' },
   ];
   
   const OpenGraph = () => (
@@ -89,11 +89,11 @@ const SimulReport2 = () => {
   );
 
   const closes = [
-    { id: '2022년 3분기', value: 21, color: 'gray' },
-    { id: '2022년 4분기', value: 24, color: 'gray' },
-    { id: '2023년 1분기', value: 25, color: 'gray' },
-    { id: '2023년 2분기', value: 10, color: 'gray' },
-    { id: '2023년 3분기', value: 15, color: 'blue' },
+    { id: '2022년 3분기', value: 872, color: '#9B9B9B' },
+    { id: '2022년 4분기', value: 882, color: '#9B9B9B' },
+    { id: '2023년 1분기', value: 881, color: '#9B9B9B' },
+    { id: '2023년 2분기', value: 889, color: '#9B9B9B' },
+    { id: '2023년 3분기', value: 895, color: '#236cff' },
   ];
   
   const CloseGraph = () => (
@@ -119,15 +119,46 @@ const SimulReport2 = () => {
     </div>
   );
 
+  const risidals = [
+    { id: '2022년 3분기', value: 872, color: '#9B9B9B' },
+    { id: '2022년 4분기', value: 882, color: '#9B9B9B' },
+    { id: '2023년 1분기', value: 881, color: '#9B9B9B' },
+    { id: '2023년 2분기', value: 889, color: '#9B9B9B' },
+    { id: '2023년 3분기', value: 895, color: '#236cff' },
+  ];
+
+  const ResidalGraph = () => (
+    <div style={{ height: '300px' }}>
+      <ResponsiveBar
+        data={risidals}
+        keys={['value']}
+        indexBy="id"
+        margin={{ top: 50, right: 60, bottom: 50, left: 60 }}
+        padding={0.3}
+        colors={(bar) => bar.data.color}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+        }}
+      />
+    </div>
+  );
+
   const sectordata = [
-    { id: '관공서', value: 6, color: 'blue' },
-    { id: '금융기관', value: 3, color: 'blue' },
-    { id: '병원', value: 4, color: 'blue' },
-    { id: '학교', value: 14, color: 'blue' },
-    { id: '유통점', value: 0, color: 'blue' },
-    { id: '극장', value: 0, color: 'blue' },
-    { id: '숙박시설', value: 0, color: 'blue' },
-    { id: '교통시설', value: 26, color: 'blue' },
+    { id: '관공서', value: 6, color: '#236cff' },
+    { id: '금융기관', value: 3, color: '#236cff' },
+    { id: '병원', value: 4, color: '#236cff' },
+    { id: '학교', value: 14, color: '#236cff' },
+    { id: '유통점', value: 0, color: '#236cff' },
+    { id: '극장', value: 0, color: '#236cff' },
+    { id: '숙박시설', value: 0, color: '#236cff' },
+    { id: '교통시설', value: 26, color: '#236cff' },
   ];
   
   const SectorGraph = () => (
@@ -250,6 +281,7 @@ const BumpGraph = () => (
         innerRadius={0} // 내부 공간을 채우는 비율 (0.5는 반원 형태)
         padAngle={0.1} // 데이터 사이의 간격
         enableArcLinkLabels={false}
+        colors={{ scheme: 'category10' }}
         radialLabel="label" // 중앙 범주 텍스트는 데이터의 'label' 속성 사용
         radialLabelsLinkHorizontalLength={10} // 중앙 범주와 그래프 간의 가로 길이
         radialLabelsLinkDiagonalLength={12} // 중앙 범주와 그래프 간의 대각선 길이
@@ -353,142 +385,190 @@ const BumpGraph = () => (
   return (
     <div className="container">  
     
-    <Button variant='contained' sx={{mt : 4, color: '#FFFFFF', backgroundColor: '#012A5B', paddingY: 2, borderRadius: 0}}>분석 보고서</Button><Button variant='outlined' sx={{mt : 4, color : '#012A5B',  paddingY: 2, borderRadius: 0}}>시뮬레이션 리포트</Button>
-      <StyledPaper sx={{ height : 'auto', padding : 5, minWidth : '1400px'}}>
+    <Button variant='outlined' sx={{mt : 4, color: '#ffffff', paddingY: 1, borderRadius: 0, width : '150px', bgcolor:"#012A5B"}}><span style={{fontSize : 18}}>분석 보고서</span></Button>
+    <Button variant='contained' href= '/SimulReport' sx={{mt : 4, color : '#FFFFFF', bgcolor : '#C5C1C1',  paddingY: 1, borderRadius: 0}}><span style={{fontSize : 18}}>시뮬레이션 리포트</span></Button>
+      <StyledPaper sx={{ height : 'auto', padding : 5, minWidth : '1200px'}}>
           <Box sx={{ml: 4, mb: 3, width: 'fit-content', height: 'auto' }}>
             <Typography style={{ fontSize : 40, fontWeight : 'bold' }}><span style={{ color : '#FFFFFF' }}> SAI 창업 분석 보고서</span></Typography>
           </Box>
           <Paper border="1px solid black" sx={{ height: 'auto', mb: 3, ml : 4, mr : 4, padding : 8, borderRadius: 8}}>
-            <TitleType> 선택 값을 반영해 SAI!로 분석한</TitleType>
-            <TitleType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동} {da.업종}</span> 업종의 매장의 예상 매출이에요</TitleType>
+            <TitleType> 선택 값을 반영해 SAI로 분석한</TitleType>
+            <TitleType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동} {da.업종}</span> 업종의 분석 보고서에요.</TitleType>
             <DivLine />
 
             <TitleType>종합 의견</TitleType>
-            <Box sx={{ bgcolor: 'primary.gray', mt : 2, mb : 5}}>
-            <ContentsType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동}</span>에서 <span style={{ color : '#6474C8' }}>{da.업종}</span> 업종 점포수는 전년 동기에 비해 (증가/감소)하고 있어요. 상권이 (발달/쇠퇴)하는 시기의 경우 입지 선정에 신중하셔야 해요.</ContentsType>
-            <ContentsType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동}</span>은 자치구에서 매출이 (증가/감소) 추세예요. 평균 임대 시세 등 고정 비용에 대한 관리가 중요해요.</ContentsType>
-            <ContentsType><span style={{ color : '#6474C8' }}>{da.행정구} {da.행정동}</span>은 전년 동 분기에 비해 유동인구가 (증가/감소)하고 있는 지역입니다. 마케팅이 중요한 상권이에요.</ContentsType>
-            <ContentsType><span style={{ color : '#6474C8' }}>{da.행정구} </span>는 행정동 (n)개 중 <span style={{ color : '#6474C8' }}>{da.행정동}</span>의 점포 수는 (0)위, 매출액 (0)위, 유동인구 (0)위에요.</ContentsType>
+            <Box sx={{ bgcolor: 'primary.gray', mt : 2, mb : 5, padding : 3, borderRadius : 3}}>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold'  }}>{da.업종}</span> 업종 <span style={{ fontWeight: 'bold' }}>점포수</span>는 전년 동기에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span>하고 있어요. 상권이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(발달/쇠퇴)</span>하는 시기의 경우 입지 선정에 신중하셔야 해요.</ContentsType>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>은 자치구에서 <span style={{ fontWeight: 'bold' }}>매출</span>이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span> 추세예요. 평균 임대 시세 등 고정 비용에 대한 관리가 중요해요.</ContentsType>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>은 전년 동 분기에 비해 <span style={{ fontWeight: 'bold' }}>유동인구</span>가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span>하고 있는 지역입니다. 마케팅이 중요한 상권이에요.</ContentsType>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} </span> 행정동 <span style={{ fontWeight: 'bold' }}>(n)개 </span>중 <span style={{ color : '#6474C8', fontWeight : 'bold'  }}>{da.행정동}</span>의 <span style={{ fontWeight: 'bold' }}>점포 수는 (0)위, 매출액 (0)위, 유동인구 (0)위</span>에요.</ContentsType>
             </Box>
             <Grid container spacing={3}>
              <Grid item xs={4}>
-                <Box border="1px solid black" sx={{padding : 3}}>
+                <Box  sx={{padding : 3}}>
                     <TitleType>점포수</TitleType>
                     <br></br>
-                    <Box sx={{bgcolor : 'primary.pink', height : '100px', padding : 2}}>
+                    <Box sx={{bgcolor : 'primary.pink', height : '100px', padding : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전 분기 대비</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>+ 11개</span></Typography>
                     </Box>
-                    <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2}}>
+                    <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'black' }}>2023년 3분기</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>800개</span></Typography>
                     </Box>
-                    <Box sx={{bgcolor : 'primary.pink', height : '100px', padding : 2, marginTop : 2}}>
+                    <Box sx={{bgcolor : 'primary.pink', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전년 동분기 대비</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>+ 9개</span></Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2}}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2, borderRadius : 3}}>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>나의 등수</span></Typography>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>10 / 16위</span></Typography>
                     </Box>
                 </Box>
               </Grid>
               <Grid item xs={4}>
-              <Box border="1px solid black" sx={{padding : 3}}>
+              <Box  sx={{padding : 3}}>
                     <TitleType>매출액</TitleType>
                     <br></br>
-                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2}}>
+                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전 분기 대비</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>- 11개</span></Typography>
                     </Box>
-                    <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2}}>
+                    <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'black' }}>2023년 3분기</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>만원</span></Typography>
                     </Box>
-                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, marginTop : 2}}>
+                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전년 동분기 대비</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>만원</span></Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2}}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2, borderRadius : 3}}>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>나의 등수</span></Typography>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>12 / 16위</span></Typography>
                     </Box>
                 </Box>
               </Grid>
               <Grid item xs={4}>
-              <Box border="1px solid black" sx={{padding : 3}}>
+              <Box  sx={{padding : 3}}>
                     <TitleType>점포수</TitleType>
                     <br></br>
-                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2}}>
+                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전 분기 대비</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>+ 11명</span></Typography>
                     </Box>
-                    <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2}}>
+                    <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'black' }}>2023년 3분기</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>800ha / 명</span></Typography>
                     </Box>
-                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, marginTop : 2}}>
+                    <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전년 동분기 대비</span></Typography>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>- 9명</span></Typography>
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2}}>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>나의 등수</span></Typography>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>10 / 16위</span></Typography>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2, borderRadius : 3}}>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black'}}>나의 등수</span></Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black'}}>10 / 16위</span></Typography>
                     </Box>
                 </Box>
               </Grid>
             </Grid>
+
             <Box sx={{mt : 15}}>
-              <TitleType>Best 유동인구</TitleType>
-              <Grid container spacing={3}>
-              <Grid item xs={3}>
-                <Box border="1px solid black" sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <TitleType>Best 매출</TitleType>
+              <Grid container>
+              <Grid item xs={4}>
+                <Box sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
-                        <span style={{ color: 'gray' }}>성별</span>
+                        <span style={{ color: 'gray' }}>성별 / 연령대</span>
                     </Typography>
                     </Box>
                     <br />
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: 'black' }}>
-                    여성
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
+                    여성 / 40대
                     </Typography>
                 </Box>
                 </Grid>
-                <Grid item xs={3}>
-                <Box border="1px solid black" sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Grid item xs={4}>
+                <Box  sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
                         <span style={{ color: 'gray' }}>요일</span>
                     </Typography>
                     </Box>
                     <br />
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: 'black' }}>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
+                    목요일(24.3%)
+                    </Typography>
+                </Box>
+                </Grid>
+                <Grid item xs={4}>
+                <Box sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
+                        <span style={{ color: 'gray' }}>시간대</span>
+                    </Typography>
+                    </Box>
+                    <br />
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
+                    14 ~ 17시
+                    </Typography>
+                </Box>
+                </Grid>
+              </Grid>
+            </Box>
+
+
+            <Box sx={{mt : 10}}>
+              <TitleType>Best 유동인구</TitleType>
+              <Grid container spacing={3}>
+              <Grid item xs={3}>
+                <Box sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
+                        <span style={{ color: 'gray' }}>성별</span>
+                    </Typography>
+                    </Box>
+                    <br />
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
+                    여성
+                    </Typography>
+                </Box>
+                </Grid>
+                <Grid item xs={3}>
+                <Box  sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
+                        <span style={{ color: 'gray' }}>요일</span>
+                    </Typography>
+                    </Box>
+                    <br />
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
                     목요일
                     </Typography>
                 </Box>
                 </Grid>
                 <Grid item xs={3}>
-                <Box border="1px solid black" sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Box sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
                         <span style={{ color: 'gray' }}>시간대</span>
                     </Typography>
                     </Box>
                     <br />
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: 'black' }}>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
                     14 ~ 17시
                     </Typography>
                 </Box>
                 </Grid>
                 <Grid item xs={3}>
-                <Box border="1px solid black" sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Box  sx={{ padding: 3, mt: 3, mb : 3, height: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Box border="1px solid gray" sx={{ width: '200px', height: '60px', padding: 2, borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}>
                         <span style={{ color: 'gray' }}>시간대</span>
                     </Typography>
                     </Box>
                     <br />
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: 'black' }}>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30, color: '#236cff' }}>
                     14 ~ 17시
                     </Typography>
                 </Box>
@@ -498,77 +578,77 @@ const BumpGraph = () => (
 
             <Box sx={{mt : 15}}>
               <TitleType>점포 수</TitleType>
-              <Box sx={{mt : 5}}>
-                    <ContentsType>선택하신 지역의 xxx업종의 점포수는 <span style={{ color: '#8398CA' }}>895개</span>가 있어요</ContentsType>
-                <Box border="1px solid gray" sx={{mt : 2, display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography sx={{ ml : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전년 동분기 대비</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
-                    <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
+              <Box sx={{mt : 3}}>
+                    <Typography style={{ fontSize: '23px'}}>선택하신 지역의 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.업종}</span> 업종의 점포수는 <span style={{ color: '#6474C8', fontWeight : 'bold' }}>895개</span>가 있어요.</Typography>
+                <Box border="1px solid gray" sx={{mt : 2, display: 'flex', justifyContent: 'space-between', borderRadius : 1, padding:.5}}>
+                    <Typography sx={{ ml : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전년 동분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> n개</span></Typography>
+                    <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> n개</span></Typography>
                 </Box>                
-                <Box border="1px solid gray" sx={{mt : 2}}>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '#8398CA' }}>{da.지역구} {da.행정동}에서 {da.업종}</span> 점포 수가 전년 동기에 비해 (증가/감소)하고 있어요.</Typography>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '#000000' }}>상권이 (발달/쇠퇴)하는 시기인 경우 입지 선정에 신중하셔야 해요.</span></Typography>
+                <Box border="1px solid gray" sx={{mt : 2, borderRadius : 1, padding:.5}}>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '#6474C8', fontWeight : 'bold'}}>{da.지역구} {da.행정동}</span>에서 <span style={{ color: '#6474C8', fontWeight : 'bold'  }}>{da.업종}</span> 점포 수가 전년 동기에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span> 하고 있어요.</Typography>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '#000000' }}>상권이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(발달/쇠퇴)</span>하는 시기인 경우 입지 선정에 신중하셔야 해요.</span></Typography>
                 </Box>
                 <StoreGraph />
               </Box>
             </Box>
             <Box sx={{mt : 15}}>
               <TitleType>개업 수</TitleType>
-              <Box sx={{mt : 5}}>
-                    <ContentsType>선택하신 지역의 <span style={{ color: '#8398CA' }}>xxx업종</span>의 개업한 점포수는 <span style={{ color: '#8398CA' }}>895개</span>가 있어요</ContentsType>
-                <Box border="1px solid gray" sx={{mt : 2, display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography sx={{ ml : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전년 동분기 대비</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
-                    <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
-                </Box>                
-                <Box border="1px solid gray" sx={{mt : 2}}>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 (증가/감소), 폐업수는 (증가/감소)하고 있어요.</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 (활발하/침체되)고 유동적이에요. 입지 선정에 유의하세요!</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
+              <Box sx={{mt : 3}}>
+                    <Typography style={{ fontSize: '23px'}}>선택하신 지역의 <span style={{ color : '#6474C8', fontWeight : 'bold'}}>{da.업종}</span> 업종의 개업한 점포수는 <span style={{ color: '#6474C8', fontWeight : 'bold' }}>895개</span>가 있어요.</Typography>
+                <Box border="1px solid gray" sx={{mt : 2, display: 'flex', justifyContent: 'space-between', borderRadius : 1, padding:.5}}>
+                    <Typography sx={{ ml : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전년 동분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> n개</span></Typography>
+                    <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> n개</span></Typography>
+                </Box>              
+                <Box border="1px solid gray" sx={{mt : 2, borderRadius : 1, padding:.5}}>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span>, 폐업수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span> 하고 있어요.</span></Typography>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(활발하/침체되)</span>고 유동적이에요. 입지 선정에 유의하세요!</span></Typography>
                 </Box>
                 <OpenGraph />
             </Box>
             </Box>
             <Box sx={{mt : 15}}>
               <TitleType>폐업 수</TitleType>
-              <Box sx={{mt : 5}}>
-                    <ContentsType>선택하신 지역의 <span style={{ color: '#8398CA' }}>xxx업종</span>의 폐업한 점포수는 <span style={{ color: '#8398CA' }}>895개</span>가 있어요</ContentsType>
-                <Box border="1px solid gray" sx={{mt : 2, display: 'flex', justifyContent: 'space-between'}}>
-                    <Typography sx={{ ml : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전년 동분기 대비</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
-                    <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00' }}> n개</span></Typography>
+              <Box sx={{mt : 3}}>
+              <Typography style={{ fontSize: '23px'}}>선택하신 지역의 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.업종}</span> 업종의 폐업한 점포수는 <span style={{ color: '#6474C8', fontWeight : 'bold' }}>895개</span>가 있어요.</Typography>                    
+              <Box border="1px solid gray" sx={{mt : 2, display: 'flex', justifyContent: 'space-between', borderRadius : 1, padding:.5}}>
+                    <Typography sx={{ ml : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전년 동분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> n개</span></Typography>
+                    <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> n개</span></Typography>
                 </Box>                
-                <Box border="1px solid gray" sx={{mt : 2}}>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 (증가/감소), 폐업수는 (증가/감소)하고 있어요.</span></Typography>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 (활발하/침체되)고 유동적이에요. 입지 선정에 유의하세요!</span></Typography>
+                <Box border="1px solid gray" sx={{mt : 2, borderRadius : 1, padding:.5}}>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span>, 폐업수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span> 하고 있어요.</span></Typography>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(활발하/침체되)</span>고 유동적이에요. 입지 선정에 유의하세요!</span></Typography>
                 </Box>
                 <CloseGraph />
               </Box>
             </Box>
             <Box sx={{mt : 15}}>
               <TitleType>배후지 분석</TitleType>
-              <Box sx={{mt : 2}}>
-                <Typography sx={{ ml : 1, fontSize: 25 }}>주요 시설, 집객시설 현황</Typography> 
-                <Box border="1px solid gray" sx={{ mt: 3, height: '80px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <Box sx={{mt : 3}}>
+                <Typography sx={{fontSize: 25 }}>주요 시설, 집객시설 현황</Typography> 
+                <Box border="1px solid gray" sx={{ mt: 3, height: '70px', display: 'flex', flexDirection: 'column', justifyContent: 'center' , borderRadius : 1}}>
                     <Typography sx={{ fontSize: 20, textAlign: 'center', color: '#000000' }}>
-                        선택하신 지역은 <span style={{color : '#8389CA'}}>(시설)</span> 비율이 가장 높아요. 주요 시설은 (1등), (2등)와 (3등) (이)가 있어요.
+                        선택하신 지역은 <span style={{ color: '#6474C8', fontWeight : 'bold'}}>(시설)</span> 비율이 가장 높아요. 주요 시설은 <span style={{ color: '#6474C8', fontWeight : 'bold'  }}> (1등), (2등)</span>와 <span style={{ color: '#6474C8', fontWeight : 'bold'  }}>(3등)</span>(이)가 있어요.
                     </Typography>
                 </Box>
                 <SectorGraph />
               </Box>
-              <Box sx={{mt : 5}}>
-                <Typography sx={{ ml : 1, fontSize: 25 }}>주거인구 수</Typography> 
-                <Box border="1px solid gray" sx={{ mt: 3, height: '80px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <Box sx={{mt : 15}}>
+                <Typography sx={{fontSize: 25 }}>주거인구 수</Typography> 
+                <Box border="1px solid gray" sx={{ mt: 3, height: '70px', display: 'flex', flexDirection: 'column', justifyContent: 'center' , borderRadius : 1}}>
                     <Typography sx={{ fontSize: 20, textAlign: 'center', color: '#000000' }}>
-                        선택하신 지역은 <span style={{color : '#8389CA'}}>(인구수)명</span>이 주거중이에요.
+                        선택하신 지역은 <span style={{color : '#6474C8', fontWeight : 'bold'}}>(인구수)명</span>이 주거중이에요.
                     </Typography>
                 </Box>
-                <BumpGraph />
+                <ResidalGraph />
               </Box>
-              <Box sx={{mt : 5}}>
-                <Typography sx={{ ml : 1, fontSize: 25 }}>소비트랜드</Typography> 
-                <Box border="1px solid gray" sx={{ mt: 3, height: '80px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <Box sx={{mt : 15}}>
+                <Typography sx={{ fontSize: 25 }}>소비트랜드</Typography> 
+                <Box border="1px solid gray" sx={{ mt: 3, height: '80px', display: 'flex', flexDirection: 'column', justifyContent: 'center' , borderRadius : 1}}>
                     <Typography sx={{ fontSize: 20, textAlign: 'center', color: '#000000' }}>
-                        선택하신 지역은 <span style={{color : '#8389CA'}}>(소비액 1등)</span> 소비가 가장 많은 지역이에요.
+                        선택하신 지역은 <span style={{color : '#6474C8', fontWeight : 'bold'}}>(소비액 1등)</span> 소비가 가장 많은 지역이에요.
                     </Typography>
                     <Typography sx={{ fontSize: 20, textAlign: 'center', color: '#000000' }}>
-                        <span style={{color : '#8389CA'}}>(소비액 1등)</span>에 대한 창업을 고려하시거나 관련하여 유리한 업종을 검토해보세요!
+                        <span style={{color : '#6474C8', fontWeight : 'bold'}}>(소비액 1등)</span> 에 대한 창업을 고려하시거나 관련하여 유리한 업종을 검토해보세요!
                     </Typography>
                 </Box>
                 <PieGraph />
@@ -580,14 +660,14 @@ const BumpGraph = () => (
                 justifyContent: 'center',
                 }}
             >
-                <Button variant='contained' sx={{ mt: 8, width: '300px', height : '50px' }}>
-                <Typography sx={{fontSize : 18}}>시뮬레이션 리포트 보러가기</Typography>
+                <Button variant='contained' href = '/SimulReport' sx={{ mt: 8, width: '300px', height : '50px', bgcolor : '#012A5B', color : '#FFFFFF', borderRadius:3 }}>
+                <Typography sx={{fontSize : 20}}>시뮬레이션 리포트 보러가기</Typography>
                 </Button>
             </Box>
             </Box>
         </Paper>
         <Box sx={{mt : 7, ml : 5, mb : 5, mr : 7}}>
-            <Typography>SAI 제공 정보는 각 제공 업체로부터 받는 정보로 참고용으로 이용해 주시길 바랍니다. SAI의 추정 매출은 각 매장의 실제 매출이 아니며, 일정 부분 오차가 존재합니다. 이점을 양해하여 주시기 바라며, 추정 매출의 절댓값보다는 각 매장들의 매출 추이에 더 집중해서 창업 시뮬레이션에 활용해 주시기 바랍니다. 더 양질의 서비스 제공을 위해 앞으로 더 많은 데이터를 수집하고, AI 모델을 정교화하여 정확도를 높여가겠습니다. 또한, 사용자는 그 어떤 정보도 재배포 할 수 없으며 서면 동의 없이 상업적 목적으로 사용될 수 없습니다.</Typography>
+        <Typography><span style={{color : '#5F5F5F'}}>SAI 제공 정보는 각 제공 업체로부터 받는 정보로 참고용으로 이용해 주시길 바랍니다. SAI의 추정 매출은 각 매장의 실제 매출이 아니며, 일정 부분 오차가 존재합니다. 이점을 양해하여 주시기 바라며, 추정 매출의 절댓값보다는 각 매장들의 매출 추이에 더 집중해서 창업 시뮬레이션에 활용해 주시기 바랍니다. 더 양질의 서비스 제공을 위해 앞으로 더 많은 데이터를 수집하고, AI 모델을 정교화하여 정확도를 높여가겠습니다. 또한, 사용자는 그 어떤 정보도 재배포 할 수 없으며 서면 동의 없이 상업적 목적으로 사용될 수 없습니다.</span></Typography>
         </Box>
       </StyledPaper>
     </div>
