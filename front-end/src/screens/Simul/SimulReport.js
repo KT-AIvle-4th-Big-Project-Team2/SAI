@@ -7,6 +7,7 @@ import {
   Button,
 }
 from '@mui/material/'
+import '../../Pretendard-1.3.9/web/static/pretendard.css';
 import DivLine from '../../components/Styles/DivLine';
 import { ResponsiveCirclePacking } from '@nivo/circle-packing'
 import { ResponsiveBullet } from '@nivo/bullet'

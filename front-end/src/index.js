@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { AuthProvider } from './components/Auth/AuthContext'; // AuthProvider를 import
+import './Pretendard-1.3.9/web/static/pretendard.css'; // 상대 경로로 CSS 파일을 import
 
 const theme = createTheme({
   palette: {
@@ -17,8 +18,8 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Noto Sans KR'"
-  }
+    fontFamily: 'Pretendard Thin, Pretendard, sans-serif'// Pretendard 폰트 패밀리 지정
+  },
 });
 
 
