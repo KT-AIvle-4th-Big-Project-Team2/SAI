@@ -21,8 +21,8 @@ from pycaret.regression import *
 class dong_ai(generics.GenericAPIView):
     serializer_class = AIReportSerializer
     
-    def post(self, request, *args, **kargs):
-        
+    def get(self, request, *args, **kargs):
+        username = unquote(self.kwargs['username'])
         goo = self.kwargs['goo'].upper()
         dong = self.kwargs['dong'].upper()
         business = self.kwargs['business'].upper()
@@ -247,7 +247,6 @@ class dong_ai(generics.GenericAPIView):
                         "simil_area_diff_2":int(similar_dongs2_diff[0])
                     }
 
-        username = self.request.data.get("username")
         user_id = UserCustom.objects.get(username = username).user_id
         
         save_data = output_data
@@ -268,7 +267,7 @@ class dong_ai(generics.GenericAPIView):
     
 # 23년 상권 예상
 class market_ai(APIView):
-    def post(self, request, *args, **kargs):        
+    def get(self, request, *args, **kwargs):        
         goo = self.kwargs['goo'].upper()
         market = self.kwargs['market']
         business = self.kwargs['business'].upper()
@@ -500,8 +499,8 @@ class market_ai(APIView):
                 "simil_area_esti_2": int(similar_market2_pred),
                 "simil_area_diff_2": int(similar_market2_diff)
             }
-                
-        username = self.request.data.get("username")
+ 
+        username = unquote(kwargs['username'])
         user_id = UserCustom.objects.get(username = username).user_id
         
         save_data = output_data
@@ -514,8 +513,8 @@ class market_ai(APIView):
 
 class AIReportListView(APIView):
     
-    def post(self, request, *args, **kwargs):
-        username = request.data.get("username")
+    def get(self, request, *args, **kwargs):
+        username = unquote(kwargs['username'])
         
         instance = AiReport.objects.filter(user__username = username).values(
             "report_id",
@@ -532,10 +531,10 @@ class AIReportListView(APIView):
     
 class AIReportView(APIView):
     
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         
         report_id = kwargs['num']
-        username = request.data.get("username")
+        username = unquote(kwargs['username'])
         
         try:
             queryset = AiReport.objects.get(report_id = report_id)
@@ -551,10 +550,10 @@ class AIReportView(APIView):
         return Response(serializer.data, status.HTTP_200_OK)
 class AIReportDeleteView(APIView):
     
-    def post(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         
         report_id = kwargs['num']
-        username = request.data.get("username")
+        username = unquote(kwargs['username'])
         
         try:
             queryset = AiReport.objects.get(report_id = report_id)
