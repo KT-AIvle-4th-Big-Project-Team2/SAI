@@ -43,4 +43,4 @@ class AiReport(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'ai_report'
+        db_table = 'market_service_estimate_shap_values'

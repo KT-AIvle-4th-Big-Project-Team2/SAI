@@ -8,6 +8,7 @@ from suggestions.models import *
 from .models import *
 from .serializers import *
 
+# from rest_framework import permissions
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,6 +16,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
 
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_protect
 
 from urllib.parse import unquote
 
@@ -24,9 +27,6 @@ class UserList(APIView):
     serializer_class = UserSerializer
     
     def get(self, request, *args, **kwargs):
-        # username = self.request.data.pop('username')
-        # if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'not admin'}, status.HTTP_403_FORBIDDEN)
-        
         
         if kwargs['function'] == 'list' and kwargs['first'] == 'none' and kwargs['second'] == 'none':
             queryset = UserCustom.objects.all()
@@ -65,9 +65,6 @@ class UserManager(APIView):
     serializer_class = UserSerializer
     
     def patch(self, request, *args, **kwargs):
-        # key = self.request.data.pop('key')
-        # if not UserCustom.objects.get(username = key).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
-        
         serializer = self.serializer_class(data = self.request.data, partial = True)
 
         try:
@@ -110,10 +107,9 @@ class UserManager(APIView):
     
 
 class ManageBoard(APIView):
+    #permission_classes = (permissions.IsAdminUser,)
     
     def delete(self, *args, kwargs):
-        # username = self.request.data.pop('username')
-        # if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
         
         if kwargs['category'] == 'board':
             try:
@@ -152,12 +148,10 @@ class ManageComment(APIView):
     #permission_classes = (permissions.IsAdminUser,)
     
     def delete(self, *args, kwargs):
-        # username = kwargs['pk']
-        # if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
         
         if kwargs['category'] == 'board':
             try:
-                instance = Comments.objects.filter(comment_id = kwargs['comment_id'])
+                instance = Comments.objects.get(comment_id = kwargs['comment_id'])
             except:
                 raise ValidationError({'error' : 'no comment found'}, status.HTTP_400_BAD_REQUEST)
             
@@ -166,7 +160,7 @@ class ManageComment(APIView):
         
         elif kwargs['category'] == 'consultboard':
             try:
-                instance = CommentsConsult.objects.filter(comment_id = kwargs['comment_id'])
+                instance = CommentsConsult.objects.get(comment_id = kwargs['comment_id'])
             except:
                 raise ValidationError({'error' : 'no comment found'}, status.HTTP_400_BAD_REQUEST)
             

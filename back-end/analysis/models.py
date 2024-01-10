@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from account.models import UserCustom
+
 
 class DongServiceDataEstimateTestFullFin(models.Model):
     기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
@@ -101,7 +101,7 @@ class DongServiceDataEstimateTestFullFin(models.Model):
 
 
 class DongServiceDataPredictTestFullFin(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
+    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
     행정동_코드 = models.IntegerField(blank=True, null=True)
     행정동_코드_명 = models.TextField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
@@ -280,7 +280,7 @@ class DongServiceEstimateShapValues(models.Model):
 
 
 class DongServiceEstimateY(models.Model):
-    행정동_코드 = models.IntegerField(blank=True, primary_key = True)
+    행정동_코드 = models.IntegerField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
     prediction_label = models.FloatField(blank=True, null=True)
 
@@ -290,7 +290,7 @@ class DongServiceEstimateY(models.Model):
 
 
 class DongSortedDbFin(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
+    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
     행정동_코드 = models.IntegerField(blank=True, null=True)
     행정동_코드_명 = models.TextField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
@@ -306,12 +306,12 @@ class DongSortedDbFin(models.Model):
     금요일_매출_금액 = models.FloatField(blank=True, null=True)
     토요일_매출_금액 = models.FloatField(blank=True, null=True)
     일요일_매출_금액 = models.FloatField(blank=True, null=True)
-    시간대_00_06_매출_금액 = models.FloatField(db_column='시간대_00_06_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_06_11_매출_금액 = models.FloatField(db_column='시간대_06_11_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_11_14_매출_금액 = models.FloatField(db_column='시간대_11_14_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_14_17_매출_금액 = models.FloatField(db_column='시간대_14_17_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_17_21_매출_금액 = models.FloatField(db_column='시간대_17_21_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_21_24_매출_금액 = models.FloatField(db_column='시간대_21_24_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_00_06_매출_금액 = models.FloatField(db_column='시간대_00~06_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_06_11_매출_금액 = models.FloatField(db_column='시간대_06~11_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_11_14_매출_금액 = models.FloatField(db_column='시간대_11~14_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_14_17_매출_금액 = models.FloatField(db_column='시간대_14~17_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_17_21_매출_금액 = models.FloatField(db_column='시간대_17~21_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_21_24_매출_금액 = models.FloatField(db_column='시간대_21~24_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     남성_매출_금액 = models.FloatField(blank=True, null=True)
     여성_매출_금액 = models.FloatField(blank=True, null=True)
     연령대_10_매출_금액 = models.FloatField(blank=True, null=True)
@@ -329,12 +329,12 @@ class DongSortedDbFin(models.Model):
     금요일_매출_건수 = models.IntegerField(blank=True, null=True)
     토요일_매출_건수 = models.IntegerField(blank=True, null=True)
     일요일_매출_건수 = models.IntegerField(blank=True, null=True)
-    시간대_건수_06_매출_건수 = models.IntegerField(db_column='시간대_건수_06_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_11_매출_건수 = models.IntegerField(db_column='시간대_건수_11_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_14_매출_건수 = models.IntegerField(db_column='시간대_건수_14_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_17_매출_건수 = models.IntegerField(db_column='시간대_건수_17_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_21_매출_건수 = models.IntegerField(db_column='시간대_건수_21_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_24_매출_건수 = models.IntegerField(db_column='시간대_건수_24_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_06_매출_건수 = models.IntegerField(db_column='시간대_건수~06_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_11_매출_건수 = models.IntegerField(db_column='시간대_건수~11_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_14_매출_건수 = models.IntegerField(db_column='시간대_건수~14_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_17_매출_건수 = models.IntegerField(db_column='시간대_건수~17_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_21_매출_건수 = models.IntegerField(db_column='시간대_건수~21_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_24_매출_건수 = models.IntegerField(db_column='시간대_건수~24_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     남성_매출_건수 = models.IntegerField(blank=True, null=True)
     여성_매출_건수 = models.IntegerField(blank=True, null=True)
     연령대_10_매출_건수 = models.IntegerField(blank=True, null=True)
@@ -475,7 +475,7 @@ class DongSortedDbFin(models.Model):
 
 
 class MarketServiceDataEstimateTestFull(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
+    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
     상권_구분_코드 = models.TextField(blank=True, null=True)
     상권_구분_코드_명 = models.TextField(blank=True, null=True)
     상권_코드 = models.IntegerField(blank=True, null=True)
@@ -574,7 +574,7 @@ class MarketServiceDataEstimateTestFull(models.Model):
 
 
 class MarketServiceDataPredictTestFull(models.Model):
-    기준_년분기_코드 = models.IntegerField(blank=True, primary_key = True)
+    기준_년분기_코드 = models.IntegerField(blank=True, null=True)
     상권_구분_코드 = models.TextField(blank=True, null=True)
     상권_구분_코드_명 = models.TextField(blank=True, null=True)
     상권_코드 = models.IntegerField(blank=True, null=True)
@@ -673,7 +673,7 @@ class MarketServiceDataPredictTestFull(models.Model):
 
 
 class MarketServiceEstimateShapValues(models.Model):
-    상권_코드 = models.IntegerField(blank=True, primary_key = True)
+    상권_코드 = models.IntegerField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
     관공서_수 = models.FloatField(blank=True, null=True)
     은행_수 = models.FloatField(blank=True, null=True)
@@ -761,7 +761,7 @@ class MarketServiceEstimateShapValues(models.Model):
 
 
 class MarketServiceEstimateY(models.Model):
-    상권_코드 = models.IntegerField(blank=True, primary_key = True)
+    상권_코드 = models.IntegerField(blank=True, null=True)
     서비스_업종_코드 = models.TextField(blank=True, null=True)
     prediction_label = models.FloatField(blank=True, null=True)
 
@@ -789,12 +789,12 @@ class MarketSortedDbFin(models.Model):
     금요일_매출_금액 = models.FloatField(blank=True, null=True)
     토요일_매출_금액 = models.FloatField(blank=True, null=True)
     일요일_매출_금액 = models.FloatField(blank=True, null=True)
-    시간대_00_06_매출_금액 = models.FloatField(db_column='시간대_00_06_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_06_11_매출_금액 = models.FloatField(db_column='시간대_06_11_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_11_14_매출_금액 = models.FloatField(db_column='시간대_11_14_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_14_17_매출_금액 = models.FloatField(db_column='시간대_14_17_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_17_21_매출_금액 = models.FloatField(db_column='시간대_17_21_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_21_24_매출_금액 = models.FloatField(db_column='시간대_21_24_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_00_06_매출_금액 = models.FloatField(db_column='시간대_00~06_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_06_11_매출_금액 = models.FloatField(db_column='시간대_06~11_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_11_14_매출_금액 = models.FloatField(db_column='시간대_11~14_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_14_17_매출_금액 = models.FloatField(db_column='시간대_14~17_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_17_21_매출_금액 = models.FloatField(db_column='시간대_17~21_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_21_24_매출_금액 = models.FloatField(db_column='시간대_21~24_매출_금액', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     남성_매출_금액 = models.FloatField(blank=True, null=True)
     여성_매출_금액 = models.FloatField(blank=True, null=True)
     연령대_10_매출_금액 = models.IntegerField(blank=True, null=True)
@@ -812,12 +812,12 @@ class MarketSortedDbFin(models.Model):
     금요일_매출_건수 = models.IntegerField(blank=True, null=True)
     토요일_매출_건수 = models.IntegerField(blank=True, null=True)
     일요일_매출_건수 = models.IntegerField(blank=True, null=True)
-    시간대_건수_06_매출_건수 = models.IntegerField(db_column='시간대_건수_06_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_11_매출_건수 = models.IntegerField(db_column='시간대_건수_11_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_14_매출_건수 = models.IntegerField(db_column='시간대_건수_14_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_17_매출_건수 = models.IntegerField(db_column='시간대_건수_17_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_21_매출_건수 = models.IntegerField(db_column='시간대_건수_21_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
-    시간대_건수_24_매출_건수 = models.IntegerField(db_column='시간대_건수_24_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_06_매출_건수 = models.IntegerField(db_column='시간대_건수~06_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_11_매출_건수 = models.IntegerField(db_column='시간대_건수~11_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_14_매출_건수 = models.IntegerField(db_column='시간대_건수~14_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_17_매출_건수 = models.IntegerField(db_column='시간대_건수~17_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_21_매출_건수 = models.IntegerField(db_column='시간대_건수~21_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    시간대_건수_24_매출_건수 = models.IntegerField(db_column='시간대_건수~24_매출_건수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     남성_매출_건수 = models.IntegerField(blank=True, null=True)
     여성_매출_건수 = models.IntegerField(blank=True, null=True)
     연령대_10_매출_건수 = models.IntegerField(blank=True, null=True)

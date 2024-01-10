@@ -3,7 +3,7 @@ from datetime import timedelta
 
 SELECT_DATABASE = 0 # 0: AWS MySQL 사용  //  1: Local MySQL 사용  //  2: Django의 기본 SQLite 사용
 
-
+#커밋용
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,6 +20,7 @@ sensitiveData.close()
 SECRET_KEY = django_secretKey[:-1]
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 
 LOGGING = {
@@ -44,6 +45,7 @@ LOGGING = {
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1","43.202.42.122"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com","storeaivle.com",]
 
 # Application definition
 
@@ -82,7 +84,6 @@ sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
 
-
 MIDDLEWARE = [
     # rest API를 위한 middleware
     'corsheaders.middleware.CorsMiddleware',
@@ -96,17 +97,25 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
+    
 ]
 
-MIDDLEWARE_CLASSES = (
-    "dev.middleware.DisableCSRF"
-)
-CSRF_USE_SESSIONS = False
-# CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOW_CREDENTIALS = False
+# CORS 설정
+CORS_ALLOW_ALL_ORIGINS = False  # 모든 오리진 요청을 허용하지 않음
+CORS_ALLOW_CREDENTIALS = True   # 인증된 요청을 허용
+
+# 기존 CORS_ORIGIN_WHITELIST에서 중복되는 항목을 제거하고 CORS_ALLOWED_ORIGINS에 추가
+CORS_ALLOWED_ORIGINS = [
+    frontURL, 
+    "http://localhost", 
+    "http://127.0.0.1",
+    "http://storeaivle.com",
+    "http://localhost:3000",
+    "http://3.38.115.132"
+]
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1","http://storeaivle.com", "http://128.0.0.1:8000"
+    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com","http://localhost:3000","http://3.38.115.132 "
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -225,14 +234,14 @@ AUTH_USER_MODEL = 'account.UserCustom'
 #     # ]
 # }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication', # 제거
-        'rest_framework.authentication.BasicAuthentication',
-    ),
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.TokenAuthentication',
+#         # 'rest_framework.authentication.SessionAuthentication', # 제거
+#         'rest_framework.authentication.BasicAuthentication',
+#     ),
     # 나머지 설정...
-}
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

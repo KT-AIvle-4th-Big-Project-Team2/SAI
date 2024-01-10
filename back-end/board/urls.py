@@ -13,5 +13,4 @@ urlpatterns = [
     path('postlist/<int:pk>/createcomment', views.BoardPostCommentCreateView.as_view()),
     path('postlist/updatecomment/<int:pk>', views.BoardPostCommentUpdateView.as_view()),
     path('postlist/deletecomment/<int:pk>', views.BoardPostCommentDeleteView.as_view()),
-    # path('testing', csrf_exempt(views.BoardPostView2.as_view()))
 ]
