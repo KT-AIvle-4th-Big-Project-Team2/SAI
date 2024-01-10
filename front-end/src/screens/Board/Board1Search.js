@@ -29,7 +29,7 @@ const Board1Search = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
-  const [Target, setSearchTarget] = useState('');
+  const [Target, setSearchTarget] = useState('title');
   const [Keyword, setSearchKeyword] = useState('');
 
   const {searchTarget} = useParams();
@@ -76,7 +76,10 @@ const Board1Search = () => {
 
   return (
     <div className="container">
-
+    <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
+        <h2>창업 정보</h2>
+    </Box>
+    <DivLine />
       <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
         <TableContainer component={Paper} style={{ height: '100%' }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -133,7 +136,7 @@ const Board1Search = () => {
           <Select
             labelId="search-target-label"
             id="search-target"
-            value={searchTarget}
+            value={Target}
             label="검색 대상"
             onChange={(e) => setSearchTarget(e.target.value)}
           >
@@ -144,11 +147,11 @@ const Board1Search = () => {
         <TextField
         id="search-keyword"
         label="검색어"
-        value={searchKeyword}
+        value={Keyword}
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
     <IconButton type="submit" aria-label="search" onClick={handleSearch} >
-    <Link to={`/Board1Search/${searchTarget}/${searchKeyword}`}>
+    <Link to={`/Board1Search/${Target}/${Keyword}`}>
       <SearchIcon />
       </Link>
     </IconButton>

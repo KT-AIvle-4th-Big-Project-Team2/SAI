@@ -33,6 +33,22 @@ import medicineIcon from '../assets/serviceicon/의약품.png';
 import privateSchoolIcon from '../assets/serviceicon/일반학원.png';
 import beautySalonIcon from '../assets/serviceicon/미용실.png';
 
+
+const convertGuToCode = (guName) => {
+    const guInfo = Data3.find(item => item['자치구_코드_명'] === guName);
+    return guInfo ? guInfo['자치구_코드'] : guName;
+  };
+
+const convertDongToCode = (dongName) => {
+    const dongInfo = Data3.find(item => item['행정동_코드_명'] === dongName);
+    return dongInfo ? dongInfo['행정동_코드'] : dongName;
+  };
+
+const convertMarketToCode = (marketName) => {
+const marketInfo = Data3.find(item => item['상권_코드_명'] === marketName);
+return marketInfo ? marketInfo['상권_코드'] : marketName;
+};
+
 function getServiceIconPath(service) {
     switch (service) {
       case '한식음식점':
@@ -809,28 +825,48 @@ class KakaoMap extends Component {
         this.setState({ capital: '' });
     };
     // SAI 창업 도우미 시작 함수 구현
+    // SAI 창업 도우미 시작 함수 구현
     startSAIHelper() {
-    // this.state.capital을 이용하여 자본금에 관련된 로직을 처리
-    const capitalValue = parseInt(this.state.capital, 10);
+        // this.state.capital을 이용하여 자본금에 관련된 로직을 처리
+        const capitalValue = parseInt(this.state.capital, 10);
+    
+        // 예를 들어, 자본금이 유효한지 확인하는 로직 등을 추가
+        if (isNaN(capitalValue) || capitalValue <= 0) {
+            alert('유효한 자본금을 입력하세요.');
+            return;
+        }
 
-    // 예를 들어, 자본금이 유효한지 확인하는 로직 등을 추가
-    if (isNaN(capitalValue) || capitalValue <= 0) {
-        alert('유효한 자본금을 입력하세요.');
-        return;
-    }
+        
+        // 변환 함수
 
-    // 자본금에 따른 추가 로직 구현...
-
-    console.log('선택된 지역구:', this.state.Gu);
-    console.log('선택된 행정동:', this.state.selectedDong);
-    console.log('선택된 상권:', this.state.selectedmarket);
-    console.log('선택된 서비스 업종:', this.state.selectedservice);
-    console.log('입력된 자본금:', capitalValue);
-
-    // 추가로 필요한 로직이 있다면 여기에 추가합니다.
-    // 예를 들어, 다음 단계로 진행하는 코드를 추가할 수 있습니다.
-    this.setState({ isMenu5Open: true }); // 다음 단계를 열도록 상태 업데이트
-    }
+    
+        // 각 state 값을 변환하고 저장
+        const convertedGu = this.convertGuToCode(this.state.Gu);
+        const convertedDong = this.convertDongToCode(this.state.selectedDong);
+        const convertedMarket = this.convertMarketToCode(this.state.selectedmarket);
+    
+        // 변환된 값을 state에 업데이트
+        this.setState({
+            Gu: convertedGu,
+            selectedDong: convertedDong,
+            selectedmarket: convertedMarket,
+            capital: this.state.capital, // 기존 자본금은 그대로 유지
+        }, () => {
+            // 업데이트된 state 값 콘솔에 출력
+            console.log('선택된 지역구:', this.state.Gu);
+            console.log('선택된 행정동:', this.state.selectedDong);
+            console.log('선택된 상권:', this.state.selectedmarket);
+            console.log('선택된 서비스 업종:', this.state.selectedservice);
+            console.log('입력된 자본금:', this.state.capital);
+        });
+    
+        console.log('선택된 지역구:', this.state.Gu);
+        console.log('선택된 행정동:', this.state.selectedDong);
+        console.log('선택된 상권:', this.state.selectedmarket);
+        console.log('선택된 서비스 업종:', this.state.selectedservice);
+        console.log('입력된 자본금:', this.state.capital);
+        }
+    
 
 }
 

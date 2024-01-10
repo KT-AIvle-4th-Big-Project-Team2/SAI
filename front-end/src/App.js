@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './components/Auth/AuthContext';
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -32,18 +31,15 @@ import SectorsAnaly from './screens/Analysis/SectorsAnaly';
 import Myboard from './screens/Mypage/Myboard';
 import Myinfo from './screens/Mypage/Myinfo';
 import WithDrawal from './screens/Mypage/WithDrawal';
-import Container from 'react-bootstrap/Container'
 import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
 import Header from './header';
 import SimulReport2 from './screens/Simul/SimulReport2';
-import Footer from './components/footer';
 
 
 
 function App() {
   return (
-      <AuthProvider>
         <Router>
           <NavBarElements />
             <Routes>
@@ -79,9 +75,7 @@ function App() {
             <Route path = "/WithDrawal" element = { <WithDrawal /> } />
             <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
           </Routes>
-          <Footer />
         </Router>
-      </AuthProvider>
   );
 }
 

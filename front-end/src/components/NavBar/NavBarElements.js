@@ -13,7 +13,7 @@ function NavBarElements() {
   const [feedbackTitle, setFeedbackTitle] = useState('');
   const [feedbackContent, setFeedbackContent] = useState('');
   const name = 'test'
-  const { isLogin, logoutHandler } = useAuth();
+  const { isLogin} = useAuth();
 
   const handleOpenFeedback = () => {
     setOpenFeedback(true);
@@ -65,7 +65,7 @@ function NavBarElements() {
                 <NavDropdown.Item onClick={handleOpenFeedback}>개선의견</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="창업 도우미" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Simul">시뮬레이션</NavDropdown.Item>
+                <NavDropdown.Item href="/Home">시뮬레이션</NavDropdown.Item>
                 <NavDropdown.Item href="/SimulReport">시뮬레이션 리포트</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="게시판" id="basic-nav-dropdown">

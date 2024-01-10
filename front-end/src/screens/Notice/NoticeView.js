@@ -66,13 +66,13 @@ const NoticeView = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" href={`/noticeMod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
+        <Button variant="outlined" href={`/noticeMod/${post_num}`} sx={{ mb: 2, mr : 2, color : '#000000' }}>
           글 수정
         </Button>
-        <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2 }}>
+        <Button variant="outlined" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#000000' }}>
           글 삭제
         </Button>
-        <Button variant="contained" href="/notice" sx={{ mb: 2 }}>
+        <Button variant="outlined" href="/Notice" sx={{ mb: 2, color : '#000000' }}>
           글 목록
         </Button>
       </Box>

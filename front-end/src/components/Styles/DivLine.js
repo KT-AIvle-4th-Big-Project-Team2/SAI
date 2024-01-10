@@ -3,7 +3,7 @@ import { Divider } from '@mui/material'
 
 const DivLine = () => {
   return (
-    <Divider sx={{ borderColor: '#C54966', mt: 3, mb: 3 }} />
+    <Divider sx={{ borderColor: '#012A5B', mt: 3, mb: 3 }} />
   )
 }
 

@@ -98,11 +98,11 @@ const Board2Mod = () => {
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
           <Link to='/Board2'>
-            <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
+            <Button variant="outlined" sx={{ mr: 2, color : '#000000' }} onClick={handleTextInput}>
               수정
             </Button>
           </Link>
-          <Button variant="contained" href="/Board2">
+          <Button  variant="outlined" sx={{ color : '#000000' }} href="/Board2">
             취소
           </Button>
         </div>

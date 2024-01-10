@@ -120,7 +120,7 @@ const Board1 = () => {
   return (
     <div className="container">      
     <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보 게시판 변경</h2>
+        <h2>창업 정보</h2>
     </Box>
     <DivLine />
 

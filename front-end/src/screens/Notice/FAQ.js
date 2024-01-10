@@ -2,12 +2,13 @@ import React from 'react'
 import Accordion from 'react-bootstrap/Accordion';
 import Box from '@mui/material/Box';
 import { Divider, Typography } from '@mui/material';
+import DivLine from '../../components/Styles/DivLine';
 
 const FAQ = () => {
   return (
     <div className="container">
-    <Box sx = {{mt : 3, mb : 3 }}><h2>자주 묻는 질문</h2></Box>
-    <Divider sx={{ borderColor: 'lime', mt: 3, mb: 3 }} />
+    <Box sx = {{mt : 3, mb : 3 }}><h2>FAQ</h2></Box>
+    <DivLine />
     <Accordion>
       <Accordion.Item eventKey="0">
         <Accordion.Header>SAI는 어떤 서비스인가요?</Accordion.Header>

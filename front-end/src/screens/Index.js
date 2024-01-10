@@ -9,6 +9,7 @@ import { About2 } from "./Index/about2";
 import { About3 } from "./Index/about3";
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
+import Footer from '../components/footer'
 import "./Index.css"
 
 export const scroll = new SmoothScroll('a[href*="#"]', {
@@ -30,6 +31,7 @@ const Index = () => {
       <About data={landingPageData.About} />
       <About2 data={landingPageData.About2} />
       <About3 data={landingPageData.About3} />
+      <Footer />
     </div>
   );
 };

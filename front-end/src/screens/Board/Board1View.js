@@ -90,7 +90,7 @@ const Board1View = () => {
     <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
       <Typography variant="h4" sx={{ mb: 2 }}>
-        게시판
+        창업 정보
       </Typography>
       <Divider sx={{ mt: 3, mb: 3 }} />
       <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={boardContent.post_id}>
@@ -113,13 +113,13 @@ const Board1View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
+        <Button  variant="outlined" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr : 2, color : '#000000' }}>
           글 수정
         </Button>
-        <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2 }}>
+        <Button  variant="outlined" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#000000' }}>
           글 삭제
         </Button>
-        <Button variant="contained" href="/Board1" sx={{ mb: 2 }}>
+        <Button  variant="outlined" href="/Board1" sx={{ mb: 2, color : '#000000' }}>
           글 목록
         </Button>
       </Box>
@@ -150,7 +150,7 @@ const Board1View = () => {
         sx={{ mb: 2 }}
         onChange={(e) => setComment((prevText) => ({ ...prevText, contents: e.target.value }))}
       />
-      <Button  variant="contained" onClick={handleCommentInput} href={`/Board1View/${post_num}` }>
+      <Button variant="outlined" sx={{ color : '#000000' }} onClick={handleCommentInput} href={`/Board1View/${post_num}` }>
         댓글 달기
       </Button>
     </Paper>

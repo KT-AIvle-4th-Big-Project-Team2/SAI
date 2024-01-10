@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -20,17 +21,20 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
 
 const Board2Search = () => {
+  const {searchTarget} = useParams();
+  const {searchKeyword} = useParams();
+
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
-  const [searchTarget, setSearchTarget] = useState('title');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [Target, setSearchTarget] = useState('title');
+  const [Keyword, setSearchKeyword] = useState('');
+
 
   function getNotice() {
     axios.get(`http://subdomain.storeaivle.com/Board2/postlist/searchpost/${searchTarget}/${searchKeyword}`)
@@ -133,7 +137,7 @@ const Board2Search = () => {
           <Select
             labelId="search-target-label"
             id="search-target"
-            value={searchTarget}
+            value={Target}
             label="검색 대상"
             onChange={(e) => setSearchTarget(e.target.value)}
           >
@@ -144,11 +148,11 @@ const Board2Search = () => {
         <TextField
         id="search-keyword"
         label="검색어"
-        value={searchKeyword}
+        value={Keyword}
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
     <IconButton type="submit" aria-label="search" onClick={handleSearch} >
-    <Link to={`/Board2Search/${searchTarget}/${searchKeyword}`}>
+    <Link to={`/Board2Search/${Target}/${Keyword}`}>
       <SearchIcon />
       </Link>
     </IconButton>

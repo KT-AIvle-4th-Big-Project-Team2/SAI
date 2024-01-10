@@ -374,7 +374,7 @@ header .intro-text {
 }
 .testimonial {
   position: relative;
-  padding: 20px;
+  padding-top: 20px;
 }
 .testimonial-image {
   float: left;

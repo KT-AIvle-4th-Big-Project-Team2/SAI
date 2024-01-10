@@ -89,10 +89,10 @@ const NoticeMod = () => {
       </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
+          <Button variant="outlined" sx={{ mr: 2, color : '#000000' }} onClick={handleTextInput}>
             수정
           </Button>
-            <Button href='/Notice' variant="contained">
+            <Button href='/Notice' variant="outlined" sx={{ color : '#000000' }}>
               취소
             </Button>
         </div>

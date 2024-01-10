@@ -44,7 +44,7 @@ const Board2Write = () => {
   return (
     <div className="container">
       <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 게시판 글 작성</h2>
+        <h2>창업 게시판</h2>
       </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
@@ -79,10 +79,10 @@ const Board2Write = () => {
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-            <Button variant="contained" sx={{ mr: 2 }} href='/Board2' onClick={handleTextInput}>
+            <Button  variant="outlined" sx={{ mr: 2, color : '#000000' }} href='/Board2' onClick={handleTextInput}>
               글쓰기
             </Button>
-          <Button variant="contained" href="/Board">
+          <Button  variant="outlined" sx={{ color : '#000000' }} href="/Board2">
             취소
           </Button>
         </div>
