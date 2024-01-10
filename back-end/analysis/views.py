@@ -480,24 +480,24 @@ class market_ai(APIView):
                 "area": market_name,
                 "business": business_name,
                 "funds": funds,
-                "sales_23_2q": int(avg_target_1qb),
-                "esti_23_3q": int(estimate_result[0]),
-                "pred_23_4q": int(predict_result[0]),
+                "sales_23_2q": int(avg_target_1qb/10000),
+                "esti_23_3q": int(estimate_result[0]/10000),
+                "pred_23_4q": int(predict_result[0]/10000),
                 "top_influ": shapValueOutputTop5,
                 "bottom_influ": shapValueOutputBottom5,
                 "sim_result": analysis,
-                "avg_sale_comp": int(seoul_diff),
+                "avg_sale_comp": int(seoul_diff/10000),
                 "sale_updown": analysis_avg_diff,
                 "market_active": analysis_active,
                 "opening_updown": analysis_opening,
                 "area_growth": analysis_growth,
                 "fpeople_updown": analysis_mp,
                 "simil_area_name_1": similar_market1_name,
-                "simil_area_esti_1": int(similar_market1_pred),
-                "simil_area_diff_1": int(similar_market1_diff[0]),
+                "simil_area_esti_1": int(similar_market1_pred/10000),
+                "simil_area_diff_1": int(similar_market1_diff[0]/10000),
                 "simil_area_name_2": similar_market2_name,
-                "simil_area_esti_2": int(similar_market2_pred),
-                "simil_area_diff_2": int(similar_market2_diff)
+                "simil_area_esti_2": int(similar_market2_pred/10000),
+                "simil_area_diff_2": int(similar_market2_diff/10000)
             }
  
         username = unquote(kwargs['username'])

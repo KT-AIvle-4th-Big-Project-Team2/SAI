@@ -1,5 +1,6 @@
 import logging
-from rest_framework import generics, permissions
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -19,10 +20,9 @@ logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
 
 class SignInView(APIView): # 회원가입
     serializer_class = SignInSerializer
-    
     def post(self, request):
         serializer = self.serializer_class(data = self.request.data)
-        
+        print(self.request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
             name = serializer.validated_data['name']
@@ -39,8 +39,14 @@ class SignInView(APIView): # 회원가입
             return Response({'error':'username already exists'}, status.HTTP_400_BAD_REQUEST)
         
         else:
-            user = UserCustom.objects.create_user(username = username, password = password, name = name, email = email, 
-                                            phonenumber = phonenumber, age = age, gender = gender)
+            print(self.request.data)
+            user = UserCustom.objects.create_user(username = username, 
+                                                  password = password, 
+                                                  name = name, 
+                                                  email = email, 
+                                            phonenumber = phonenumber, 
+                                            age = age, 
+                                            gender = gender)
             user.save()
             return Response({'success': "User created successfully"}, status=status.HTTP_200_OK)
 
@@ -50,7 +56,8 @@ class LoginView(APIView): # 로그인
     serializer_class = LoginSerializer
     
     def post(self, request, format = None):
-        serialized = self.serializer_class(data = request.data)
+        print(self.request.data)
+        serialized = self.serializer_class(data = self.request.data)
         if serialized.is_valid():
             username = serialized.validated_data['username']
             password = serialized.validated_data['password']
@@ -156,7 +163,7 @@ class UpdateUserInfo(generics.UpdateAPIView): # 수정
 
     serializer_class = SignInSerializer
     
-    def post(self, request, *args, **kwargs):
+    def PATCH(self, request, *args, **kwargs):
         
         username = self.request.data.pop("username")
         instance = UserCustom.objects.get(username = username)
@@ -169,7 +176,7 @@ class UpdateUserInfo(generics.UpdateAPIView): # 수정
             if 'name' in serializer.validated_data:
                 instance.name = serializer.validated_data['name']
             if 'password' in serializer.validated_data:
-                instance.set_password(serializer.validated_data['password'])
+                instance.password = make_password(serializer.validated_data['password'])
             if 'email' in serializer.validated_data:
                 instance.email = serializer.validated_data['email']
             if 'phonenumber' in serializer.validated_data:
@@ -185,8 +192,8 @@ class UpdateUserInfo(generics.UpdateAPIView): # 수정
 
 class DeleteAccountView(APIView): # 회원탈퇴
     
-    def delete(self, request):
-        username = request.data.pop('username')
+    def delete(self, request, *args, **kwargs):
+        username = kwargs['username']
         
         try:
             targetUser = UserCustom.objects.get(username = username)
@@ -201,7 +208,7 @@ class DeleteAccountView(APIView): # 회원탈퇴
 class GetUserView(APIView): # 유저정보 불러오기
     serializer_class = GetUserData 
 
-    def post(self, request, format=None):
+    def get(self, request, format=None):
         username = self.request.data.pop('username')
         
         instance = UserCustom.objects.get(username=username)

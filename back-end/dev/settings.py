@@ -20,7 +20,7 @@ sensitiveData.close()
 SECRET_KEY = django_secretKey[:-1]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+
 
 LOGGING = {
     'version': 1,
@@ -81,6 +81,7 @@ sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
 
+
 MIDDLEWARE = [
     # rest API를 위한 middleware
     'corsheaders.middleware.CorsMiddleware',
@@ -88,20 +89,23 @@ MIDDLEWARE = [
     # django 기본 middleware
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
-    #"django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
-    
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = False
+MIDDLEWARE_CLASSES = (
+    "dev.middleware.DisableCSRF"
+)
+CSRF_USE_SESSIONS = False
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = False
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1","http://storeaivle.com"
+    frontURL, "http://localhost", "http://127.0.0.1","http://storeaivle.com", "http://128.0.0.1:8000"
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -219,6 +223,15 @@ AUTH_USER_MODEL = 'account.UserCustom'
         
 #     # ]
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication', # 제거
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    # 나머지 설정...
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

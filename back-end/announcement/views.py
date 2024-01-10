@@ -95,7 +95,7 @@ class AnnouncementCreateView(APIView):
     serializer_class = AnnouncementCreateSerializer
     
     def post(self, request, serializer):
-        if not UserCustom.objects.get(self.request.data.get("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
+        # if not UserCustom.objects.get(self.request.data.get("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
         
         Announcements.objects.create(
             title=serializer.validated_data['title'],
@@ -112,22 +112,17 @@ class AnnouncementUpdateView(generics.UpdateAPIView):
     queryset = Announcements.objects.all()
     
     def perform_update(self, request):    
-        if not UserCustom.objects.get(self.request.data("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
+        # if not UserCustom.objects.get(self.request.data.pop("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
         instance = self.get_object()
         
         serializer = self.serializer_class(data = self.request.data, partial = True)
         
         if serializer.is_valid() != True : raise ValidationError({'error' : 'update announcement failed'}, status.HTTP_400_BAD_REQUEST)
-        
-        if 'title' in serializer.validated_data:
-            
-            if serializer.validated_data['title'] != '':
-                instance.title = serializer.validated_data['title']
-        
+
         if 'contents' in serializer.validated_data:
-            
-            if serializer.validated_data['contents'] != '':
-                instance.contents = serializer.validated_data['contents']
+            instance.contents = serializer.validated_data['contents']
+        if 'title' in serializer.validated_data:
+            instance.title = serializer.validated_data['title']
 
         instance.save()
         
@@ -140,9 +135,9 @@ class AnnouncementdeleteView(APIView):
 
     queryset = Announcements.objects.all()
     
-    def destroy(self, request, *args, **kwargs):
-        if not UserCustom.objects.get(self.request.data("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
-        instance = Announcements.objects.get(kwargs['pk'])
+    def delete(self, request, *args, **kwargs):
+        # if not UserCustom.objects.get(self.request.data("username")).is_superuser: return Response({'error' : 'no auth'}, status.HTTP_401_UNAUTHORIZED)
+        # instance = Announcements.objects.get(kwargs['pk'])
         
         instance.delete()
         

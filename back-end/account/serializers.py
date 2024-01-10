@@ -18,7 +18,7 @@ class SignInSerializer(serializers.ModelSerializer):
 class FindIDInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
-        fields = ['email', 'phonenumber']
+        fields = ['email', 'name']
 class FindIDOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom

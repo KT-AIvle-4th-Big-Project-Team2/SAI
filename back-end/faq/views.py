@@ -71,7 +71,7 @@ class FaqSearchView(generics.ListAPIView):
             )
             
         else:
-            raise ValidationError({'error' : 'input error'}, status.HTTP_404_NOT_FOUND)
+            raise Response({'error' : 'input error'}, status.HTTP_404_NOT_FOUND)
         
         return queryset
 
@@ -88,7 +88,7 @@ class FaqCreateView(generics.CreateAPIView):
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
             # admin = self.request.user
-            admin = "jinwon97"
+            admin = Admin.objects.get(username = serializer.validated_data['contents'],)
         )
         
 

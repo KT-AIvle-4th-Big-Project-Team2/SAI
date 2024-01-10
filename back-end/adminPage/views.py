@@ -23,9 +23,9 @@ from urllib.parse import unquote
 class UserList(APIView):
     serializer_class = UserSerializer
     
-    def post(self, request, *args, **kwargs):
-        username = self.request.data.pop('username')
-        if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'not admin'}, status.HTTP_403_FORBIDDEN)
+    def get(self, request, *args, **kwargs):
+        # username = self.request.data.pop('username')
+        # if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'not admin'}, status.HTTP_403_FORBIDDEN)
         
         
         if kwargs['function'] == 'list' and kwargs['first'] == 'none' and kwargs['second'] == 'none':
@@ -64,9 +64,9 @@ class UserList(APIView):
 class UserManager(APIView):
     serializer_class = UserSerializer
     
-    def post(self, request, *args, **kwargs):
-        key = self.request.data.pop('key')
-        if not UserCustom.objects.get(username = key).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
+    def patch(self, request, *args, **kwargs):
+        # key = self.request.data.pop('key')
+        # if not UserCustom.objects.get(username = key).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
         
         serializer = self.serializer_class(data = self.request.data, partial = True)
 
@@ -111,9 +111,9 @@ class UserManager(APIView):
 
 class ManageBoard(APIView):
     
-    def post(self, *args, kwargs):
-        username = self.request.data.pop('username')
-        if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
+    def delete(self, *args, kwargs):
+        # username = self.request.data.pop('username')
+        # if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
         
         if kwargs['category'] == 'board':
             try:
@@ -151,9 +151,9 @@ class ManageBoard(APIView):
 class ManageComment(APIView):
     #permission_classes = (permissions.IsAdminUser,)
     
-    def post(self, *args, kwargs):
-        username = self.request.data.pop('username')
-        if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
+    def delete(self, *args, kwargs):
+        # username = kwargs['pk']
+        # if not UserCustom.objects.get(username = username).is_superuser : return Response({'error':'no auth'}, status.HTTP_403_FORBIDDEN)
         
         if kwargs['category'] == 'board':
             try:
