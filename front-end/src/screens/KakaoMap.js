@@ -9,12 +9,17 @@ import './KakaoMap.css'; // 스타일을 위한 CSS 파일을 가정합니다
 import Data from '../assets/서울시 행정동.json';
 import seoul from './seoul.json'
 import Data3 from '../assets/서울시 상권정보.json';
+import code_market from '../assets/상권코드정보.json';
+import code_service from '../assets/업종코드정보.json';
+import code_gu from '../assets/자치구코드정보.json';
+import code_dong from '../assets/행정동코드정보.json';
 import backImage from '../assets/back_button.png';  // 뒤로가기 버튼 이미지
 import '../Pretendard-1.3.9/web/static/pretendard.css'; // 상대 경로로 CSS 파일을 import
 import progress0Image from '../assets/progress0.png';
 import progress1Image from '../assets/progress1.png';
 import progress2Image from '../assets/progress2.png';
 import progress3Image from '../assets/progress3.png';
+import progress345Image from '../assets/progress345.png';
 import progress4Image from '../assets/progress4.png';
 import progress5Image from '../assets/progress5.png';
 import hanSikIcon from '../assets/serviceicon/한식음식점.png';
@@ -111,13 +116,19 @@ class KakaoMap extends Component {
             selectedservice:'',
             capital:'',
             buttonStyle: {
-                minWidth: '30%', // Set the desired width
-                minHeight: '22%', // Set the desired height
+                width: '7.6em', // Set the desired width
+                minWidth:'7.6em',
+                maxWidth:'7.6em',
+                minHeight: '29%', // Set the desired height
+                height: '3.4em',
+                fontSize:'108%',
                 // Add other common styles if needed
             },
             buttonStyle2: {
-                minWidth: '30%', // Set the desired width
-                minHeight: '22%', // Set the desired height
+                minWidth: '7.6em', // Set the desired width
+                minHeight: '29%', // Set the desired height
+                height:'3.4em',
+                fontSize:'110%',
                 // Add other common styles if needed
             },
             
@@ -130,6 +141,10 @@ class KakaoMap extends Component {
         this.uniqueDongArray=Array.from(new Set(Data3.map(item => item.행정동_코드_명)));
         this.dongData = Data;
         this.marketinfo=Data3;
+        this.codeMarketInfo=code_market;
+        this.codeServiceInfo=code_service;
+        this.codeGuInfo=code_gu;
+        this.codeDongInfo=code_dong;
         this.serviceList= ['한식음식점', '커피-음료', '분식전문점', '호프-주점', '치킨전문점', '중식음식점', '패스트푸드', '제과점', '일식음식점', '양식음식점', '편의점', '일반의류', '화장품', '의약품', '일반학원', '미용실'];
         this.markers = [];  // 마커를 저장할 배열
     }
@@ -294,6 +309,7 @@ class KakaoMap extends Component {
         let imageSrc1 = progress1Image;
         let imageSrc2 = progress2Image;
         let imageSrc3 = progress3Image;
+        let imageSrc345=progress345Image;
         let imageSrc4 = progress4Image;
         let imageSrc5 = progress5Image;
         let altText0='진행상태0';
@@ -307,15 +323,15 @@ class KakaoMap extends Component {
             
                 <nav className={this.state.selectedMenu === '' ? 'startbar' : 'startbar hidden'}>
                     {/* username */}
-                    <div style={{marginLeft : 35, marginTop : 50}}>
-                    <span style={{fontWeight : 'bold',fontSize:'18px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>오진원님, 반가워요!<br/></span> 
-                    <span style={{fontWeight : 'bold',fontSize:'18px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>창업을 고민하시는 <br/></span> 
-                    <span style={{fontWeight : 'bold',fontSize:'18px',color: '#0500FF'}}>분석 단위</span> 
-                    <span style={{fontWeight : 'bold',fontSize:'18px'}}>를 선택해 주세요. <br/></span> 
+                    <div style={{marginLeft : '11%', marginTop : '13%'}}>
+                    <span style={{fontWeight : 'bold',fontSize:'25.8px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>오진원님, 반가워요!<br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'25.8px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>창업을 고민하시는 <br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'25.8px',color: '#0500FF'}}>분석 단위</span> 
+                    <span style={{fontWeight : 'bold',fontSize:'25.8px'}}>를 선택해 주세요. <br/></span> 
                     </div>
                     
                     {/* 행정동 단위로 분석하기 버튼 클릭 시 selectedMenu를 'sidebar1'로 설정 */}
-                    <div style={{marginLeft : 15}}>
+                    <div style={{marginLeft : '5.8%',marginTop:'5.8%'}}>
                     <button onClick={() => this.setState({ selectedMenu: 'sidebar1' })}>
                         행정동 단위로 분석하기
                     </button>
@@ -334,26 +350,26 @@ class KakaoMap extends Component {
                         {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
                         {!this.state.Gu && (
                             <button onClick={() => this.handleBackButtonClick()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px' }} />
                             </button>
                         )}
 
                         {/* 뒤로가기 버튼2: 행정동 선택창에서 지역구 선택창으로 이동 */}
                         {this.state.Gu && !this.state.selectedDong && (
                             <button onClick={() => this.handleBackButtonClick2()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px' }} />
                             </button>
                         )}
                         {/* 뒤로가기 버튼6: 업종 선택창에서 행정동 선택창으로 이동 */}
                         {this.state.Gu && this.state.selectedDong &&!this.state.selectedservice && (
                             <button onClick={() => this.handleBackButtonClick6()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px' }} />
                             </button>
                         )}
                         {/* 뒤로가기 버튼5: 자본금 입력창에서 업종 선택창으로 이동 */}
                         {this.state.Gu && this.state.selectedDong &&this.state.selectedservice && (
                             <button onClick={() => this.handleBackButtonClick5()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px' }} />
                             </button>
                         )}
                         </div>
@@ -367,9 +383,9 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px'}}>어느 지역구</strong>
-                                <strong style={{fontSize:'18px'}}>에서<br/></strong>
-                                <strong style={{fontSize:'18px'}}>창업하시는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%'}}>어느 지역구</strong>
+                                <strong style={{fontSize:'155%'}}>에서<br/></strong>
+                                <strong style={{fontSize:'155%'}}>창업하시는지 알려주세요.</strong>
                             </div>
                         )}
                         {this.state.Gu === '' && (<br/>)}
@@ -389,7 +405,7 @@ class KakaoMap extends Component {
                         </div>
                         
                         {/* 행정동 선택 버튼 */}
-                        <div style={{marginLeft:'15px'}}>
+                        <div style={{marginLeft:'17px'}}>
                         {this.state.selectedDong==='' &&this.state.isMenu1Open && (
                             <div>
                                 <img src={imageSrc2} alt={altText2} style={{
@@ -397,8 +413,8 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어느 행정동</strong>
-                                <strong style={{fontSize:'18px'}}>에서<br/>창업하시는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어느 행정동</strong>
+                                <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요.</strong>
                             </div>
                         )}
                         {this.state.selectedDong==='' &&this.state.isMenu1Open && (<br/>)}
@@ -423,16 +439,16 @@ class KakaoMap extends Component {
                         <div style={{marginLeft:'17px'}}>
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div>
-                                <img src={imageSrc4} alt={altText3} style={{
+                                <img src={imageSrc345} alt={altText3} style={{
                                     width: '100%',     // 가로 길이를 부모 요소에 맞게 조절
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어떤 업종</strong>
-                                <strong style={{fontSize:'18px'}}>으로<br/>창업하시는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어떤 업종</strong>
+                                <strong style={{fontSize:'155%'}}>으로<br/>창업하시는지 알려주세요.</strong>
                             </div>
                         )}
-                        {/* {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)} */}
+                        {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)}
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div style={{ display: 'flex', flexWrap: 'wrap'}}>
                                 {this.serviceList.map((service) => (
@@ -443,20 +459,21 @@ class KakaoMap extends Component {
                                             this.setState({ isMenu4Open: true });
                                         }}
                                         style={{
-                                            width: '84px',
-                                            height: '82px',
+                                            width: '26%',
+                                            height: '80%',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            margin: '3px',
-                                            marginLeft:'5px',
+                                            margin: '3%',
+                                            marginTop:'1%',
+                                            
                                         }}
                                     >
                                         <img
                                             src={getServiceIconPath(service)}
                                             alt={service}
-                                            style={{ width: '34px', height: '34px', marginTop: '7px',marginBottom:'5px' }}
+                                            style={{ width: '49%', height: '49%', marginTop: '7px',marginBottom:'5px' }}
                                         />
                                         <span>{service}</span>
                                     </button>
@@ -474,8 +491,8 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>자본금</strong>
-                                <strong style={{fontSize:'18px'}}>으로<br/>얼마를 생각하지는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>자본금</strong>
+                                <strong style={{fontSize:'155%'}}>으로<br/>얼마를 생각하지는지 알려주세요.</strong>
                             </div>
                         )}
                         {this.state.selectedDong && this.state.isMenu4Open && (<br/>)}
@@ -520,32 +537,32 @@ class KakaoMap extends Component {
                         {/* 뒤로가기 버튼: 지역구 선택창에서 단위분석 선택창으로 이동 */}
                         {!this.state.Gu && (
                             <button onClick={() => this.handleBackButtonClick()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px'}} />
                             </button>
                         )}
 
                         {/* 뒤로가기 버튼2: 행정동 선택창에서 지역구 선택창으로 이동 */}
                         {this.state.Gu && !this.state.selectedDong && (
                             <button onClick={() => this.handleBackButtonClick2()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px'}} />
                             </button>
                         )}
                         {/* 뒤로가기 버튼3: 상권 선택창에서 행정동 선택창으로 이동 */}
                         {this.state.Gu && this.state.selectedDong &&!this.state.selectedmarket  && (
                             <button onClick={() => this.handleBackButtonClick3()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px'}} />
                             </button>
                         )}
                         {/* 뒤로가기 버튼4: 업종 선택창에서 상권 선택창으로 이동 */}
                         {this.state.Gu && this.state.selectedDong &&this.state.selectedmarket&&!this.state.selectedservice && (
                             <button onClick={() => this.handleBackButtonClick4()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px'}} />
                             </button>
                         )}
                         {/* 뒤로가기 버튼5: 자본금 입력창에서 업종 선택창으로 이동 */}
                         {this.state.Gu && this.state.selectedDong &&this.state.selectedmarket&&this.state.selectedservice && (
                             <button onClick={() => this.handleBackButtonClick5()} className="back-button">
-                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '23px' }} />
+                                <img src={backImage} alt="뒤로가기" style={{ width: '22px', height: '29px'}} />
                             </button>
                         )}
                         </div>
@@ -559,9 +576,9 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px'}}>어느 지역구</strong>
-                                <strong style={{fontSize:'18px'}}>에서<br/></strong>
-                                <strong style={{fontSize:'18px'}}>창업하시는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%'}}>어느 지역구</strong>
+                                <strong style={{fontSize:'155%'}}>에서<br/></strong>
+                                <strong style={{fontSize:'155%'}}>창업하시는지 알려주세요.</strong>
                             </div>
                         )}
                         {this.state.Gu === ''&&(<br/>)}
@@ -581,7 +598,7 @@ class KakaoMap extends Component {
 
 
                         {/* 행정동 선택 버튼 */}
-                        <div style={{ marginLeft: '15px' }}>
+                        <div style={{ marginLeft: '17px' }}>
                         {this.state.selectedDong === '' && this.state.isMenu1Open && (
                             <div>
                                 <img src={imageSrc2} alt={altText1} style={{
@@ -589,8 +606,8 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',
                                     height: 'auto'
                                 }} />
-                                <strong style={{ color: '#0500FF', marginBottom: '5px', fontSize: '18px' }}>어느 행정동</strong>
-                                <strong style={{ fontSize: '18px' }}>에서<br />창업하시는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px', fontSize: '155%' }}>어느 행정동</strong>
+                                <strong style={{ fontSize: '155%' }}>에서<br />창업하시는지 알려주세요.</strong>
                             </div>
                         )}
                         {this.state.selectedDong === '' && this.state.isMenu1Open && (<br />)}
@@ -630,8 +647,8 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어느 상권</strong>
-                                <strong style={{fontSize:'18px'}}>에서<br/>창업하시는지 알려주세요</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어느 상권</strong>
+                                <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요</strong>
                             </div>
                         )}
                         {this.state.selectedmarket==='' && this.state.isMenu2Open && (<br/>)}
@@ -661,11 +678,11 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>어떤 업종</strong>
-                                <strong style={{fontSize:'18px'}}>으로<br/>창업하시는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>어떤 업종</strong>
+                                <strong style={{fontSize:'155%'}}>으로<br/>창업하시는지 알려주세요.</strong>
                             </div>
                         )}
-                        {/* {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)} */}
+                        {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)}
                         {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {this.serviceList.map((service) => (
@@ -676,20 +693,21 @@ class KakaoMap extends Component {
                                             this.setState({ isMenu4Open: true });
                                         }}
                                         style={{
-                                            width: '84px',
-                                            height: '82px',
+                                            width: '26%',
+                                            height: '80%',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'center',
                                             alignItems: 'center',
-                                            margin: '3px',
-                                            marginLeft:'5px',
+                                            margin: '3%',
+                                            marginTop:'1%',
+                                            
                                         }}
                                     >
                                         <img
                                             src={getServiceIconPath(service)}
                                             alt={service}
-                                            style={{ width: '34px', height: '34px', marginTop: '7px',marginBottom:'5px' }}
+                                            style={{ width: '49%', height: '49%', marginTop: '7px',marginBottom:'5px' }}
                                         />
                                         <span>{service}</span>
                                     </button>
@@ -707,8 +725,8 @@ class KakaoMap extends Component {
                                     maxWidth: '100%',  // 최대 가로 길이 설정
                                     height: 'auto'     // 세로 비율 유지
                                 }}/>
-                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'18px' }}>자본금</strong>
-                                <strong style={{fontSize:'18px'}}>으로<br/>얼마를 생각하지는지 알려주세요.</strong>
+                                <strong style={{ color: '#0500FF', marginBottom: '5px',fontSize:'155%' }}>자본금</strong>
+                                <strong style={{fontSize:'155%'}}>으로<br/>얼마를 생각하지는지 알려주세요.</strong>
                             </div>
                         )}
                         
@@ -865,7 +883,7 @@ class KakaoMap extends Component {
     convertToCode = (type, value) => {
     const mapping = this.marketinfo[type];
     return mapping[value] || value;
-    };
+    };  
 
 }
 
