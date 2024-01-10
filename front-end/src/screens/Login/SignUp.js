@@ -35,6 +35,38 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+
+async function sendSignUpRequest() {
+  try {
+
+    const response = await axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
+      csrftoken: "BlgLFWKJKzN6yFY6iL5CriGmUCskHD56",
+      username: "sampleuser11235445451322134",
+      name: "Sample Name123412312345552133125",
+      password: "SamplePassword123!",
+      email: "sample@example.com",
+      phonenumber: "01012345678",
+      age: 25,
+      gender: "M"
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        
+      },
+      withCredentials: false,
+    });
+
+    if (response.status === 200) {
+      console.log("test회원가입 성공:", response.data);
+    } else {
+      console.error("test회원가입 실패:", response.data);
+    }
+  } catch (error) {
+    console.error("test네트워크 오류:", error);
+  }
+}
+
 export default function SignUp() {
 
   
@@ -47,9 +79,13 @@ export default function SignUp() {
 
 
   const handleSubmit = async (event) => {
+    // 함수 호출
+    sendSignUpRequest();
     event.preventDefault();
+    console.log(event.currentTarget);
     const data = new FormData(event.currentTarget);
     const joinData = {
+      username : data.get('username'),
       email: data.get('email'),
       name: data.get('name'),
       password: data.get('password'),
@@ -65,31 +101,29 @@ export default function SignUp() {
       age
     })
 */
-    const { email, name, password, rePassword, age } = joinData;
+    const {username, email, name, password, rePassword, age } = joinData;
     try {
-      const signUpResponse = await fetch("http://subdomain.storeaivle.com/accounts/signin/", {
-        method: "POST",
+      const signUpResponse = await axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
+        csrftoken: "BlgLFWKJKzN6yFY6iL5CriGmUCskHD56",
+        username: joinData.username,
+        name: joinData.name,
+        password: joinData.password,
+        email: joinData.email,
+        phonenumber: "01033334444",
+        age: 23,
+        gender: "M"
+      }, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           // 'X-CSRFToken': csrfToken, // CSRF 토큰이 필요한 경우 포함
         },
-        body: JSON.stringify({
-          username: joinData.username,
-          name: joinData.name,
-          password: joinData.password,
-          email: joinData.email,
-          phonenumber: "01033334444",
-          age: joinData.age,
-          gender: "M"
-        }),
-        credentials: 'include', // 필요한 경우 쿠키를 포함하기 위해 설정
+        withCredentials: false, // 필요한 경우 쿠키를 포함하기 위해 설정
       });
-  
-      if (signUpResponse.ok) {
+    
+      if (signUpResponse.status === 200) {
         // 회원가입 성공 처리
-        const responseData = await signUpResponse.json();
-        console.log("회원가입 성공:", responseData);
+        console.log("회원가입 성공:", signUpResponse.data);
         // 추가적인 회원가입 성공 후 처리 로직
       } else {
         // 회원가입 실패 처리
@@ -98,7 +132,6 @@ export default function SignUp() {
     } catch (error) {
       console.error("네트워크 오류:", error);
     }
-
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     if (!emailRegex.test(email)) {
@@ -137,7 +170,7 @@ export default function SignUp() {
       }
 
       // 회원가입 동의 체크
-      if (!checked) alert('회원가입 약관에 동의해주세요.');
+      //if (!checked) alert('회원가입 약관에 동의해주세요.');
 
     };
 
@@ -281,8 +314,9 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              href = '/login'
+             
               sx={{ mt: 3, mb: 2 }}
+              
             >
               회원가입
             </Button>

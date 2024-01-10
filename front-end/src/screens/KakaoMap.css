@@ -8,21 +8,7 @@
     display: none;
 }
 
-.startbar {
-    margin-top: 1%;
-    margin-left: 3%;
-    position: absolute; /* 절대 위치 지정 */
-    top: 0; /* 상단에 위치 */
-    left: 0; /* 좌측에 위치 */
-    width: 330px; /* Set your desired width */
-    height: 90%; /* Set your desired height */
-    background-color: #fff; /* 배경색 */
-    z-index: 2;
-    border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
-    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
 
-    /* 기타 스타일 속성 추가 가능 */
-}
 
 
 .startbar strong {
@@ -31,9 +17,9 @@
 }
 .startbar button {
     width: 82%;
-    height: 9vh;
-    font-size: 1em;
-    margin-top: 40px;
+    height: 4em;
+    font-size: 130%;
+    margin-top: 2.3em;
     margin-bottom: -4em;
     margin-left: 20px;
     border: 1px solid #333; /* 테두리를 두껍게 설정 */
@@ -51,7 +37,7 @@
   }
   
   button {
-    font-size: 13px;
+    font-size: 100% ;
     margin: 5px;
     padding: 8px;
     cursor: pointer;
@@ -69,7 +55,21 @@ button.selected {
     background-color: #3498db;
     color: #fff;
 }
+.startbar {
+    margin-top: 1%;
+    margin-left: 3%;
+    position: absolute; /* 절대 위치 지정 */
+    top: 0; /* 상단에 위치 */
+    left: 0; /* 좌측에 위치 */
+    width: 22%; /* Set your desired width */
+    height: 88%; /* Set your desired height */
+    background-color: #fff; /* 배경색 */
+    z-index: 2;
+    border-radius: 2.3%; /* 원하는 각도로 조절 가능합니다. */
+    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
 
+    /* 기타 스타일 속성 추가 가능 */
+}
 .sidebar1 {
     margin-top: 1%;
     margin-left: 3%;
@@ -77,13 +77,13 @@ button.selected {
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
     background-color: #fff; /* 배경색 */
-    width: 330px; /* Set your desired width */
-    height: 90%; /* Set your desired height */
+    width: 22%; /* Set your desired width */
+    height: 88%; /* Set your desired height */
     padding: 10px; /* 내부 여백 */
     box-sizing: border-box; /* 총 너비 계산 방식 */
     z-index:2;
-    border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
-    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
+    border-radius: 2.3%; /* 원하는 각도로 조절 가능합니다. */
+    /* overflow: hidden; 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
 }
 .sidebar2 {
     margin-top: 1%;
@@ -92,13 +92,13 @@ button.selected {
     top: 0; /* 상단에 위치 */
     left: 0; /* 좌측에 위치 */
     background-color: #fff; /* 배경색 */
-    width: 330px; /* Set your desired width */
-    height: 90%; /* Set your desired height */
+    width: 22%; /* Set your desired width */
+    height: 88%; /* Set your desired height */
     padding: 10px; /* 내부 여백 */
     box-sizing: border-box; /* 총 너비 계산 방식 */
     z-index:2;
-    border-radius: 10px; /* 원하는 각도로 조절 가능합니다. */
-    overflow: hidden; /* 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
+    border-radius: 2.3%; /* 원하는 각도로 조절 가능합니다. */
+    /* overflow: hidden; 내용이 둥근 모서리를 벗어나지 않도록 처리합니다. */
 }
 
 .menu-item {

@@ -18,7 +18,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Board1Write = () => {
-  const name = 'Marie85'
+  const name = 'jinwon97'
   const [text, setText] = useState({ title: '', contents: '' });
 
   const handleFileUpload = () => {
@@ -28,10 +28,12 @@ const Board1Write = () => {
 
   const handleTextInput = () => {
     const { title, contents } = text;
+    console.log("이름",name);
     axios.post("http://subdomain.storeaivle.com/board/postlist/createpost", {
-      title,
-      name,
-      contents,
+      
+      title:title,
+      contents:contents,
+      user:9,
     })
       .then(function (response) {
         console.log(response);

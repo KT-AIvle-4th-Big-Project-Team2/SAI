@@ -28,9 +28,9 @@ const Board2Write = () => {
   const handleTextInput = () => {
     const { title, contents } = text;
     axios.post("http://subdomain.storeaivle.com/board/postlist/createpost", {
-      title,
-      name,
-      contents,
+      title:title,
+      contents:contents,
+      user:9,
     })
       .then(function (response) {
         console.log(response);
