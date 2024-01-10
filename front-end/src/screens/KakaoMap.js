@@ -7,6 +7,7 @@ import geoJsonData from './geometry.json';
 import geoJsonData_jachigu from './jachigugeojson.json'
 import './KakaoMap.css'; // 스타일을 위한 CSS 파일을 가정합니다
 import Data from '../assets/서울시 행정동.json';
+import seoul from './seoul.json'
 import Data3 from '../assets/서울시 상권정보.json';
 import backImage from '../assets/back_button.png';  // 뒤로가기 버튼 이미지
 import progress0Image from '../assets/progress0.png';
