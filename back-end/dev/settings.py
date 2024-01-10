@@ -20,9 +20,29 @@ sensitiveData.close()
 SECRET_KEY = django_secretKey[:-1]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com"]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","43.202.42.122"]
 
 # Application definition
 
@@ -61,6 +81,7 @@ sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
 
+
 MIDDLEWARE = [
     # rest API를 위한 middleware
     'corsheaders.middleware.CorsMiddleware',
@@ -74,14 +95,17 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
-    
 ]
 
-#CORS_ALLOW_ALL_ORIGINS = True
-#CORS_ALLOW_CREDENTIALS = True
+MIDDLEWARE_CLASSES = (
+    "dev.middleware.DisableCSRF"
+)
+CSRF_USE_SESSIONS = False
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = False
 
 CORS_ORIGIN_WHITELIST = [
-    frontURL, "http://localhost", "http://127.0.0.1","storeaivle.com","http://localhost:3000"
+    frontURL, "http://localhost", "http://127.0.0.1","http://storeaivle.com", "http://128.0.0.1:8000"
 ]
 
 ROOT_URLCONF = "dev.urls"
@@ -186,19 +210,28 @@ AUTH_USER_MODEL = 'account.UserCustom'
 # Django 보안 관련 설정
 
 # REST_FRAMEWORK = {
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
-    # ],
+#     # 'DEFAULT_PARSER_CLASSES': [
+#     #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
+#     # ],
     
-    # 'DEFAULT_PERMISSION_CLASSES':[
-    #     'rest_framework.permissions.IsAuthenticated', # 모든 REST API 기능을 SESSION ID 또는 TOKEN이 있어야 사용할 수 있게 설정
-    # ],
+#     # 'DEFAULT_PERMISSION_CLASSES':[
+#     #     'rest_framework.permissions.AllowAny',
+#     # ],
     
-    # 'DEFAULT_AUTHENTICATON_CLASSES':[
-    #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
+#     # 'DEFAULT_AUTHENTICATON_CLASSES':[
+#     #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
         
-    # ]
+#     # ]
 # }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication', # 제거
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    # 나머지 설정...
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

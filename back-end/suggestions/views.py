@@ -10,8 +10,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework import generics
 
-
-
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.csrf import csrf_protect
 
@@ -95,7 +93,8 @@ class SuggestionCreateView(generics.CreateAPIView):
         Suggestions.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin=UserCustom.objects.get(username = "jinwon97")
+            # admin=self.request.user
+            admin = user.objects.get(username = "jinwon97")
         )
         
 # @method_decorator(csrf_protect, name='dispatch')

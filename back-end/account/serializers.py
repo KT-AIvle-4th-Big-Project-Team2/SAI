@@ -3,16 +3,6 @@ from rest_framework import serializers
 from .models import UserCustom
 
 class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length = 75)
-    password = serializers.CharField(max_length = 75)
-    # def to_representation(self, instance):
-    #     return {
-    #         'post_id': instance['board_id'],
-    #         'title': instance['title'],
-    #         'tag': instance['tag'],
-    #         'date': instance['creationdate'],
-    #         'name': instance['user__name']
-    #     }
     class Meta:
         model = UserCustom
         fields = ['username', 'password']
@@ -34,7 +24,7 @@ class SignInSerializer(serializers.ModelSerializer):
 class FindIDInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
-        fields = ['email', 'phonenumber']
+        fields = ['email', 'name']
 class FindIDOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
@@ -65,9 +55,6 @@ class PasswordCheckSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
         fields = ['password']
-    
-class DeleteUserSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=75)
 
 class GetUserData(serializers.ModelSerializer):
     class Meta:
@@ -81,3 +68,4 @@ class ResetPasswordInput(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
         fields = ['username','password', 'email', 'phonenumber']
+    

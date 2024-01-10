@@ -1,7 +1,8 @@
 from .models import *
 from .serializers import *
-from account.models import UserCustom
+
 # from rest_framework import permissions
+
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -70,11 +71,12 @@ class FaqSearchView(generics.ListAPIView):
             )
             
         else:
-            raise ValidationError({'error' : 'input error'}, status.HTTP_404_NOT_FOUND)
+            raise Response({'error' : 'input error'}, status.HTTP_404_NOT_FOUND)
         
         return queryset
 
     serializer_class = FaqSearchSerializer
+    
 # @method_decorator(csrf_protect, name='dispatch')
 class FaqCreateView(generics.CreateAPIView):
     #permission_classes = (permissions.IsAdminUser,)
@@ -85,7 +87,8 @@ class FaqCreateView(generics.CreateAPIView):
         Faq.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin = UserCustom.objects.get(username = "jinwon97")
+            # admin = self.request.user
+            admin = Admin.objects.get(username = serializer.validated_data['contents'],)
         )
         
 

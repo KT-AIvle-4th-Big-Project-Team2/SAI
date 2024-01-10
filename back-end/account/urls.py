@@ -9,9 +9,9 @@ urlpatterns = [
     path("findid/", views.FindIDView.as_view()),#
     path("resetpw/", views.ResetPW.as_view()), #
     path("getuser/", views.GetUserView.as_view()), #
-    path("deleteuser/", views.DeleteAccountView.as_view()),
+    path("deleteuser/<str:username>", views.DeleteAccountView.as_view()),
     path("checkpassword/", views.CheckPWView.as_view()), #
-    path("updatepw/", views.UpdatePWView.as_view()), #
+    # path("updatepw/", views.UpdatePWView.as_view()), #
     # path("checkauth/", views.CheckAuthenticatedView.as_view()), #
     # path("getcsrf/", views.GetCSRFToken.as_view()), #
 ]

@@ -63,10 +63,11 @@ class BoardPostCreateSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['title', 'contents', 'user']
 
-class BoardPostUpdateSerializer(serializers.Serializer):
+class BoardPostUpdateSerializer(serializers.ModelSerializer):
 
-    title = serializers.CharField()
-    contents = serializers.CharField()
+    class Meta:
+        model = Board
+        fields = ['title', 'contents']
 
         
 class BoardPostcommentCreateSerializer(serializers.ModelSerializer):
