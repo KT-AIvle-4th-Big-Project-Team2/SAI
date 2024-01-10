@@ -43,8 +43,9 @@ const Board2View = () => {
     console.log(comment)
     const {contents} = comment;
     axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
-      contents,
-      name,
+      contents: contents,
+      user: name,
+      board:post_num
     })
       .then(function (response) {
         console.log(response);

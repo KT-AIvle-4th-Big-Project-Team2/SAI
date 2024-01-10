@@ -41,8 +41,8 @@ async function sendSignUpRequest() {
 
     const response = await axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
       csrftoken: "BlgLFWKJKzN6yFY6iL5CriGmUCskHD56",
-      username: "sampleuser1123",
-      name: "Sample Name1234",
+      username: "sampleuser11235445451322134",
+      name: "Sample Name123412312345552133125",
       password: "SamplePassword123!",
       email: "sample@example.com",
       phonenumber: "01012345678",
@@ -85,6 +85,7 @@ export default function SignUp() {
     console.log(event.currentTarget);
     const data = new FormData(event.currentTarget);
     const joinData = {
+      username : data.get('username'),
       email: data.get('email'),
       name: data.get('name'),
       password: data.get('password'),
@@ -100,9 +101,10 @@ export default function SignUp() {
       age
     })
 */
-    const { email, name, password, rePassword, age } = joinData;
+    const {username, email, name, password, rePassword, age } = joinData;
     try {
       const signUpResponse = await axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
+        csrftoken: "BlgLFWKJKzN6yFY6iL5CriGmUCskHD56",
         username: joinData.username,
         name: joinData.name,
         password: joinData.password,
