@@ -136,8 +136,8 @@ class KakaoMap extends Component {
             userMarket:'',
             userService:'',
             buttonStyle: {
-                width: '7.1em', // Set the desired width
-                minWidth:'7.1em',
+                width: '6em', // Set the desired width
+                minWidth:'6em',
                 maxWidth:'7.1em',
                 minHeight: '25%', // Set the desired height
                 height: '2.8em',
@@ -539,7 +539,7 @@ class KakaoMap extends Component {
                                 }}
                             />
                             {/* SAI 창업 도우미 시작하기 버튼 */}
-                            <button type="submit" className="sai-button" style={{marginTop:'20px',fontSize:'16px'}}>
+                            <button type="submit" className="sai-button" href="/SimulReport2" style={{marginTop:'20px',fontSize:'16px'}}>
                                 SAI 창업 도우미 시작하기
                             </button>
                         </form>
@@ -737,9 +737,9 @@ class KakaoMap extends Component {
                                         <img
                                             src={getServiceIconPath(service)}
                                             alt={service}
-                                            style={{ width: '49%', height: '49%', marginTop: '7px',marginBottom:'5px' }}
+                                            style={{ width: '49%', height: '49%', marginTop: '4px',marginBottom:'4px' }}
                                         />
-                                        <span>{service}</span>
+                                        <span style={{fontSize : '12px'}}>{service}</span>
                                     </button>
                                 ))}
                             </div>
@@ -779,9 +779,11 @@ class KakaoMap extends Component {
                             />
                             
                             {/* SAI 창업 도우미 시작하기 버튼 */}
-                            <button type="submit" className="sai-button" style={{marginTop:'20px'}}>
+                            <a href="/SimulReport2" className="sai-button" style={{ marginTop: '20px', display: 'block', textDecoration: 'none' }}>
+                            <button className="sai-button" style={{ width: '100%', height: '100%', border: 'none', background: 'none', padding: '0', margin: '0', cursor: 'pointer' }}>
                                 SAI 창업 도우미 시작하기
                             </button>
+                            </a>
                         </form>
                         )}
                         </div>
