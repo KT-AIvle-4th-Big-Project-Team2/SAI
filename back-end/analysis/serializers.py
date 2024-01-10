@@ -36,7 +36,7 @@ class AIReportSerializer(serializers.ModelSerializer):
 class AIReportListSerializer(serializers.ModelSerializer):
     class Meta:
         model = AiReport
-        fields = ['creationdate', 'region', 'area', 'business', 'funds', 'sim_result', 'report_id']
+        fields = ['creationdate', 'region', 'area_1', 'business', 'funds', 'sim_result', 'report_id']
         
         
 
@@ -62,5 +62,5 @@ class franchise_dataSerializer(serializers.ModelSerializer):
 class AIReportList(serializers.ModelSerializer):
     class Meta:
         model = AiReport
-        fields = ["report_id","region","area", "business", "funds", "sim_result", "creationdate"]
+        fields = ["report_id","region","area_1", "business", "funds", "sim_result", "creationdate"]
         
