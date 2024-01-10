@@ -43,9 +43,9 @@ const Board2Write = () => {
 
   return (
     <div className="container">
-      <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 게시판</h2>
-      </Box>
+    <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 게시판</span>
+    </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>

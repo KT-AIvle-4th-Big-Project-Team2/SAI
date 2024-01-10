@@ -13,7 +13,7 @@ function NavBarElements() {
   const [feedbackTitle, setFeedbackTitle] = useState('');
   const [feedbackContent, setFeedbackContent] = useState('');
   const name = 'test'
-  const { isLogin} = useAuth();
+  const { isLogin, logoutHandler } = useAuth();
 
   const handleOpenFeedback = () => {
     setOpenFeedback(true);
@@ -58,10 +58,7 @@ function NavBarElements() {
             </Navbar.Brand>
           {isLogin ? (
             <Nav>
-              <NavDropdown title="창업 도우미" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Home">시뮬레이션</NavDropdown.Item>
-                <NavDropdown.Item href="/SimulReport">시뮬레이션 리포트</NavDropdown.Item>
-              </NavDropdown>
+              <Nav.Link href="/Home">창업도우미</Nav.Link>
               <NavDropdown title="커뮤니티" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
                 <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
@@ -72,7 +69,7 @@ function NavBarElements() {
                 <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
                 <NavDropdown.Item onClick={handleOpenFeedback}>개선의견</NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link href="/">Logout</Nav.Link>
+              <Nav.Link href="/" onClick={logoutHandler}>Logout</Nav.Link>
             </Nav>
           ) : ( 
           <Nav>

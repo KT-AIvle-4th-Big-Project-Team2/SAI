@@ -18,7 +18,6 @@ import {
   IconButton
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
-import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
