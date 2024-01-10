@@ -42,7 +42,7 @@ const Footer = () => {
               KT AIVLE SCHOOL 4기 2조ㅣ오진원 김수현 김수환 신진한 안예린 윤경상 이웅희 | E-mail : aivle4team2@gmail.com
             </Typography>
             <br />
-            <Typography sx={{fontSize : 15}}>Copyright© 2024 KT AIVLE SHCOOL TEAM2’ All rights reserved.</Typography>
+            <Typography sx={{fontSize : 15}}>Copyright© 2024 SAI All rights reserved.</Typography>
           </Box>
         </div>
       </Box>

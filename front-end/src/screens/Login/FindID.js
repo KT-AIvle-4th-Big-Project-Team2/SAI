@@ -2,16 +2,14 @@ import * as React from 'react';
 import { Button, TextField, Link, Box, Typography, Container, Grid } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/SAI_logo_slogan.png';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const defaultTheme = createTheme();
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      Copyright© 2024 SAI All rights reserved.
     </Typography>
   );
 }
@@ -30,6 +28,8 @@ export default function FindID() {
   };
 
   return (
+    
+    <ThemeProvider theme={defaultTheme}>
     <Container component="main" maxWidth="xs">
       <Box
         component="form"
@@ -79,12 +79,13 @@ export default function FindID() {
           </Button>
         </Box>
       </Box>
-      <Box textAlign="right">
+      <Box textAlign="right" sx={{mt : 1}}>
         <Link href="/login" variant="body2">
-          로그인
+          로그인으로 돌아가기
         </Link>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
+    </ThemeProvider>
   );
 }

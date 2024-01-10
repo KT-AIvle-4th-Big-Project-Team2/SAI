@@ -26,7 +26,7 @@ import logo from '../../assets/SAI_logo_slogan.png'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © SAI! All Rights Reserved.'}
+      Copyright© 2024 SAI All rights reserved.
     </Typography>
   );
 }

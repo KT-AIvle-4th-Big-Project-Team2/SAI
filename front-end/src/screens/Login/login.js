@@ -22,12 +22,7 @@ import logo from '../../assets/SAI_logo_slogan.png'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      Copyright© 2024 SAI All rights reserved.
     </Typography>
   );
 }
