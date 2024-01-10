@@ -968,7 +968,8 @@ class AiReport(models.Model):
     report_id = models.AutoField(primary_key=True)
     creationdate = models.DateTimeField(auto_now_add=True)
     region = models.CharField(max_length=20)
-    area = models.CharField(max_length=20)
+    area_1 = models.CharField(max_length=20)
+    area_2 = models.CharField(max_length=20, blank=True, null=True)
     business = models.CharField(max_length=20)
     funds = models.BigIntegerField()
     sales_23_2q = models.BigIntegerField(blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
@@ -991,7 +992,65 @@ class AiReport(models.Model):
     simil_area_diff_2 = models.BigIntegerField(blank=True, null=True)
     AI = models.CharField(db_column='AI', max_length=10)  # Field name made lowercase.
     user = models.ForeignKey(UserCustom, models.DO_NOTHING)
+    rent_cost = models.IntegerField(blank=True, null=True)
+    posi_fran_num = models.IntegerField(blank=True, null=True)
+    franchise_rec_1 = models.JSONField(blank=True, null=True)
+    franchise_rec_2 = models.JSONField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'ai_report'
+        
+        
+        
+#############################################################
+#                      프랜차이즈                            #
+#############################################################
+class Vacancyrate(models.Model):
+    지역별 = models.TextField(primary_key = True)
+    상세지역 = models.TextField(blank=True, null=True)
+    임대료 = models.FloatField(blank=True, null=True)
+    평균임대면적 = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'vacancyrate'
+
+
+class SeoulRent(models.Model):
+    dong_code = models.IntegerField(primary_key = True)
+    dong_name = models.TextField(blank=True, null=True)
+    area_size = models.IntegerField(blank=True, null=True)
+    x = models.IntegerField(blank=True, null=True)
+    y = models.BigIntegerField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    latituded = models.FloatField(blank=True, null=True)
+    area_name = models.TextField(blank=True, null=True)
+    시도명 = models.TextField(blank=True, null=True)
+    시군구명 = models.TextField(blank=True, null=True)
+    class Meta:
+        managed = False
+        db_table = 'seoul_rent'
+
+
+class FranchiseData(models.Model):
+    대분류서비스 = models.TextField(blank=True, null=True)
+    중분류서비스 = models.TextField(blank=True, null=True)
+    법인명 = models.TextField(blank=True, null=True)
+    브랜드명 = models.TextField(primary_key = True)
+    가맹점수 = models.IntegerField(blank=True, null=True)
+    신규가맹점_등록수 = models.IntegerField(db_column='신규가맹점 등록수', blank=True, null=True)  # Field renamed to remove unsuitable characters.
+    계약종료수 = models.IntegerField(blank=True, null=True)
+    계약해지수 = models.IntegerField(blank=True, null=True)
+    명의변경수 = models.IntegerField(blank=True, null=True)
+    평균매출금액 = models.IntegerField(blank=True, null=True)
+    면적단위평균매출액 = models.IntegerField(blank=True, null=True)
+    가맹금액 = models.IntegerField(blank=True, null=True)
+    교육금액 = models.IntegerField(blank=True, null=True)
+    보증금액 = models.IntegerField(blank=True, null=True)
+    기타금액 = models.IntegerField(blank=True, null=True)
+    합계금액 = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'franchise_data'

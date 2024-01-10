@@ -12,28 +12,34 @@ class AiReport(models.Model):
     report_id = models.AutoField(primary_key=True)
     creationdate = models.DateTimeField()
     region = models.CharField(max_length=20)
-    area = models.CharField(max_length=20)
-    number_23_2q_sales = models.BigIntegerField(db_column='23_2q_sales', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
-    number_23_4q_esti = models.BigIntegerField(db_column='23_4q_esti', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
-    number_23_3q_sales = models.BigIntegerField(db_column='23_3q_sales', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
-    number_23_4q_pre = models.BigIntegerField(db_column='23_4q_pre', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    area_1 = models.CharField(max_length=20)
+    area_2 = models.CharField(max_length=20, blank=True, null=True)
+    business = models.CharField(max_length=20)
+    funds = models.BigIntegerField()
+    ai = models.CharField(db_column='AI', max_length=10)  # Field name made lowercase.
+    sales_23_2q = models.BigIntegerField(blank=True, null=True)
+    esti_23_3q = models.BigIntegerField(blank=True, null=True)
+    pred_23_4q = models.BigIntegerField(blank=True, null=True)
     top_influ = models.JSONField(blank=True, null=True)
     bottom_influ = models.JSONField(blank=True, null=True)
     sim_result = models.CharField(max_length=10, blank=True, null=True)
-    avg_sale_comp = models.CharField(max_length=45, blank=True, null=True)
-    sale_updown = models.CharField(max_length=45, blank=True, null=True)
-    market_active = models.CharField(max_length=45, blank=True, null=True)
-    opening_updown = models.CharField(max_length=45, blank=True, null=True)
-    area_growth = models.CharField(max_length=45, blank=True, null=True)
-    fpeople_updown = models.CharField(max_length=45, blank=True, null=True)
+    avg_sale_comp = models.IntegerField(blank=True, null=True)
+    sale_updown = models.CharField(max_length=20, blank=True, null=True)
+    market_active = models.CharField(max_length=20, blank=True, null=True)
+    opening_updown = models.CharField(max_length=20, blank=True, null=True)
+    area_growth = models.CharField(max_length=20, blank=True, null=True)
+    fpeople_updown = models.CharField(max_length=20, blank=True, null=True)
     simil_area_name_1 = models.CharField(max_length=20, blank=True, null=True)
     simil_area_esti_1 = models.BigIntegerField(blank=True, null=True)
     simil_area_diff_1 = models.BigIntegerField(blank=True, null=True)
-    simil_area_name_2_field = models.CharField(db_column='simil_area_name_2:', max_length=20, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
+    simil_area_name_2 = models.CharField(max_length=20, blank=True, null=True)
     simil_area_esti_2 = models.BigIntegerField(blank=True, null=True)
     simil_area_diff_2 = models.BigIntegerField(blank=True, null=True)
-    ai = models.CharField(db_column='AI', max_length=10)  # Field name made lowercase.
     user = models.ForeignKey('AccountUsercustom', models.DO_NOTHING)
+    rent_cost = models.IntegerField(blank=True, null=True)
+    posi_fran_num = models.IntegerField(blank=True, null=True)
+    franchise_rec_1 = models.JSONField(blank=True, null=True)
+    franchise_rec_2 = models.JSONField(blank=True, null=True)
 
     class Meta:
         managed = False

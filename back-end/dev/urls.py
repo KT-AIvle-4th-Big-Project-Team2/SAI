@@ -27,5 +27,6 @@ urlpatterns = [
     path('faq/', include("faq.urls")),
     path('analysis/', include("analysis.urls")),
     path('adminpage/', include("adminPage.urls")),
-    path('userPage/', include("userPage.urls"))
+    path('userPage/', include("userPage.urls")),
+    path('report/', include("report.urls"))
 ]

@@ -39,3 +39,28 @@ class AIReportListSerializer(serializers.ModelSerializer):
         fields = ['creationdate', 'region', 'area', 'business', 'funds', 'sim_result', 'report_id']
         
         
+
+
+class seoul_rent_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = SeoulRent
+        fields = '__all__'
+        
+        
+class vacancyrateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vacancyrate
+        fields = '__all__'
+
+
+class franchise_dataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FranchiseData
+        fields = '__all__'
+        
+        
+class AIReportList(serializers.ModelSerializer):
+    class Meta:
+        model = AiReport
+        fields = ["report_id","region","area", "business", "funds", "sim_result", "creationdate"]
+        

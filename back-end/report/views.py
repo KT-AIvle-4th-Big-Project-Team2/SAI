@@ -16,10 +16,10 @@ from rest_framework.views import APIView
 
 class dong_report(APIView):
     
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         
-        dong = "대조동"
-        business = "한식음식점"
+        dong = kwargs['dong']
+        business = kwargs['market']
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
@@ -488,10 +488,14 @@ class MarketReportView(APIView):
 
 class market_report(APIView):
     
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         
-        market = "회현역"
-        business = "한식음식점"
+        # market = "회현역"
+        # business = "한식음식점"
+        
+        market = kwargs["market"]
+        business = kwargs["business"]
+        
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
@@ -961,193 +965,4 @@ class market_report(APIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
         
-
-
-
-class rent_cost(APIView):
-    def get(self, request):
-        #goo = unquote(self.kwargs['goo'])
-        #dong = self.kwargs['dong'].upper()
-        dong1 = "청운효자동" # null
-        dong2 = "사직동" # one
-        dong3 = "미아동" # two
-        
-        #business = self.kwargs['business'].upper()
-        #funds = self.kwargs['seedMoney']
-        
-        
-        #dong_name = seoul_rent_db.objects.all()
-
-        # 임대료 데이터 초기 설정 
-        rent_cost_last_data = 0
-        
-        queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
-        
-        # 행정동 입력 →  seoul_rent ( dong_name → 지명 확인) 
-
-        vacancy_data = ["임대료","평균임대면적"]
-
-        area_name = len(queryset_estimate)
-
-        #임대료 데이터가 존재하거나 하나일 경우
-        if len(queryset_estimate) == 1 :
-            # temp_data = vacancyrate 상세지역
-            temp_data = queryset_estimate[0]["area_name"]
-            
-            print(temp_data)
-            
-            # temp = "" 이면 임대료 정보 x
-            if temp_data != "":
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-            else :
-                rent_cost_last_data = -1
-        
-        # 임대료 데이터가 중복일 경우
-        else :
-            rent_cost_last_data = len(queryset_estimate) 
-    
-             
-            for i in range(len(queryset_estimate) ):
-                temp_data = queryset_estimate[i]["area_name"]
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-                print(rent_cost_last_data)
-
-            rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
                 
-        
-        return Response(rent_cost_last_data, status=status.HTTP_200_OK)
-        
-# class rent_cost(APIView):
-    
-#     def get(self, request):
-        
-#         rent_cost_last_data = 0
-        
-#         queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
-        
-#         # 행정동 입력 →  seoul_rent ( dong_name → 지명 확인) 
-
-#         vacancy_data = ["임대료","평균임대면적"]
-
-#         area_name = len(queryset_estimate)
-
-#         #임대료 데이터가 존재하거나 하나일 경우
-#         if len(queryset_estimate) == 1 :
-#             # temp_data = vacancyrate 상세지역
-#             temp_data = queryset_estimate[0]["area_name"]
-            
-#             print(temp_data)
-            
-#             # temp = "" 이면 임대료 정보 x
-#             if temp_data != "":
-#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-#                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-#             else :
-#                 rent_cost_last_data = -1
-        
-#         # 임대료 데이터가 중복일 경우
-#         else :
-#             rent_cost_last_data = len(queryset_estimate) 
-    
-             
-#             for i in range(len(queryset_estimate) ):
-#                 temp_data = queryset_estimate[i]["area_name"]
-#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-#                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-#                 print(rent_cost_last_data)
-
-#             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
-                
-        
-#         return Response(rent_cost_last_data, status=status.HTTP_200_OK)
-                
-def rent_cost_data(name_dong):
-        rent_cost_last_data =1
-        
-        queryset_estimate = seoul_rent_db.objects.filter(dong_name=name_dong).values("area_name")
-        
-        vacancy_data = ["임대료","평균임대면적"]
-
-        area_name = len(queryset_estimate)
-
-        #임대료 데이터가 존재하거나 하나일 경우
-        if len(queryset_estimate) == 1 :
-            # temp_data = vacancyrate 상세지역
-            temp_data = queryset_estimate[0]["area_name"]
-            
-            # temp = "" 이면 임대료 정보 x
-            if temp_data != "":
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-            else :
-                rent_cost_last_data = -1
-        
-        # 임대료 데이터가 중복일 경우
-        else :
-            rent_cost_last_data = len(queryset_estimate) 
-    
-             
-            for i in range(len(queryset_estimate) ):
-                temp_data = queryset_estimate[i]["area_name"]
-                rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-                rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-                print(rent_cost_last_data)
-
-            rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
-        
-        return rent_cost_last_data
-           
-        
-# 프랜차이즈 작업 더 필요
-class franchisedata(APIView):
-    
-    
-    def get(self, request):
-        
-        dongname = "미아동"
-        Sectors = "치킨"
-        rentcost = rent_cost_data(dongname)
-        
-        seedmoney = 50000
-        
-
-        franchise_col = ["브랜드명","평균매출금액","가맹금액","교육금액","보증금액","기타금액","합계금액"]
-        
-        #queryset_franch1 = franchise_data.objects.filter(합계금액__lte = seedmoney).all()
-        # 시드 머니에 임대료 +  보증금 (임대료 *10) 제외
-        seedmoney = seedmoney - (rentcost*11)
-        
-        queryset_franch1 = franchise_data.objects.filter(중분류서비스 = "치킨",합계금액__lte = seedmoney).order_by('평균매출금액').values(*franchise_col)
-        
-        franchise_sort_data = queryset_franch1[::-1]
-        #franchise_data[0]
-        response_data= {
-            "임대료" : rent_cost
-        }
-        
-        fran_response_last =   [franchise_sort_data[0],franchise_sort_data[1],rent_cost]
-        
-        #franchise_sort_data[0]["브랜드명"]
-        #franchise_sort_data[0]["평균매출금액"]
-        #franchise_sort_data[0]["가맹금액"]
-        #franchise_sort_data[0]["교육금액"]
-        #franchise_sort_data[0]["보증금액"]
-        #franchise_sort_data[0]["기타금액"]
-        #franchise_sort_data[0]["합계금액"]
-        
-        
-        return Response({"임대료" : rent_cost , "프랜차이즈 1 브랜드" : franchise_sort_data[0]["브랜드명"],
-                         "프랜차이즈 1 평균매출금액" : franchise_sort_data[0]["평균매출금액"],"프랜차이즈 1 가맹금액" : franchise_sort_data[0]["가맹금액"],
-                         "프랜차이즈 1 교육금액" : franchise_sort_data[0]["교육금액"],"프랜차이즈 1 보증금액" : franchise_sort_data[0]["보증금액"],
-                         "프랜차이즈 1 기타금액" : franchise_sort_data[0]["기타금액"],"프랜차이즈 1 합계금액" : franchise_sort_data[0]["합계금액"],
-                         "프랜차이즈 2 브랜드" : franchise_sort_data[1]["브랜드명"],
-                         "프랜차이즈 2 평균매출금액" : franchise_sort_data[1]["평균매출금액"],"프랜차이즈 2 가맹금액" : franchise_sort_data[1]["가맹금액"],
-                         "프랜차이즈 2 교육금액" : franchise_sort_data[1]["교육금액"],"프랜차이즈 2 보증금액" : franchise_sort_data[1]["보증금액"],
-                         "프랜차이즈 2 기타금액" : franchise_sort_data[1]["기타금액"],"프랜차이즈 2 합계금액" : franchise_sort_data[1]["합계금액"],
-                         
-                         }, status=status.HTTP_200_OK)
-        
-        #return  Response({franchise_sort_data[1]["평균매출금액"]}) 
-    
