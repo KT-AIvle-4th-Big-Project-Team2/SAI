@@ -89,9 +89,9 @@ const Board1View = () => {
   return (
     <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        창업 정보
-      </Typography>
+    <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 정보</span>
+    </Box>
       <Divider sx={{ mt: 3, mb: 3 }} />
       <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={boardContent.post_id}>
         <Typography variant="h4" >

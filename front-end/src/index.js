@@ -13,7 +13,7 @@ const theme = createTheme({
       gray: '#EEEEEE',
       orange: '#FF6B00',
       dark: '#012A5B',
-      pink: '#F25278',<ㄴ
+      pink: '#F25278',
       blue: '#0055FF'
     },
   },

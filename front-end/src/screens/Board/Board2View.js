@@ -85,10 +85,9 @@ const Board2View = () => {
   return (
     <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        창업 게시판
-      </Typography>
-      <DivLine />
+    <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 게시판</span>
+    </Box>
       <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={boardContent.post_id}>
         <Typography variant="h4" >
           {boardContent.length > 0 ? boardContent[0].title || "Loading..." : "Loading..."}
@@ -109,13 +108,13 @@ const Board2View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="outlined" href={`/board2Mod/${post_num}`} sx={{ mb: 2, mr : 2, color : '#000000' }}>
+        <Button variant="contained" href={`/board2Mod/${post_num}`} sx={{ mb: 2, mr : 2}}>
           글 수정
         </Button>
-        <Button  variant="outlined" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#000000' }}>
+        <Button  variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2}}>
           글 삭제
         </Button>
-        <Button variant="outlined" href="/board2" sx={{ mb: 2, color : '#000000' }}>
+        <Button variant="contained" href="/board2" sx={{ mb: 2}}>
           글 목록
         </Button>
       </Box>
@@ -146,7 +145,7 @@ const Board2View = () => {
         sx={{ mb: 2 }}
         onChange={(e) => setComment((prevText) => ({ ...prevText, contents: e.target.value }))}
       />
-      <Button variant="outlined" sx={{ color : '#000000' }} onClick={handleCommentInput} href={`/board2View/${post_num}` }>
+      <Button variant="contained" onClick={handleCommentInput} href={`/board2View/${post_num}` }>
         댓글 달기
       </Button>
     </Paper>

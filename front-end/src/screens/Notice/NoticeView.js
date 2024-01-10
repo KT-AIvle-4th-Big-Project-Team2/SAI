@@ -42,9 +42,9 @@ const NoticeView = () => {
   return (
     <div className="container">
     <Box sx={{ p: 2, height: '100%' }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        공지사항
-      </Typography>
+    <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+          <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>공지사항</span>
+      </Box>
       <Divider sx={{ mt: 3, mb: 3 }} />
       <Paper elevation={3} sx={{ p: 3, mb: 3, minHeight: 700 }} key={boardContent.post_id}>
         <Typography variant="h4" >
@@ -66,13 +66,13 @@ const NoticeView = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="outlined" href={`/noticeMod/${post_num}`} sx={{ mb: 2, mr : 2, color : '#000000' }}>
+        <Button variant="contained" href={`/noticeMod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
           글 수정
         </Button>
-        <Button variant="outlined" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#000000' }}>
+        <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2}}>
           글 삭제
         </Button>
-        <Button variant="outlined" href="/Notice" sx={{ mb: 2, color : '#000000' }}>
+        <Button variant="contained" href="/Notice" sx={{ mb: 2 }}>
           글 목록
         </Button>
       </Box>

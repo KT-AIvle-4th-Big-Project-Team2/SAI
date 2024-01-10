@@ -109,10 +109,9 @@ const Notice = () => {
 
   return (
     <div className="container">
-        <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-          <h2 >공지사항</h2>
-        </Box>
-        <DivLine />
+      <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+          <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>공지사항</span>
+      </Box>
         <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
           <TableContainer component={Paper} style={{ height: '100%' }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -156,7 +155,7 @@ const Notice = () => {
           />
                 
         <div>
-            <Button variant="outlined" href="/NoticeWrite"  style={{ color: 'black' }}>
+            <Button variant="contained" href="/NoticeWrite" >
               글쓰기
             </Button>
           </div>

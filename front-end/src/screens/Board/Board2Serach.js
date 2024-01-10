@@ -77,10 +77,9 @@ const Board2Search = () => {
 
   return (
     <div className="container">
-      <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 게시판</h2>
+      <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+          <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 게시판</span>
       </Box>
-      <DivLine />
       <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
         <TableContainer component={Paper} style={{ height: '100%' }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -124,7 +123,7 @@ const Board2Search = () => {
         />
 
         <div>
-          <Button variant="outlined" href="/Board2Write" style={{ color: 'black' }}>
+          <Button variant="contained" href="/Board2Write">
             글쓰기
           </Button>
         </div>

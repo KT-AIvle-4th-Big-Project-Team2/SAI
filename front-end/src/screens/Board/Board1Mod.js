@@ -55,9 +55,9 @@ const Board1Mod = () => {
 
   return (
     <div className="container">
-      <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>창업 정보 수정</h2>
-      </Box>
+    <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 정보</span>
+    </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
@@ -88,11 +88,11 @@ const Board1Mod = () => {
       />
       </div>
         <p></p>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-          <Button variant="outlined" sx={{ mr: 2, color : '#000000' }} onClick={handleTextInput}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom : 20 }}>
+          <Button variant="contained" sx={{ mr: 2}} onClick={handleTextInput}>
             수정
           </Button>
-            <Button href='/Board1' variant="outlined" sx={{ color : '#000000' }}>
+            <Button href='/Board1' variant="contained">
               취소
             </Button>
         </div>

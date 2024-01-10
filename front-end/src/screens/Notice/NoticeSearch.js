@@ -75,8 +75,8 @@ const NoticeSearch = () => {
 
   return (
     <div className="container">
-      <Box sx={{ height: '100%', mt: 3, mb: 3, width: 'fit-content' }}>
-        <h2>공지사항</h2>
+      <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+          <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>공지사항</span>
       </Box>
       <DivLine />
       <Paper className="Paper" border={1} p={2} style={{ height: '100%', overflow: 'auto' }}>
@@ -122,7 +122,7 @@ const NoticeSearch = () => {
         />
 
         <div>
-          <Button variant="outlined" href="/Board1Write" style={{ color: 'black' }}>
+          <Button variant="contained" href="/Board1Write">
             글쓰기
           </Button>
         </div>

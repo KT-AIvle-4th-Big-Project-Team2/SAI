@@ -6,8 +6,9 @@ import DivLine from '../../components/Styles/DivLine';
 
 const FAQ = () => (
   <div className="container">
-    <Box sx={{ mt: 3, mb: 3 }}><h2>FAQ</h2></Box>
-    <DivLine />
+    <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
+        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>FAQ</span>
+    </Box>
     <Accordion>
       <Accordion.Item eventKey="0">
         <Accordion.Header><Typography sx={{ fontSize: 23 }}>🙋‍♀️ SAI는 어떤 서비스인가요?</Typography></Accordion.Header>
