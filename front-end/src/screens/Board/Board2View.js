@@ -120,8 +120,8 @@ const Board2View = () => {
       </Box>
       <DivLine />
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        Comment
+      <Typography>
+      <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>Comment</span>
       </Typography>
       <DivLine />
       {comments.map((c) => (

@@ -31,11 +31,20 @@ const SimulReport2 = () => {
     "상권"  : "삼성역",
     "자본금" : "20000만원",
     "업종" : "한식음식점",
-    "점포순위": 15,
-    "매출순위": 11,
-    "유동인구순위": 23,
+    "saletext": "감소",
+    "floatingpopulationtext": "증가",
+    "marketcount" : 37,
+    "storeranking": 13,
+    "saleranking": 9,
+    "Floating_population_ranking": 24,
     "전분기대비매출액": -164509,
     "전년도분기대비매출액": -24019,
+    "Quarterlysales": -4447,
+    "nowsales": 33158,
+    "Salescomparedtothesamequarterlastyear": -650,
+    "Quarterlyfloatingpopulation": -19107,
+    "nowfloatingpopulation": 1076565,
+    "floatingpopulationcomparedtothesamequarterlastyear": 54893,
     "best_매출_성별_연령대": "남성/30대",
     "best_매출_요일": "화요일(19.3%)",
     "best_매출_시간대": "11~14시",
@@ -78,9 +87,9 @@ const SimulReport2 = () => {
     "극장": 0,
     "숙박시설": 0,
     "교통시설": 19,
-    "배후지_1등_텍스트": "tf",
-    "배후지_2등_텍스트": "fi",
-    "배후지_3등 텍스트": "go",
+    "배후지_1등_텍스트": "교통시설",
+    "배후지_2등_텍스트":  "금융기관",
+    "배후지_3등 텍스트": "관공서",
     "20223_주거인구": 746.0,
     "20224_주거인구": 355.0,
     "20231_주거인구": 355.0,
@@ -394,7 +403,7 @@ const BumpGraph = () => (
 
 
 
-  const user = '오진원'
+  const user = 'jinwon97'
 
   const TitleType = ({children}) => {
     const fontSize = 30;
@@ -439,9 +448,9 @@ const BumpGraph = () => (
             <TitleType>종합 의견</TitleType>
             <Box sx={{ bgcolor: 'primary.gray', mt : 2, mb : 5, padding : 3, borderRadius : 3}}>
             <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold'  }}>{da.업종}</span> 업종 <span style={{ fontWeight: 'bold' }}>점포수</span>는 전년 동기에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.점포수_증감_텍스트}</span>하고 있어요. 상권이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.점포수_발쇠_텍스트}</span>하는 시기의 경우 입지 선정에 신중하셔야 해요.</ContentsType>
-            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>은 자치구에서 <span style={{ fontWeight: 'bold' }}>매출</span>이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span> 추세예요. 평균 임대 시세 등 고정 비용에 대한 관리가 중요해요.</ContentsType>
-            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>은 전년 동 분기에 비해 <span style={{ fontWeight: 'bold' }}>유동인구</span>가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(증가/감소)</span>하고 있는 지역입니다. 마케팅이 중요한 상권이에요.</ContentsType>
-            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} </span> 행정동 <span style={{ fontWeight: 'bold' }}>(n)개 </span>중 <span style={{ color : '#6474C8', fontWeight : 'bold'  }}>{da.행정동}</span>의 <span style={{ fontWeight: 'bold' }}>점포 수는 {da.점포순위}위, 매출액 {da.매출순위}위, 유동인구 {da.유동인구순위}위</span>에요.</ContentsType>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>은 자치구에서 <span style={{ fontWeight: 'bold' }}>매출</span>이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.saletext}</span> 추세예요. 평균 임대 시세 등 고정 비용에 대한 관리가 중요해요.</ContentsType>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} {da.행정동}</span>은 전년 동 분기에 비해 <span style={{ fontWeight: 'bold' }}>유동인구</span>가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.floatingpopulationtext}</span>하고 있는 지역입니다. 마케팅이 중요한 상권이에요.</ContentsType>
+            <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.행정구} </span> 행정동 <span style={{ fontWeight: 'bold' }}>{da.marketcount}개 </span>중 <span style={{ color : '#6474C8', fontWeight : 'bold'  }}>{da.행정동}</span>의 <span style={{ fontWeight: 'bold' }}>점포 수는 {da.storeranking}위, 매출액 {da.saleranking}위, 유동인구 {da.Floating_population_ranking}위</span>에요.</ContentsType>
             </Box>
             <Grid container spacing={3}>
              <Grid item xs={4}>
@@ -462,7 +471,7 @@ const BumpGraph = () => (
                     </Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2, borderRadius : 3}}>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>나의 등수</span></Typography>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>{da.점포순위} / 16위</span></Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>{da.storeranking} / {da.marketcount}위</span></Typography>
                     </Box>
                 </Box>
               </Grid>
@@ -472,41 +481,41 @@ const BumpGraph = () => (
                     <br></br>
                     <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전 분기 대비</span></Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>{da.전분기대비매출액}</span></Typography>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>{da.Quarterlysales}만원</span></Typography>
                     </Box>
                     <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'black' }}>2023년 2분기</span></Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>만원</span></Typography>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>{da.nowsales}만원</span></Typography>
                     </Box>
                     <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전년 동분기 대비</span></Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>만원</span></Typography>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>{da.Salescomparedtothesamequarterlastyear}만원</span></Typography>
                     </Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2, borderRadius : 3}}>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>나의 등수</span></Typography>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>12 / 16위</span></Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black' }}>{da.saleranking} / {da.marketcount}위</span></Typography>
                     </Box>
                 </Box>
               </Grid>
               <Grid item xs={4}>
               <Box  sx={{padding : 3}}>
-                    <TitleType>점포수</TitleType>
+                    <TitleType>유동인구</TitleType>
                     <br></br>
                     <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전 분기 대비</span></Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>+ 11명</span></Typography>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>{da.Quarterlyfloatingpopulation.toLocaleString()}명</span></Typography>
                     </Box>
                     <Box sx={{bgcolor : 'primary.gray', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'black' }}>2023년 3분기</span></Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>800ha / 명</span></Typography>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'black' }}>{da.nowfloatingpopulation.toLocaleString()}명</span></Typography>
                     </Box>
                     <Box sx={{bgcolor : 'primary.blue', height : '100px', padding : 2, marginTop : 2, borderRadius : 3}}>
                     <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 20 }}><span style={{ color: 'white' }}>전년 동분기 대비</span></Typography>
-                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>- 9명</span></Typography>
+                    <Typography sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: 30 }}><span style={{ color: 'white' }}>{da.floatingpopulationcomparedtothesamequarterlastyear.toLocaleString()}명</span></Typography>
                     </Box>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2, borderRadius : 3}}>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black'}}>나의 등수</span></Typography>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black'}}>10 / 16위</span></Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: 15 }}><span style={{ color: 'black'}}>10 / {da.marketcount}위</span></Typography>
                     </Box>
                 </Box>
               </Grid>
@@ -640,7 +649,7 @@ const BumpGraph = () => (
                     <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> {da['전분기_개업점포수 비교 수치 ']}개</span></Typography>
                 </Box>              
                 <Box border="1px solid gray" sx={{mt : 2, borderRadius : 1, padding:.5}}>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['개업점포수_증/감_텍스트']}</span>, 폐업수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['폐업점포수_증/감_텍스트']}</span> 하고 있어요.</span></Typography>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['개업점포수_증/감_텍스트']}</span>, 폐업수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['폐업점포수_증/감_텍스트']}</span>하고 있어요.</span></Typography>
                     <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['개업점포수_발/쇠_텍스트']}</span>고 유동적이에요. 입지 선정에 유의하세요!</span></Typography>
                 </Box>
                 <OpenGraph />
@@ -655,8 +664,8 @@ const BumpGraph = () => (
                     <Typography sx={{ mr : 20, fontSize: 20 }}><span style={{ color: '#5F5F5F' }}>전분기 대비</span><span style={{ color: '#FF6B00', fontWeight : 'bold' }}> {da['전분기_폐업점포수_비교_수치 ']}개</span></Typography>
                 </Box>                
                 <Box border="1px solid gray" sx={{mt : 2, borderRadius : 1, padding:.5}}>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['개업점포수_증/감_텍스트']}</span>, 폐업수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['폐업점포수_증/감_텍스트']}</span> 하고 있어요.</span></Typography>
-                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>(활발하/침체되)</span>고 유동적이에요. 입지 선정에 유의하세요!</span></Typography>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>전분기 대비 개업 업소수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['개업점포수_증/감_텍스트']}</span>, 폐업수는 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['폐업점포수_증/감_텍스트']}</span>하고 있어요.</span></Typography>
+                    <Typography sx={{ ml : 5, fontSize: 20, textAlign: 'center' }}><span style={{ color: '000000' }}>상권 변화가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da['폐업점포수_발/쇠_텍스트']}</span>고 유동적이에요. 입지 선정에 유의하세요!</span></Typography>
                 </Box>
                 <CloseGraph />
               </Box>

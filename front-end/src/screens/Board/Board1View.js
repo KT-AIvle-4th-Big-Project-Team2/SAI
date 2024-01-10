@@ -7,7 +7,7 @@ import { useAuth } from '../../components/Auth/AuthContext';
 
 
 const Board1View = () => {
-  const name = 'jinwon97'
+  const username = 'jinwon97'
   const [comment, setComment] = useState({contents : ''});
   const [comments, setComments] = useState([]);
   const { post_num } = useParams();
@@ -47,7 +47,7 @@ const Board1View = () => {
     const {contents} = comment;
     axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
       Contents: contents,
-      name: name,
+      name: username,
       'X-CSRFToken': csrfToken,
     })
       .then(function (response) {
@@ -113,30 +113,38 @@ const Board1View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button  variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
-          글 수정
-        </Button>
-        <Button  variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2, color : '#FFFFFF' }}>
-          글 삭제
-        </Button>
+      {boardContent[0].name === username && (
+        <>
+          <Button variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr: 2 }}>
+            글 수정
+          </Button>
+          <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2, color: '#FFFFFF' }}>
+            글 삭제
+          </Button>
+        </>
+      )}
         <Button  variant="contained" href="/Board1" sx={{ mb: 2 }}>
           글 목록
         </Button>
       </Box>
       <DivLine />
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>
-        Comment
+      <Typography>
+      <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>Comment</span>
       </Typography>
       <DivLine />
       {comments.map((c) => (
         <div key={c.comment_id}>
         <Typography variant="body1" fontSize={15} sx={{ mb: 3, display: 'flex', justifyContent: 'space-between' }}>
           <span>ㄴ {c.contents}</span>
-          <span>{c.name} {c.date} 
+          <span>{c.name} {c.date}
+          {c.name === username && (
+        <>
             <Button size='small' onClick={() => handleCommentDelete(c.comment_id)} href={`/Board1View/${post_num}`} sx={{ ml: 1 }}>
               X
             </Button>
+            </>
+      )}
           </span>
         </Typography>
       </div>

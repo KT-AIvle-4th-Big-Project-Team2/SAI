@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useAuth } from '../../components/Auth/AuthContext';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -15,6 +16,7 @@ function Alert(props) {
 const Withdrawal = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const { logoutHandler } = useAuth();
 
   const handleWithdrawal = () => {
     setModalOpen(true);
@@ -61,7 +63,7 @@ const Withdrawal = () => {
           <Button onClick={handleCancelWithdrawal} color="primary">
             아니오
           </Button>
-          <Button onClick={handleConfirmWithdrawal} color="primary">
+          <Button onClick={logoutHandler} href='/' color="primary">
             예
           </Button>
         </DialogActions>
