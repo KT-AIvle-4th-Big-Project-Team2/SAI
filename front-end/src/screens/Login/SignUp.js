@@ -35,11 +35,14 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+
 async function sendSignUpRequest() {
   try {
+
     const response = await axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
-      username: "sampleuser",
-      name: "Sample Name",
+      csrftoken: "BlgLFWKJKzN6yFY6iL5CriGmUCskHD56",
+      username: "sampleuser1123",
+      name: "Sample Name1234",
       password: "SamplePassword123!",
       email: "sample@example.com",
       phonenumber: "01012345678",
@@ -49,6 +52,7 @@ async function sendSignUpRequest() {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        
       },
       withCredentials: false,
     });
