@@ -145,33 +145,31 @@ export default function SignIn() {
       */
 
       try {
-        // 로그인 요청을 보냅니다.
-        const loginResponse = await fetch("http://subdomain.storeaivle.com/accounts/login/", {
-          method: "POST",
+        const response = await axios.post('http://subdomain.storeaivle.com/accounts/login/', {
+          username: joinData.email,
+          password: joinData.password
+        }, {
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            'Accept': 'application/json'
           },
-          body: JSON.stringify({
-            username: joinData.email,
-            password: joinData.password
-          }),
-          credentials: 'include',
+          withCredentials: false // 이 옵션을 false로 설정
         });
-      
-        if (loginResponse.ok) {
-          const data = await loginResponse.json();
-          
-          console.log("Login successful:", data);
-          
-          loginHandler();
-          setUserInfo(data);
-        } else {
-          console.error("Login failed:", loginResponse.status);
-        }
-        
+    
+        console.log("Login successful:", response.data);
+        loginHandler();
+        setUserInfo(response.data);
       } catch (error) {
-        console.error("Network error:", error);
+        if (error.response) {
+          // 서버로부터 응답이 있으나 2xx 범위 밖인 경우
+          console.error("Login failed:", error.response.status);
+        } else if (error.request) {
+          // 요청이 이루어졌으나 응답이 없는 경우
+          console.error("No response:", error.request);
+        } else {
+          // 요청 설정 중 발생한 오류
+          console.error("Error:", error.message);
+        }
       }
     };
   return (

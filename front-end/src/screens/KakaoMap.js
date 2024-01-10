@@ -10,6 +10,7 @@ import Data from '../assets/서울시 행정동.json';
 import seoul from './seoul.json'
 import Data3 from '../assets/서울시 상권정보.json';
 import backImage from '../assets/back_button.png';  // 뒤로가기 버튼 이미지
+import '../Pretendard-1.3.9/web/static/pretendard.css'; // 상대 경로로 CSS 파일을 import
 import progress0Image from '../assets/progress0.png';
 import progress1Image from '../assets/progress1.png';
 import progress2Image from '../assets/progress2.png';
@@ -322,8 +323,8 @@ class KakaoMap extends Component {
                 <nav className={this.state.selectedMenu === '' ? 'startbar' : 'startbar hidden'}>
                     {/* username */}
                     <div style={{marginLeft : 35, marginTop : 50}}>
-                    <span style={{fontWeight : 'bold',fontSize:'18px'}}>오진원님, 반가워요!<br/></span> 
-                    <span style={{fontWeight : 'bold',fontSize:'18px'}}>창업을 고민하시는 <br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'18px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>오진원님, 반가워요!<br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'18px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>창업을 고민하시는 <br/></span> 
                     <span style={{fontWeight : 'bold',fontSize:'18px',color: '#0500FF'}}>분석 단위</span> 
                     <span style={{fontWeight : 'bold',fontSize:'18px'}}>를 선택해 주세요. <br/></span> 
                     </div>
