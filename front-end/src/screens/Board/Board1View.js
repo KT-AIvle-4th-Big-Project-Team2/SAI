@@ -99,9 +99,6 @@ const Board1View = () => {
         </Typography>
         <DivLine />
       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-      <Typography variant="h8">
-       작성자 : {boardContent.length > 0 ?  boardContent[0].name || "Loading..." : "Loading..."}
-          </Typography>
         <Typography variant="h8">
          작성일시 : {boardContent.length > 0 ? boardContent[0].date || "Loading..." : "Loading..."}
         </Typography>
@@ -113,16 +110,6 @@ const Board1View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-      {boardContent[0].name === username && (
-        <>
-          <Button variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr: 2 }}>
-            글 수정
-          </Button>
-          <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2, color: '#FFFFFF' }}>
-            글 삭제
-          </Button>
-        </>
-      )}
         <Button  variant="contained" href="/Board1" sx={{ mb: 2 }}>
           글 목록
         </Button>
