@@ -55,7 +55,7 @@ const Notice = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get("http://subdomain.storeaivle.com/announcements/announcementlist/")
+    axios.get("http://subdomain.storeaivle.com/announcement/announcementlist/")
       .then((response) => {
         setNoticeList([...response.data]);
         console.log(response.data);
