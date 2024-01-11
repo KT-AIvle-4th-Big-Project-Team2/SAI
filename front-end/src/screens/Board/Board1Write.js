@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { Button, TextField, Box, Link } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
-import DivLine from '../../components/Styles/DivLine';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',

@@ -27,25 +27,12 @@ const Board1 = () => {
 
   const navigate = useNavigate();
 
-  const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  /*
-  function getBoard() {12
-    axios.get("https://subdomain.storeaivle.com/board/postlist/")
-      .then((response) => {
-        setBoardList([...response.data]);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-  */
   function getBoard() {
     fetch("http://subdomain.storeaivle.com/board/postlist/")
       .then((response) => {
@@ -63,18 +50,6 @@ const Board1 = () => {
       });
   }
   
-  /*
-  function getBoard() {
-    axios.get("https://subdomain.storeaivle.com/board/postlist/")
-      .then((response) => {
-        setBoardList([...response.data]);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-*/
   useEffect(() => {
     getBoard(); // 1) 게시글 목록 조회 함수 호출
   }, []);
@@ -183,7 +158,6 @@ const Board1 = () => {
             onChange={(e) => setSearchTarget(e.target.value)}
           >
             <MenuItem value="title">제목</MenuItem>
-            <MenuItem value="name">작성자</MenuItem>
           </Select>
         </FormControl>
         <TextField

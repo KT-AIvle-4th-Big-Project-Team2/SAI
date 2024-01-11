@@ -79,10 +79,10 @@ const Board2Write = () => {
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom : 20 }}>
-          <Button variant="contained" sx={{ mr: 2 }} href='/board1' onClick={handleTextInput}>
+          <Button variant="contained" sx={{ mr: 2 }} href='/board2' onClick={handleTextInput}>
             글쓰기
           </Button>
-          <Button variant="contained" href="/Board1">
+          <Button variant="contained" href="/Board2">
             취소
           </Button>
         </div>

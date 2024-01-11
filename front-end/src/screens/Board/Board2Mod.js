@@ -31,7 +31,7 @@ const Board2Mod = () => {
     const { title, content } = text;
 
     // Make a PATCH request to update the post with the modified data
-    axios.patch(`http://subdomain.storeaivle.com/board2/postlist/${post_num}`, {
+    axios.patch(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}`, {
       title,
       content,
     })
@@ -47,7 +47,7 @@ const Board2Mod = () => {
 
   useEffect(() => {
     // Fetch existing post content when the component mounts
-    axios.get(`http://subdomain.storeaivle.com/board2/postlist/${post_num}`)
+    axios.get(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText({

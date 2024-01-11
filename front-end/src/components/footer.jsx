@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Service from './service';
 import PrivacyPolicy from './PrivacyPolicy';
 
+// Index 페이지에 들어갈 footer 컴포넌트
 
 const Footer = () => {
   const scrollToTop = () => {

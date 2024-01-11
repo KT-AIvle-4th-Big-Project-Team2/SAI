@@ -46,9 +46,8 @@ const Board1View = () => {
     console.log(comment)
     const {contents} = comment;
     axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
-      Contents: contents,
-      name: username,
-      'X-CSRFToken': csrfToken,
+      contents: contents,
+      name: username
     })
       .then(function (response) {
         console.log(response);
@@ -162,7 +161,7 @@ const Board1View = () => {
         sx={{ mb: 2 }}
         onChange={(e) => setComment((prevText) => ({ ...prevText, contents: e.target.value }))}
       />
-      <Button variant="contained" sx={{ bgcolor : '#012A5B', color : '#FFFFFF' }} onClick={handleCommentInput} href={`/Board1View/${post_num}` }>
+      <Button variant="contained" sx={{ bgcolor : '#012A5B', color : '#FFFFFF' }} onClick={handleCommentInput} href={`/Board1View/${post_num}`}>
         댓글 달기
       </Button>
     </Paper>

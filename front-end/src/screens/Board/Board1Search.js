@@ -19,23 +19,23 @@ import {
   IconButton
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
-import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
 
 const ITEMS_PER_PAGE = 10;
 
 const Board1Search = () => {
-  const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [Target, setSearchTarget] = useState('title');
   const [Keyword, setSearchKeyword] = useState('');
-
+  const navigate = useNavigate();
   const {searchTarget} = useParams();
   const {searchKeyword} = useParams();
 
-  function getNotice() {
+
+//검색에 맞는 게시글 호출
+  function getBoard() {
     axios.get(`http://subdomain.storeaivle.com/board/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
@@ -47,31 +47,30 @@ const Board1Search = () => {
   };
 
   useEffect(() => {
-    getNotice(); // 1) 게시글 목록 조회 함수 호출
+    getBoard();
   }, []);
 
-  console.log(boardList);
 
+  // URL 클릭 정리
   const handleLinkClick = (postId) => {
     setPost_num(postId);
   };
 
-  const handleSearch = () => {
-    // Perform search based on searchTarget and searchKeyword
-    console.log("Search Target:", searchTarget);
-    console.log("Search Keyword:", searchKeyword);
 
-    // You can call the setSearchQuery function here if needed
+  // URL 인코딩 적용
+  const handleSearch = () => {
+    const encodedSearchTarget = encodeURIComponent(Target);
+    const encodedSearchKeyword = encodeURIComponent(Keyword);
+
+    navigate(`/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`)
+    window.location.reload();
   };
 
-  // Calculate the index range for the current page
+
+  //페이지 관련 변수
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // Get the current page items using the slice method
   const currentItems = boardList.slice(startIndex, endIndex);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (
@@ -140,7 +139,6 @@ const Board1Search = () => {
             onChange={(e) => setSearchTarget(e.target.value)}
           >
             <MenuItem value="title">제목</MenuItem>
-            <MenuItem value="name">작성자</MenuItem>
           </Select>
         </FormControl>
         <TextField
@@ -150,9 +148,7 @@ const Board1Search = () => {
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
     <IconButton type="submit" aria-label="search" onClick={handleSearch} >
-    <Link to={`/Board1Search/${Target}/${Keyword}`}>
       <SearchIcon />
-      </Link>
     </IconButton>
       </Box>
     </div>

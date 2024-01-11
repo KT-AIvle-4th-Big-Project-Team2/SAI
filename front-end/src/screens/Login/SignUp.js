@@ -45,7 +45,6 @@ async function sendSignUpRequest() {
       name: "Sample Name123412312345552133125",
       password: "SamplePassword123!",
       email: "sample@example.com",
-      phonenumber: "01012345678",
       age: 25,
       gender: "M"
     }, {
@@ -212,6 +211,42 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="이메일"
+                  name="email"
+                  autoComplete="email"
+                  error={emailError !== '' || false}
+                />
+              </Grid>
+              
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="비밀번호 (숫자 + 영문자 + 특수문자 8자리 이상)"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  error={passwordState !== '' || false}
+                  helperText={passwordState}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="repassword"
+                  label="비밀번호 확인"
+                  type="password"
+                  id="repassword"
+                  error={passwordError !== '' || false}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   name="name"
@@ -240,7 +275,7 @@ export default function SignUp() {
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
+                    name="sex"
                   >
                     <FormControlLabel value="male" control={<Radio />} label="남성" />
                     <FormControlLabel value="female" control={<Radio />} label="여성" />
@@ -254,41 +289,6 @@ export default function SignUp() {
                   id="age"
                   label="나이"
                   name="age"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="이메일"
-                  name="email"
-                  autoComplete="email"
-                  error={emailError !== '' || false}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="비밀번호 (숫자 + 영문자 + 특수문자 8자리 이상)"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  error={passwordState !== '' || false}
-                  helperText={passwordState}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="repassword"
-                  label="비밀번호 확인"
-                  type="password"
-                  id="repassword"
-                  error={passwordError !== '' || false}
                 />
               </Grid>
               <Grid container alignItems="center" sx={{ml:2, mt :1}}>

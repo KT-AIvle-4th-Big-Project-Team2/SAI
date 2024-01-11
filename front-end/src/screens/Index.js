@@ -3,8 +3,6 @@ import { Header } from "./Index/header"
 import { Features } from "./Index/features";
 import { About } from "./Index/about";
 import { Testimonials } from "./Index/testimonials";
-import { Team } from "./Index/Team";
-import { Contact } from "./Index/contact";
 import { About2 } from "./Index/about2";
 import { About3 } from "./Index/about3";
 import JsonData from "./data/data.json";
@@ -12,6 +10,7 @@ import SmoothScroll from "smooth-scroll";
 import Footer from '../components/footer'
 import "./Index.css"
 
+// 스크롤 속도 지정
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
   speedAsDuration: true,

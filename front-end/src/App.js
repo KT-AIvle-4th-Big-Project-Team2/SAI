@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import React, { useEffect, useState, lazy, Suspense } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
 import Home from './screens/Home';
 import Index from './screens/Index';
 import Board1 from './screens/Board/Board1';
@@ -23,24 +21,18 @@ import NoticeView from './screens/Notice/NoticeView';
 import NoticeWrite from './screens/Notice/NoticeWrite';
 import NoticeSearch from './screens/Notice/NoticeSearch';
 import FindID from './screens/Login/FindID';
-import Simul from './screens/Simul/Simul';
-import Simul2 from './screens/Simul/Simul2';
 import SimulReport from './screens/Simul/SimulReport';
-import AreaAnaly from './screens/Analysis/AreaAnaly';
-import SectorsAnaly from './screens/Analysis/SectorsAnaly';
-import Myboard from './screens/Mypage/Myboard';
+import SimulReport2 from './screens/Simul/SimulReport2';
 import Myinfo from './screens/Mypage/Myinfo';
-import WithDrawal from './screens/Mypage/WithDrawal';
 import FAQ from './screens/Notice/FAQ';
 import MyinfoCheck from './screens/Mypage/MyinfoCheck';
-import Header from './header';
-import SimulReport2 from './screens/Simul/SimulReport2';
 
 
 
 function App() {
   return (
         <Router>
+          {/* NavBar 상단에 항상 표시 */}
           <NavBarElements />
             <Routes>
             <Route path = "/" element = { <Index /> } />
@@ -64,15 +56,9 @@ function App() {
             <Route path = "/Login" element = { <Login /> } />
             <Route path = "/signup" element = { <SignUp /> } />
             <Route path = "/FindID" element = { <FindID /> } />
-            <Route path = "/Simul" element = { <Simul /> } />
-            <Route path = "/Simul2" element = { <Simul2 /> } />
             <Route path = "/SimulReport" element = { <SimulReport /> } />
             <Route path = "/SimulReport2" element = { <SimulReport2 /> } />
-            <Route path = "/Area" element = { <AreaAnaly /> } />
-            <Route path = "/Sectors" element = { <SectorsAnaly /> } />
-            <Route path = "/Myboard" element = { <Myboard /> } />
             <Route path = "/Myinfo" element = { <Myinfo /> } />
-            <Route path = "/WithDrawal" element = { <WithDrawal /> } />
             <Route path = "/MyinfoCheck" element = { <MyinfoCheck /> } />
           </Routes>
         </Router>

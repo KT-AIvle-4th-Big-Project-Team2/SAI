@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/material';
+import { Box, Button, Paper, Typography, Divider } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
 
 const NoticeView = () => {
-  const name = 'tester1'
+  const [name, setName] = useState();
   const { post_num } = useParams();
   const navigate = useNavigate();
   const [boardContent, setBoardContent] = useState({}); // Change to object
 
   function getBoardContent() {
-    axios.get(`http://subdomain.storeaivle.com/announcements/announcementlist/${post_num}`)
+    axios.get(`http://subdomain.storeaivle.com/announcement/announcementlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data); // Update state with fetched data
         console.log(response.data);
@@ -27,7 +27,7 @@ const NoticeView = () => {
 
 
   const handleDelete = () => {
-    axios.delete(`http://subdomain.storeaivle.com/announcements/announcementlist/deletepost/${post_num}`)
+    axios.delete(`http://subdomain.storeaivle.com/announcement/announcementlist/deletepost/${post_num}`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행

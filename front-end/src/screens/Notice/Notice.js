@@ -55,7 +55,7 @@ const Notice = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   function getNotice() {
-    axios.get("http://subdomain.storeaivle.com/announcements/announcementlist/")
+    axios.get("http://subdomain.storeaivle.com/announcement/announcementlist/")
       .then((response) => {
         setNoticeList([...response.data]);
         console.log(response.data);
@@ -97,7 +97,7 @@ const Notice = () => {
     const encodedSearchKeyword = encodeURIComponent(searchKeyword);
   
     // URL을 동적으로 생성하여 이동
-    const searchUrl = `/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`;
+    const searchUrl = `/announcement/announcementlist/${encodedSearchTarget}/${encodedSearchKeyword}`;
   
     console.log("Encoded Search Target:", encodedSearchTarget);
     console.log("Encoded Search Keyword:", encodedSearchKeyword);

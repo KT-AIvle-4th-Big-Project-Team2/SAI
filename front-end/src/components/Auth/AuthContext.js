@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
+//유저 정보 관리 컴포넌트
+
 export const AuthProvider = ({ children }) => {
   const storedIsLogin = localStorage.getItem('isLogin');
   const [isLogin, setIsLogin] = useState(storedIsLogin === 'true');

@@ -19,25 +19,24 @@ import {
   IconButton
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
-import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
 
 const ITEMS_PER_PAGE = 10;
 
 const Board2Search = () => {
-  const {searchTarget} = useParams();
-  const {searchKeyword} = useParams();
-
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [Target, setSearchTarget] = useState('title');
   const [Keyword, setSearchKeyword] = useState('');
+  const navigate = useNavigate();
+  const {searchTarget} = useParams();
+  const {searchKeyword} = useParams();
 
 
   function getNotice() {
-    axios.get(`http://subdomain.storeaivle.com/Board2/postlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`http://subdomain.storeaivle.com/consultboard/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);
@@ -59,10 +58,15 @@ const Board2Search = () => {
 
   const handleSearch = () => {
     // Perform search based on searchTarget and searchKeyword
-    console.log("Search Target:", searchTarget);
-    console.log("Search Keyword:", searchKeyword);
+    const encodedSearchTarget = encodeURIComponent(Target);
+    const encodedSearchKeyword = encodeURIComponent(Keyword);
 
-    // You can call the setSearchQuery function here if needed
+
+    // URL을 동적으로 생성하여 이동
+    console.log("Encoded Search Target:", encodedSearchTarget);
+    console.log("Encoded Search Keyword:", encodedSearchKeyword);
+    navigate(`/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`)
+    window.location.reload();
   };
 
   // Calculate the index range for the current page
@@ -151,9 +155,7 @@ const Board2Search = () => {
         onChange={(e) => setSearchKeyword(e.target.value)}
       />
     <IconButton type="submit" aria-label="search" onClick={handleSearch} >
-    <Link to={`/Board2Search/${Target}/${Keyword}`}>
       <SearchIcon />
-      </Link>
     </IconButton>
       </Box>
     </div>

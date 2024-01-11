@@ -21,6 +21,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
+
 const ITEMS_PER_PAGE = 10;
 
 const NoticeSearch = () => {
@@ -35,7 +36,7 @@ const NoticeSearch = () => {
   const {searchKeyword} = useParams();
 
   function getNotice() {
-    axios.get(`"http://subdomain.storeaivle.com/announcements/announcementlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`"http://subdomain.storeaivle.com/announcement/announcementlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);

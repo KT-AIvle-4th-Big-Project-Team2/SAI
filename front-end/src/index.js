@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { AuthProvider } from './components/Auth/AuthContext'; // AuthProvider를 import
 import './Pretendard-1.3.9/web/static/pretendard.css'; // 상대 경로로 CSS 파일을 import
 
+// 커스텀 테마 지정
 const theme = createTheme({
   palette: {
     primary: {
@@ -22,15 +23,13 @@ const theme = createTheme({
   },
 });
 
-
+//배포할땐 strict mode 해제
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <AuthProvider> {/* AuthProvider로 감싸기 */}
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </AuthProvider>
-  </React.StrictMode>
+  <AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  </AuthProvider>
 );
