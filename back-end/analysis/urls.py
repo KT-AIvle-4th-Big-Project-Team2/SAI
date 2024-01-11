@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("dongai/<str:username>/<str:goo>/<str:business>/<int:funds>/<str:dong>", views.dong_ai.as_view()),
-    path("marketai/<str:username>/<str:goo>/<str:business>/<int:funds>/<str:market>", views.market_ai.as_view()),
+    path("dongai/<str:goo>/<str:business>/<int:funds>/<str:dong>", views.dong_ai.as_view()),
+    path("marketai/<str:goo>/<str:business>/<int:funds>/<str:market>", views.market_ai.as_view()),
         
     
     

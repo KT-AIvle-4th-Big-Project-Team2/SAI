@@ -103,7 +103,7 @@ class dong_ai(generics.GenericAPIView):
         # business = self.kwargs['business'].upper()
         # funds = self.kwargs['funds']
         
-        username = unquote(self.kwargs['username'])
+        #username = unquote(self.kwargs['username'])
         goo_name = unquote(self.kwargs['goo'])
         dong_name = unquote(self.kwargs['dong'])
         business_name = unquote(self.kwargs['business'])
@@ -313,7 +313,8 @@ class dong_ai(generics.GenericAPIView):
         
         output_data = {"AI":"행정동",
                        "region":goo, 
-                       "area_1":dong_name, 
+                       "area_1":dong_name,
+                       "area_2":None, 
                        "business": business_name, 
                        "funds" : funds, 
                        "sales_23_2q":int(avg_target_1qb/10000), 
@@ -340,14 +341,14 @@ class dong_ai(generics.GenericAPIView):
                         "franchise_rec_2": franchise[3]
                     }
 
-        user_id = UserCustom.objects.get(username = username).user_id
+        # user_id = UserCustom.objects.get(username = username).user_id
         
-        save_data = output_data
-        save_data["user"] = user_id
+        # save_data = output_data
+        # save_data["user"] = user_id
         
-        serialised = AIReportSerializer(data = save_data)
-        if serialised.is_valid(): serialised.save()
-        else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # serialised = AIReportSerializer(data = save_data)
+        # if serialised.is_valid(): serialised.save()
+        # else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(output_data, status=status.HTTP_200_OK)
 
 
@@ -463,7 +464,8 @@ class market_ai(APIView):
             shapValueOutputBottom5 = None
             
             
-            
+        shapValueOutputTop5 = {key: int(value) for key, value in shapValueOutputTop5.items()}
+        shapValueOutputBottom5 = {key: int(value) for key, value in shapValueOutputBottom5.items()}
             
             
         queryset_avg_seoul = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business).values("점포별_평균_매출_금액")
@@ -569,8 +571,7 @@ class market_ai(APIView):
         franchise = get_franchise_data_dong(dong_name, business_name, funds)
         #if franchise == None: franchise = [None, None, None]
         
-        shapValueOutputTop5 = {key: int(value) for key, value in shapValueOutputTop5.items()}
-        shapValueOutputBottom5 = {key: int(value) for key, value in shapValueOutputBottom5.items()}
+        
         
         if franchise[2] != None:
             franchise[2] = {key: int(int(value) / 10) if key != '브랜드명' else value for key, value in franchise[2].items()}
@@ -608,14 +609,14 @@ class market_ai(APIView):
                 "franchise_rec_2": franchise[3]
             }
  
-        username = unquote(kwargs['username'])
-        user_id = UserCustom.objects.get(username = username).user_id
+        # username = unquote(kwargs['username'])
+        # user_id = UserCustom.objects.get(username = username).user_id
         
-        save_data = output_data
-        save_data["user"] = user_id
-        serialised = AIReportSerializer(data = save_data)
-        if serialised.is_valid(): serialised.save()
-        else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # save_data = output_data
+        # save_data["user"] = user_id
+        # serialised = AIReportSerializer(data = save_data)
+        # if serialised.is_valid(): serialised.save()
+        # else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(output_data, status=status.HTTP_200_OK)
     
 

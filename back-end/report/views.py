@@ -22,9 +22,9 @@ class dong_report(APIView):
         dong = unquote(kwargs['dong'])
         business = unquote(kwargs['business'])
         
-        dong = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
+        # dong = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
         
-        business = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
+        # business = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
@@ -576,8 +576,8 @@ class market_report(APIView):
         market = unquote(kwargs["market"])
         business = unquote(kwargs["business"])
         
-        market = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
-        business = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드=business).first().서비스_업종_코드_명
+        # market = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
+        # business = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드=business).first().서비스_업종_코드_명
         
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
