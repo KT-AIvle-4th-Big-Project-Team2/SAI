@@ -27,7 +27,7 @@ const NoticeWrite = () => {
 
   const handleTextInput = () => {
     const { title, contents } = text;
-    axios.post("http://subdomain.storeaivle.com/announcements/announcementlist/createpost", {
+    axios.post("http://subdomain.storeaivle.com/announcement/announcementlist/createpost", {
       title,
       name,
       contents,

@@ -35,7 +35,7 @@ const NoticeSearch = () => {
   const {searchKeyword} = useParams();
 
   function getNotice() {
-    axios.get(`"http://subdomain.storeaivle.com/announcements/announcementlist/searchpost/${searchTarget}/${searchKeyword}`)
+    axios.get(`"http://subdomain.storeaivle.com/announcement/announcementlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
         console.log(response.data);
