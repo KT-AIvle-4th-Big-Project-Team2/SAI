@@ -400,7 +400,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 지역구 선택 버튼 */}
-                        <div style={{marginLeft:'12px'}}>
+                        <div style={{marginLeft:'10%'}}>
                         {this.state.Gu === '' && (
                             <div>
                                 <img src={imageSrc1} alt={altText1} style={{
@@ -430,7 +430,7 @@ class KakaoMap extends Component {
                         </div>
                         
                         {/* 행정동 선택 버튼 */}
-                        <div style={{marginLeft:'12px'}}>
+                        <div style={{marginLeft:'10%'}}>
                             {this.state.selectedDong==='' &&this.state.isMenu1Open && (
                                 <div>
                                     <img src={imageSrc2} alt={altText2} style={{
@@ -463,7 +463,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 서비스 업종 선택 버튼 */}
-                        <div style={{marginLeft:'12px'}}>
+                        <div style={{marginLeft:'10%'}}>
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div>
                                 <img src={imageSrc345} alt={altText3} style={{
@@ -510,7 +510,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        <div style={{marginLeft:'12px',marginRight:'14px'}}>
+                        <div style={{marginLeft:'10%',marginRight:'14px'}}>
                         {this.state.selectedDong && this.state.isMenu4Open && (
                             <div>
                                 <img src={imageSrc5} alt={altText4} style={{
@@ -595,7 +595,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 지역구 선택 버튼 */}
-                        <div style={{marginLeft:'12px'}}>
+                        <div style={{marginLeft:'10%'}}>
                         {this.state.Gu === '' && (
                             <div>
                                 <img src={imageSrc1} alt={altText0} style={{
@@ -625,7 +625,7 @@ class KakaoMap extends Component {
 
 
                         {/* 행정동 선택 버튼 */}
-                        <div style={{ marginLeft: '12px' }}>
+                        <div style={{ marginLeft: '10%' }}>
                             {this.state.selectedDong === '' && this.state.isMenu1Open && (
                                 <div>
                                     <img src={imageSrc2} alt={altText1} style={{
@@ -667,7 +667,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 상권 선택 버튼 */}
-                        <div style={{marginLeft:'12px'}}>
+                        <div style={{marginLeft:'10%'}}>
                             {this.state.selectedmarket==='' && this.state.isMenu2Open && (
                                 <div>
                                     <img src={imageSrc3} alt={altText2} style={{
@@ -700,7 +700,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 서비스 업종 선택 버튼 */}
-                        <div style={{marginLeft:'12px'}}>
+                        <div style={{marginLeft:'10%'}}>
                         {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div>
                                 <img src={imageSrc4} alt={altText3} style={{
@@ -747,7 +747,7 @@ class KakaoMap extends Component {
                         </div>
 
                         {/* 자본금 입력 받고 창업도우미 시작 버튼 */}
-                        <div style={{marginLeft:'12px', marginRight:'14px'}}>
+                        <div style={{marginLeft:'10%', marginRight:'14px'}}>
                         {this.state.selectedmarket && this.state.isMenu4Open && (
                             <div>
                                 <img src={imageSrc5} alt={altText4} style={{
