@@ -4,7 +4,7 @@ import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/materia
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
 import { useAuth } from '../../components/Auth/AuthContext';
-
+//
 
 const Board1View = () => {
   const username = 'jinwon97'
