@@ -69,10 +69,10 @@ class BoardPostUpdateSerializer(serializers.Serializer):
 class BoardPostcommentCreateSerializer(serializers.ModelSerializer):
 
     contents = serializers.CharField()
-    
+    username = serializers.CharField()
     class Meta:
         model = Comments
-        fields = ('contents',)
+        fields = ('contents','username')
 
 
 class BoardPostCommentUpdateSerializer(serializers.ModelSerializer):

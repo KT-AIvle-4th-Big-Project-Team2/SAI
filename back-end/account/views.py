@@ -48,7 +48,7 @@ class SignInView(APIView):
     serializer_class = SignInSerializer
     
     def post(self, request):
-        input_data = self.request.data
+        # input_data = self.request.data
         # passwordAgain = input_data.get("password_again")
         # input_data.pop("password_again")
         serializer = self.serializer_class(data = self.request.data)
@@ -63,7 +63,7 @@ class SignInView(APIView):
             gender = serializer.validated_data['gender']
             
         else:
-            raise ValidationError({'error':'input value format error'})
+            raise ValidationError({'error':serializer.errors}, status.HTTP_400_BAD_REQUEST)
         
         # if len(passwordAgain) > 25:
         #     raise ValidationError({'error':'input value format error'}) 
@@ -88,10 +88,12 @@ class LoginView(APIView):
     def post(self, request, format = None):
         serialized = self.serializer_class(data = request.data)
         if serialized.is_valid():
-            username = serialized.validated_data['username']
+            email = serialized.validated_data['email']
             password = serialized.validated_data['password']
             
-            user_info = authenticate(username=username, password=password)
+            username = UserCustom.objects.get(email = email).username
+            
+            user_info = authenticate(username = username, password=password)
             if user_info != None:
                 # auth.login(request, user_info)
                 return Response({'success' : 'login successful', 'username' : username}, status=status.HTTP_200_OK)
@@ -104,8 +106,9 @@ class LoginView(APIView):
         
 # @method_decorator(csrf_protect, name='dispatch')        
 class LogoutView(APIView):
+    serializer_class = LoginSerializer
     def post(self, request, format = None):
-        username = UserCustom.objects.get(username = "jinwon97")
+        
         try:
             # auth.logout(request)
             return Response({'success':'logout success'})

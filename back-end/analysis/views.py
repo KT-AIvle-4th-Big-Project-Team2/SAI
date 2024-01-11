@@ -97,18 +97,25 @@ class dong_ai(generics.GenericAPIView):
     serializer_class = AIReportSerializer
     
     def get(self, request, *args, **kargs):
+        # username = unquote(self.kwargs['username'])
+        # goo = self.kwargs['goo'].upper()
+        # dong = self.kwargs['dong'].upper()
+        # business = self.kwargs['business'].upper()
+        # funds = self.kwargs['funds']
+        
         username = unquote(self.kwargs['username'])
-        goo = self.kwargs['goo'].upper()
-        dong = self.kwargs['dong'].upper()
-        business = self.kwargs['business'].upper()
+        goo_name = unquote(self.kwargs['goo'])
+        dong_name = unquote(self.kwargs['dong'])
+        business_name = unquote(self.kwargs['business'])
         funds = self.kwargs['funds']
         
-        goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
-        
-        dong_name = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
-        
-        business_name = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
+        # goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
+        # dong_name = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
+        # business_name = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
 
+        goo= MarketSortedDbFin.objects.filter(자치구_코드_명=goo_name).first().자치구_코드
+        dong = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드_명=dong_name).first().행정동_코드
+        business = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드_명 = business_name).first().서비스_업종_코드
         
         
         x_cols = ['행정동_코드', '서비스_업종_코드', '관공서_수', '은행_수', '종합병원_수', '일반_병원_수', '약국_수',
@@ -247,13 +254,16 @@ class dong_ai(generics.GenericAPIView):
         analysis_mp = "증가" if (mp - mp_1yb) > 0 else "감소"
         
         
-        if seoul_diff >= 80:
+        if seoul_diff >= 150:
             analysis = "양호"
         
-        elif seoul_diff <= 20:
+        elif seoul_diff <= 50:
             analysis = "위험"
         else:
             analysis = "보통"
+            
+        if seoul_diff > 200:
+            seoul_diff = 200
         
         queryset_similar = DongServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('행정동_코드', 'prediction_label') # 4분기?
         
@@ -351,15 +361,27 @@ class dong_ai(generics.GenericAPIView):
 # 23 상권
 class market_ai(APIView):
     def get(self, request, *args, **kwargs):        
-        goo = self.kwargs['goo'].upper()
-        market = self.kwargs['market']
-        business = self.kwargs['business'].upper()
-        funds = self.kwargs['funds']
-        goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
-        market_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
-        dong_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().행정동_코드_명
+        # goo = self.kwargs['goo'].upper()
+        # market = self.kwargs['market']
+        # business = self.kwargs['business'].upper()
+        # funds = self.kwargs['funds']
         
-        business_name = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
+        goo_name = unquote(self.kwargs['goo'])
+        market_name = unquote(self.kwargs['market'])
+        business_name = unquote(self.kwargs['business'])
+        funds = self.kwargs['funds']
+        
+        # goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
+        # market_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
+        # dong_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().행정동_코드_명
+        
+        # business_name = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
+        
+        goo = MarketSortedDbFin.objects.filter(자치구_코드_명=goo_name).first().자치구_코드
+        market = MarketServiceDataEstimateTestFull.objects.filter(상권_코드_명=market_name).first().상권_코드
+        dong_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드_명=market_name).first().행정동_코드_명
+
+        business = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드_명 = business_name).first().서비스_업종_코드
     
         x_cols = ['상권_코드', '서비스_업종_코드', '관공서_수', '은행_수', '종합병원_수', '일반_병원_수', '약국_수',
        '유치원_수', '초등학교_수', '중학교_수', '고등학교_수', '대학교_수', '백화점_수', '슈퍼마켓_수',
@@ -501,13 +523,16 @@ class market_ai(APIView):
         analysis_mp = "증가" if (mp - mp_1yb) > 0 else "감소"
         
         
-        if seoul_diff > 80:
+        if seoul_diff > 150:
             analysis = "양호"
         
-        elif seoul_diff < 20:
+        elif seoul_diff < 50:
             analysis = "위험"
         else:
             analysis = "보통"
+        
+        if seoul_diff > 200:
+            seoul_diff = 200
         
         queryset_similar = MarketServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('상권_코드', 'prediction_label') # 4분기?
         

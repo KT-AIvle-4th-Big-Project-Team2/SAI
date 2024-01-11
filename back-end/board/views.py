@@ -197,7 +197,7 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
         Comments.objects.create(
             contents=serializer.validated_data['contents'],
             # user=self.request.user,
-            user = UserCustom.objects.get(username = "jinwon97"),
+            user = UserCustom.objects.get(username = serializer.validated_data['username']),
             board=board_id,
         )
         return Response({'success': 'crate comment success'}, status.HTTP_201_CREATED)

@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('/home/ubuntu/setting/djangoSecretKey_info.txt')
+sensitiveDataPath = ('C:/bigproject/sensitiveDatas/djangoSecretKey_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -22,6 +22,29 @@ SECRET_KEY = django_secretKey[:-1]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+DEBUG = True
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","43.202.42.122"]
 ALLOWED_HOSTS = ["localhost", "127.0.0.1","3.38.115.132","subdomain.storeaivle.com","storeaivle.com",]
 
 # Application definition
@@ -49,14 +72,14 @@ INSTALLED_APPS = [
     
     # rest API
     "rest_framework",
-    "rest_framework.authtoken", # django + REST framework Token authentication
+    #"rest_framework.authtoken", # django + REST framework Token authentication
     "corsheaders",
     
     # Token JWT 인증
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('/home/ubuntu/setting/frontURL_info.txt')
+sensitiveDataPath = ('C:/bigproject/sensitiveDatas/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -115,7 +138,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('/home/ubuntu/setting/DB_info.txt')
+sensitiveDataPath = ('C:/bigproject/sensitiveDatas/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
@@ -197,18 +220,27 @@ AUTH_USER_MODEL = 'account.UserCustom'
 # Django 보안 관련 설정
 
 # REST_FRAMEWORK = {
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
-    # ],
+#     # 'DEFAULT_PARSER_CLASSES': [
+#     #     'rest_framework.parsers.JSONParser', # REST API가 입출력 할 기본 형식 설정
+#     # ],
     
-    # 'DEFAULT_PERMISSION_CLASSES':[
-    #     'rest_framework.permissions.IsAuthenticated', # 모든 REST API 기능을 SESSION ID 또는 TOKEN이 있어야 사용할 수 있게 설정
-    # ],
+#     # 'DEFAULT_PERMISSION_CLASSES':[
+#     #     'rest_framework.permissions.AllowAny',
+#     # ],
     
-    # 'DEFAULT_AUTHENTICATON_CLASSES':[
-    #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
+#     # 'DEFAULT_AUTHENTICATON_CLASSES':[
+#     #     'rest_framework.authentication.SessionAuthentication',  # REST FRAMEWORK의 SESSION ID 기반 로그인 및 보안 사용
         
-    # ]
+#     # ]
+# }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.TokenAuthentication',
+#         # 'rest_framework.authentication.SessionAuthentication', # 제거
+#         'rest_framework.authentication.BasicAuthentication',
+#     ),
+    # 나머지 설정...
 # }
 
 # Internationalization

@@ -2,35 +2,20 @@ from rest_framework import serializers
 # from .models import Admin, User
 from .models import UserCustom
 
-class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length = 75)
-    password = serializers.CharField(max_length = 75)
-    # def to_representation(self, instance):
-    #     return {
-    #         'post_id': instance['board_id'],
-    #         'title': instance['title'],
-    #         'tag': instance['tag'],
-    #         'date': instance['creationdate'],
-    #         'name': instance['user__name']
-    #     }
-    class Meta:
-        model = UserCustom
-        fields = ['username', 'password']
-    
-
-# class SignInSerializer(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model = UserCustom
-#         fields = ['username', 'name', 'password', 'email', 'phonenumber', 'age', 'gender']
-
 class SignInSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserCustom
         fields = ['username', 'name', 'password', 'email', 'phonenumber', 'age', 'gender']
+class LoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserCustom
+        fields = ['email', 'password']
 
-    
+class LogoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserCustom
+        fields = ['username']
 class FindIDInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
