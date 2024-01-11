@@ -35,7 +35,7 @@ const Board1 = () => {
   const [searchKeyword, setSearchKeyword] = useState('');
 
   /*
-  function getBoard() {
+  function getBoard() {12
     axios.get("https://subdomain.storeaivle.com/board/postlist/")
       .then((response) => {
         setBoardList([...response.data]);
