@@ -35,38 +35,6 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-
-async function sendSignUpRequest() {
-  try {
-
-    const response = await axios.post("http://subdomain.storeaivle.com/accounts/signin/", {
-      csrftoken: "BlgLFWKJKzN6yFY6iL5CriGmUCskHD56",
-      username: "sampleuser11235445451322134",
-      name: "Sample Name123412312345552133125",
-      password: "SamplePassword123!",
-      email: "sample@example.com",
-      phonenumber: "01012345678",
-      age: 25,
-      gender: "M"
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        
-      },
-      withCredentials: false,
-    });
-
-    if (response.status === 200) {
-      console.log("test회원가입 성공:", response.data);
-    } else {
-      console.error("test회원가입 실패:", response.data);
-    }
-  } catch (error) {
-    console.error("test네트워크 오류:", error);
-  }
-}
-
 export default function SignUp() {
 
   
@@ -80,7 +48,6 @@ export default function SignUp() {
 
   const handleSubmit = async (event) => {
     // 함수 호출
-    sendSignUpRequest();
     event.preventDefault();
     console.log(event.currentTarget);
     const data = new FormData(event.currentTarget);
@@ -124,6 +91,8 @@ export default function SignUp() {
       if (signUpResponse.status === 200) {
         // 회원가입 성공 처리
         console.log("회원가입 성공:", signUpResponse.data);
+        window.location.href = './login'; // 루트 경로를 기준으로 상대 경로로 이동
+        console.log("이동실패");
         // 추가적인 회원가입 성공 후 처리 로직
       } else {
         // 회원가입 실패 처리
