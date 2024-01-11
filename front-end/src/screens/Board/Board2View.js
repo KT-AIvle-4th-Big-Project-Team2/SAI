@@ -109,13 +109,21 @@ const Board2View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" href={`/board2Mod/${post_num}`} sx={{ mb: 2, mr : 2}}>
-          글 수정
-        </Button>
-        <Button  variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2}}>
-          글 삭제
-        </Button>
-        <Button variant="contained" href="/board2" sx={{ mb: 2}}>
+      {boardContent.length > 0 ? boardContent[0].name && (
+          <>
+            {boardContent[0].name === name && (
+              <>
+                <Button variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr: 2 }}>
+                  글 수정
+                </Button>
+                <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2, color: '#FFFFFF' }}>
+                  글 삭제
+                </Button>
+              </>
+            )}
+          </>
+        ) : "Loading..."}
+        <Button  variant="contained" href="/Board1" sx={{ mb: 2 }}>
           글 목록
         </Button>
       </Box>
