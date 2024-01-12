@@ -1,4 +1,4 @@
-// drawPolygons.js
+// drawPolygons.js s
 export const convertCoordinatesToLatLng = (coordinates, type) => {
     let paths = [];
 
