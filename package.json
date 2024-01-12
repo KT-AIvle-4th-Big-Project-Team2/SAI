@@ -1,0 +1,18 @@
+{
+  "name": "sai",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@nivo/circle-packing": "^0.84.0",
+    "axios": "^1.6.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3"
+    
+  }
+}

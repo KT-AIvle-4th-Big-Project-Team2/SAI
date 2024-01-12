@@ -1,18 +1,38 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { Header } from "./Index/header"
+import { Features } from "./Index/features";
+import { About } from "./Index/about";
+import { Testimonials } from "./Index/testimonials";
+import { About2 } from "./Index/about2";
+import { About3 } from "./Index/about3";
+import JsonData from "./data/data.json";
+import SmoothScroll from "smooth-scroll";
+import Footer from '../components/footer'
+import "./Index.css"
 
-const About = () => {
+// 스크롤 속도 지정
+export const scroll = new SmoothScroll('a[href*="#"]', {
+  speed: 1000,
+  speedAsDuration: true,
+});
+
+const Index = () => {
+  const [landingPageData, setLandingPageData] = useState({});
+  useEffect(() => {
+    setLandingPageData(JsonData);
+  }, []);
+
   return (
-   <body>
-  
-    <div className = 'box1'>
-        <h1>AI</h1>
-        <h2>상업용 부동산에서 발생할 수 있는 미래가치인 매출을 추정하는 AI 알고리즘</h2>
-      </div>
     <div>
-        <h3>공간에서 발생하는 부가가치에 따라 부동산 가치를 결정하는 수익환원법을 사용합니다</h3>
+      <Header data={landingPageData.Header} />
+      <Testimonials data={landingPageData.Testimonials} />
+      <Features data={landingPageData.Features} />
+      <About data={landingPageData.About} />
+      <About2 data={landingPageData.About2} />
+      <About3 data={landingPageData.About3} />
+      <Footer />
     </div>
-    </body>
-  )
-}
+  );
+};
 
-export default About
+export default Index;

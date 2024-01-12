@@ -1,82 +1,118 @@
-import React from 'react'
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import imgLogo from './logo.png';
-import "./NavBarElements.css";
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField} from '@mui/material';
+import axios from 'axios';
+import { useAuth } from '../Auth/AuthContext';
+
+// 상단 네비게이션 바 컴포넌트
 
 function NavBarElements() {
+  const [openFeedback, setOpenFeedback] = useState(false);
+  const [feedbackTitle, setFeedbackTitle] = useState('');
+  const [feedbackContent, setFeedbackContent] = useState('');
+  const name = 'test'
+  const { isLogin, logoutHandler } = useAuth();
+
+
+  // 개선 의견 보내기
+
+  const handleOpenFeedback = () => {
+    setOpenFeedback(true);
+  };
+
+  const handleCloseFeedback = () => {
+    setOpenFeedback(false);
+  };
+
+  const handleSendFeedback = () => {
+    const title = feedbackTitle
+    const contents = feedbackContent
+    axios.post("http://127.0.0.1:8000/suggestions/suggestions/createpost", {
+      title,
+      contents,
+      name
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+    setOpenFeedback(false);
+    setFeedbackTitle('');
+    setFeedbackContent('');
+    })}
+
   return (
-    <>
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">
+      <>
+        <Navbar style={{ background: '#EAEAEA' }} data-bs-theme="light">
+          <Container className="justify-content-between">
+            <Navbar.Brand href="/Home">
               <img
                 src={imgLogo}
-                width="30"
+                width="23"
                 height="30"
                 className="d-inline-block align-top"
                 alt="React Bootstrap logo"
               />
             </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <NavDropdown title="알림마당" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">공지사항</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">FAQ</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.3">개선의견</NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title="시뮬레이션" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">시뮬레이션</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">시뮬레이션 리포트</NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title="창업분석" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">지역 분석</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">업종 분석</NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title="게시판" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">창업 정보</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">창업 게시판</NavDropdown.Item>
-            </NavDropdown>
-            <NavDropdown title="마이페이지" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">내 정보 수정</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">내가 쓴 글</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#home">Log out</Nav.Link>
-            
+          {isLogin ? (
+            <Nav>
+              <Nav.Link href="/Home">창업도우미</Nav.Link>
+              <NavDropdown title="커뮤니티" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/FAQ">FAQ</NavDropdown.Item>
+                <NavDropdown.Item href="/Notice">공지사항</NavDropdown.Item>
+                <NavDropdown.Item href="/Board1">창업 정보</NavDropdown.Item>
+                <NavDropdown.Item href="/Board2">창업 게시판</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="마이페이지" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/MyinfoCheck">내 정보 수정</NavDropdown.Item>
+                <NavDropdown.Item onClick={handleOpenFeedback}>개선의견</NavDropdown.Item>
+              </NavDropdown>
+              <Nav.Link href="/" onClick={logoutHandler}>Logout</Nav.Link>
+            </Nav>
+          ) : ( 
+          <Nav>
+          <Nav.Link href="/login">로그인</Nav.Link>
+          <Nav.Link href="/Signup">회원가입</Nav.Link>
           </Nav>
-        </Container>
-      </Navbar>
-    </>
+          )}
+          </Container>
+        </Navbar>
+        
+
+        <Dialog open={openFeedback} onClose={handleCloseFeedback}>
+          <DialogTitle>개선의견 제출</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="제목"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={feedbackTitle}
+              onChange={(e) => setFeedbackTitle(e.target.value)}
+            />
+            <TextField
+              label="내용"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              multiline
+              rows={4}
+              value={feedbackContent}
+              onChange={(e) => setFeedbackContent(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseFeedback}>취소</Button>
+            <Button onClick={handleSendFeedback}>보내기</Button>
+          </DialogActions>
+        </Dialog>
+      </>
   );
 }
 
 export default NavBarElements;
-
-function NavBarElements2() {
-  return (
-    <>
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">
-              <img
-                src={imgLogo}
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-                alt="React Bootstrap logo"
-              />
-            </Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Index</Nav.Link>
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#home">Login</Nav.Link>
-            
-          </Nav>
-        </Container>
-      </Navbar>
-    </>
-  );
-}
