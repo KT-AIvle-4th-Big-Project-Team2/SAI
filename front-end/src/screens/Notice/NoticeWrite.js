@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { Button, TextField, Box, Link } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 
@@ -16,15 +16,15 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+// 공지사항 글 쓰기
+
 const NoticeWrite = () => {
+
   const name = 'admin'
   const [text, setText] = useState({ title: '', contents: '' });
 
-  const handleFileUpload = () => {
-    // Implement file upload functionality here
-    console.log('File upload functionality to be implemented.');
-  };
 
+  // 공지사항 글 쓰기 관련 통신
   const handleTextInput = () => {
     const { title, contents } = text;
     axios.post("http://subdomain.storeaivle.com/announcement/announcementlist/createpost", {
@@ -47,13 +47,6 @@ const NoticeWrite = () => {
           <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>공지사항</span>
       </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
-            Upload file
-            <VisuallyHiddenInput type="file" />
-          </Button>
-          {/* Add your picture upload button here */}
-        </div>
         <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>
           <TextField

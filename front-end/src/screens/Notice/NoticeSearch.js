@@ -21,18 +21,22 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
+
 const ITEMS_PER_PAGE = 10;
 
+// 공지사항 글 검색
+
 const NoticeSearch = () => {
-  const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [Target, setSearchTarget] = useState('title');
   const [Keyword, setSearchKeyword] = useState('');
-
+  const navigate = useNavigate();
   const {searchTarget} = useParams();
   const {searchKeyword} = useParams();
+
+ // 공지사항 검색 글 받아오기
 
   function getNotice() {
     axios.get(`"http://subdomain.storeaivle.com/announcement/announcementlist/searchpost/${searchTarget}/${searchKeyword}`)
@@ -51,26 +55,26 @@ const NoticeSearch = () => {
 
   console.log(boardList);
 
+  // Post_num 관리
+
   const handleLinkClick = (postId) => {
     setPost_num(postId);
   };
 
-  const handleSearch = () => {
-    // Perform search based on searchTarget and searchKeyword
-    console.log("Search Target:", searchTarget);
-    console.log("Search Keyword:", searchKeyword);
+  // URL 인코딩 적용
 
-    // You can call the setSearchQuery function here if needed
+  const handleSearch = () => {
+    const encodedSearchTarget = encodeURIComponent(Target);
+    const encodedSearchKeyword = encodeURIComponent(Keyword);
+
+    navigate(`/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`)
+    window.location.reload();
   };
 
-  // Calculate the index range for the current page
+  // 페이지 관련 변수
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // Get the current page items using the slice method
   const currentItems = boardList.slice(startIndex, endIndex);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (

@@ -1,8 +1,9 @@
 import React from 'react'
 import Accordion from 'react-bootstrap/Accordion';
 import Box from '@mui/material/Box';
-import { Divider, Typography } from '@mui/material';
-import DivLine from '../../components/Styles/DivLine';
+import { Typography } from '@mui/material';
+
+// FAQ 페이지
 
 const FAQ = () => (
   <div className="container">

@@ -1,5 +1,7 @@
 import React from "react";
 
+// 서비스 특성 아이콘 컴포넌트
+
 export const Features = (props) => {
   return (
     <div id="features" className="text-center" style={{backgroundColor: 'white', marginTop: '100px'}}>

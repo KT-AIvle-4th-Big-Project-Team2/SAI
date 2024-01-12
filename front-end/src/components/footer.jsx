@@ -4,12 +4,16 @@ import { Link } from 'react-router-dom';
 import Service from './service';
 import PrivacyPolicy from './PrivacyPolicy';
 
+// Index 페이지에 들어갈 footer 컴포넌트
 
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };
+  
 
+  // 서비스 약관, 개인정보 처리 방침 모달
+  
   const [isServiceModalOpen, setServiceModalOpen] = useState(false);
   const [isPrivacyModalOpen, setPrivacyModalOpen] = useState(false);
 

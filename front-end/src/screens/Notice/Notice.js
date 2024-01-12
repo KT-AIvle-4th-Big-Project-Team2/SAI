@@ -18,41 +18,26 @@ import {
   IconButton
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
-import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 
+// 페이지 관련 변수 정리
+
 const ITEMS_PER_PAGE = 10;
 
-const SearchBar = ({ setSearchQuery }) => (
-  <form>
-    <TextField
-      id="search-bar"
-      className="text"
-      onInput={(e) => {
-        setSearchQuery(e.target.value);
-      }}
-      label="Search"
-      variant="outlined"
-      placeholder="Search..."
-      size="small"
-    />
-    <IconButton type="submit" aria-label="search">
-      <SearchIcon />
-    </IconButton>
-  </form>
-);
+// 공지사항 보기
 
 const Notice = () => {
 
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
   const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [NoticeList, setNoticeList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
+
+  // 공지사항 받아오기
 
   function getNotice() {
     axios.get("http://subdomain.storeaivle.com/announcement/announcementlist/")
@@ -68,24 +53,22 @@ const Notice = () => {
 
   
   useEffect(() => {
-    getNotice(); // 1) 게시글 목록 조회 함수 호출
+    getNotice();
   }, []);
 
-  // Calculate the index range for the current page
+
+  // 페이지 갯수 확인
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = rows.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
 
-  
+  // Post_num 관리
   const handleLinkClick = (postId) => {
     setPost_num(postId);
   };
 
-  // Get the current page items using the slice method
-  const currentItems = rows.slice(startIndex, endIndex);
-
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
-
+  // 게시판 글 검색
 
   const handleSearch = () => {
     // Perform search based on searchTarget and searchKeyword
@@ -97,10 +80,8 @@ const Notice = () => {
     const encodedSearchKeyword = encodeURIComponent(searchKeyword);
   
     // URL을 동적으로 생성하여 이동
-    const searchUrl = `/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`;
+    const searchUrl = `/announcement/announcementlist/${encodedSearchTarget}/${encodedSearchKeyword}`;
   
-    console.log("Encoded Search Target:", encodedSearchTarget);
-    console.log("Encoded Search Keyword:", encodedSearchKeyword);
   
     // React Router의 history 객체를 사용하여 페이지 이동
     navigate(searchUrl);
@@ -155,9 +136,9 @@ const Notice = () => {
           />
                 
         <div>
-            <Button variant="contained" href="/NoticeWrite" >
+            {/* <Button variant="contained" href="/NoticeWrite" >
               글쓰기
-            </Button>
+            </Button> */}
           </div>
         </div>
 

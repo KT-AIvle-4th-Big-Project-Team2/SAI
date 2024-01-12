@@ -4,9 +4,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import imgLogo from './logo.png';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, createTheme, ThemeProvider, CssBaseline } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField} from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../Auth/AuthContext';
+
+// 상단 네비게이션 바 컴포넌트
 
 function NavBarElements() {
   const [openFeedback, setOpenFeedback] = useState(false);
@@ -14,6 +16,9 @@ function NavBarElements() {
   const [feedbackContent, setFeedbackContent] = useState('');
   const name = 'test'
   const { isLogin, logoutHandler } = useAuth();
+
+
+  // 개선 의견 보내기
 
   const handleOpenFeedback = () => {
     setOpenFeedback(true);
@@ -33,12 +38,10 @@ function NavBarElements() {
     })
       .then(function (response) {
         console.log(response);
-        // Consider using a redirect method here
       })
       .catch(function (error) {
         console.log(error);
     setOpenFeedback(false);
-    // Reset the input fields
     setFeedbackTitle('');
     setFeedbackContent('');
     })}

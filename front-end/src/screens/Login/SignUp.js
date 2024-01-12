@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -18,7 +17,6 @@ import {
   RadioGroup,
   FormLabel,
 } from '@mui/material/';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
 import TermsModal from '../../components/TermsModal';
 import logo from '../../assets/SAI_logo_slogan.png'
@@ -37,7 +35,8 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
 
-  
+  // 회원가입 관련 변수 조정
+
   const [checked, setChecked] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordState, setPasswordState] = useState('');
@@ -46,9 +45,10 @@ export default function SignUp() {
   const [registerError, setRegisterError] = useState('');
 
 
+  // 데이터 제출 관련 정리
+
   const handleSubmit = async (event) => {
     // 함수 호출
-    event.preventDefault();
     console.log(event.currentTarget);
     const data = new FormData(event.currentTarget);
     const joinData = {
@@ -101,6 +101,8 @@ export default function SignUp() {
     } catch (error) {
       console.error("네트워크 오류:", error);
     }
+
+    // 이메일 유효성 체크
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     if (!emailRegex.test(email)) {
@@ -181,51 +183,7 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="이름"
-                  autoFocus
-                  error={nameError !== '' || false}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="username"
-                  required
-                  fullWidth
-                  id="username"
-                  label="닉네임"
-                  autoFocus
-                  error={nameError !== '' || false}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">성별 *</FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                  >
-                    <FormControlLabel value="male" control={<Radio />} label="남성" />
-                    <FormControlLabel value="female" control={<Radio />} label="여성" />
-                  </RadioGroup>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="age"
-                  label="나이"
-                  name="age"
-                />
-              </Grid>
-              <Grid item xs={12}>
+            <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -236,6 +194,7 @@ export default function SignUp() {
                   error={emailError !== '' || false}
                 />
               </Grid>
+              
               <Grid item xs={12}>
                 <TextField
                   required
@@ -260,6 +219,49 @@ export default function SignUp() {
                   error={passwordError !== '' || false}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  required
+                  fullWidth
+                  id="name"
+                  label="이름"
+                  autoFocus
+                  error={nameError !== '' || false}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="username"
+                  required
+                  fullWidth
+                  id="username"
+                  label="닉네임"
+                  autoFocus
+                  error={nameError !== '' || false}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">성별</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="sex"
+                  >
+                    <FormControlLabel value="male" control={<Radio />} label="남성" />
+                    <FormControlLabel value="female" control={<Radio />} label="여성" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  id="age"
+                  label="나이"
+                  name="age"
+                />
+              </Grid>
               <Grid container alignItems="center" sx={{ml:2, mt :1}}>
               <Grid item>
                 <FormControlLabel
@@ -275,7 +277,7 @@ export default function SignUp() {
                 </span>
               </Grid>
               {!isChecked && (
-                <TermsModal open={isTermsModalOpen} onClose={handleCloseTermsModal} />
+                <TermsModal open={isTermsModalOpen} onClose={handleCloseTermsModal} />  // 가입 약관 모달 띄우기
               )}
             </Grid>
             </Grid>

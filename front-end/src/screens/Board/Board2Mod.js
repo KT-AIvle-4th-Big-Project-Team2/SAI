@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { styled } from '@mui/system';
-import { Button, TextField, Box, Link } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 
@@ -17,48 +17,67 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+// 창업 게시판 글 수정
+
 const Board2Mod = () => {
-  const [text, setText] = useState({ title: '', content: '' });
+  const [text, setText] = useState({ title: '', contents: '' });
   const { post_num } = useParams();
   const [boardContent, setBoardContent] = useState({});
+  const navigate = useNavigate();
+  const name = 'jinwon97'
+  const [uploadedFileName, setUploadedFileName] = useState('');
 
-  const handleFileUpload = () => {
-    // Implement file upload functionality here
-    console.log('File upload functionality to be implemented.');
+  // 파일 업로드 관련 로직
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // axios.post("http://subdomain.storeaivle.com/consultboardboard/postlist/uploadfile", formData)
+    //   .then(function (response) {
+    //     console.log(response);
+    //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
   const handleTextInput = () => {
     const { title, content } = text;
 
-    // Make a PATCH request to update the post with the modified data
-    axios.patch(`http://subdomain.storeaivle.com/board2/postlist/${post_num}`, {
+    axios.patch(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}`, {
       title,
+      name,
       content,
     })
     .then((response) => {
       console.log(response.data);
-      // Handle success, redirect, or show a success message
     })
     .catch((error) => {
       console.error(error);
-      // Handle error, show an error message, etc.
     });
   };
 
+ // 기존 글 받아오기
+
   useEffect(() => {
-    // Fetch existing post content when the component mounts
-    axios.get(`http://subdomain.storeaivle.com/board2/postlist/${post_num}`)
+    axios
+      .get(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
-        setText({
-          title: response.data.title,
-          content: response.data.content,
-        });
+        setText((prevText) => ({
+          ...prevText,
+          title: response.data[0].title || '',
+          contents: response.data[0].contents || '',
+        }));
       })
       .catch((error) => {
-        console.error(error);
+        console.error('Error fetching data:', error);
       });
   }, [post_num]);
+  
 
   return (
     <div className="container">
@@ -97,14 +116,12 @@ const Board2Mod = () => {
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom : 20 }}>
-          <Link to='/Board2'>
-            <Button variant="contained" sx={{ mr: 2 }} onClick={handleTextInput}>
-              수정
-            </Button>
-          </Link>
-          <Button  variant="contained"  href="/Board2">
-            취소
+        <Button variant="contained" sx={{ mr: 2}} onClick={handleTextInput}>
+            수정
           </Button>
+            <Button href='/Board1' variant="contained">
+              취소
+            </Button>
         </div>
       </div>
     </div>

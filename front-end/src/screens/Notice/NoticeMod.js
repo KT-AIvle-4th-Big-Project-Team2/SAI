@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
+
+// 공지사항 글 수정
 
 const NoticeMod = () => {
   const [text, setText] = useState({ title: '', contents: '' });
@@ -10,17 +12,13 @@ const NoticeMod = () => {
   const [boardContent, setBoardContent] = useState({});
   const navigate = useNavigate(); // useNavigate 훅 사용
 
-  const handleFileUpload = () => {
-    // 파일 업로드 로직을 구현
-    console.log('File upload functionality to be implemented.');
-  };
   const name = 'Marie85'
   const handleTextInput = () => {
     const { title, contents } = text;
 
     // PATCH 요청을 통해 수정된 데이터로 업데이트
     axios
-      .patch(`http://subdomain.storeaivle.com/announcements/announcementlist/updatepost/${post_num}`, {
+      .patch(`http://subdomain.storeaivle.com/announcement/announcementlist/updatepost/${post_num}`, {
         title,
         contents,
         name,
@@ -36,9 +34,11 @@ const NoticeMod = () => {
       });
   };
 
+  // 공지사항 기존 글 받아오기
+
   useEffect(() => {
     axios
-      .get(`http://subdomain.storeaivle.com/announcements/announcementlist/${post_num}`)
+      .get(`http://subdomain.storeaivle.com/announcement/announcementlist/${post_num}`)
       .then((response) => {
         setBoardContent(response.data);
         setText((prevText) => ({
@@ -59,12 +59,6 @@ const NoticeMod = () => {
           <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>공지사항</span>
       </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
-            Upload file
-            {/* ... (VisuallyHiddenInput remains the same) */}
-          </Button>
-        </div>
         <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>
         <TextField

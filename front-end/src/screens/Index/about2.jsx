@@ -1,5 +1,7 @@
 import React from "react";
-import {Box, Typography } from "@mui/material/";
+import {Typography } from "@mui/material/";
+
+// Index 특성 상세 설명 컴포넌트 2
 
 export const About2 = (props) => {
   return (

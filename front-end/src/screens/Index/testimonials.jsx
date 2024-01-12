@@ -1,5 +1,7 @@
 import React from "react";
 
+// Index 페이지 인터뷰 컴포넌트
+
 export const Testimonials = (props) => {
   return (
     <div id="testimonials">

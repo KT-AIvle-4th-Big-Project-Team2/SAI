@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { Button, TextField, Box, Link } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
-import DivLine from '../../components/Styles/DivLine';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -25,6 +24,23 @@ const Board1Write = () => {
     // Implement file upload functionality here
     console.log('File upload functionality to be implemented.');
   };
+
+  //파일 업로드 관련 통신
+
+  // const handleFileUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+
+  // axios.post("http://subdomain.storeaivle.com/board/postlist/uploadfile", formData)
+  //   .then(function (response) {
+  //     console.log(response);
+  //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+  // };
 
   const handleTextInput = () => {
     const { title, contents } = text;

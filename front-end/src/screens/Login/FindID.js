@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Button, TextField, Link, Box, Typography, Container, Grid } from '@mui/material/';
+import { Button, TextField, Link, Box, Typography, Container } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/SAI_logo_slogan.png';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+// 회원가입 찾기 페이지
 
 const defaultTheme = createTheme();
 
@@ -18,7 +20,7 @@ export default function FindID() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    // 여기에 이메일로 비밀번호 찾기 안내 등의 비즈니스 로직을 추가할 수 있습니다.
+    // 여기에 이메일로 비밀번호 찾기 안내 통신 로직
 
     // Alert 표시
     alert('이메일로 비밀번호 찾기 안내를 보내드렸습니다.');

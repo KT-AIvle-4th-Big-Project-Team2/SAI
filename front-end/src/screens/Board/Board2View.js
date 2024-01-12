@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/material';
+import { Box, Button, Paper, Typography, TextField } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
+// import { useAuth } from '../../components/Auth/AuthContext';
 
 const Board2View = () => {
-  const name = 'tester1'
+  const username = 'jinwon97'
   const [comment, setComment] = useState({contents : ''});
   const [comments, setComments] = useState([]);
   const { post_num } = useParams();
   const navigate = useNavigate();
-  const [boardContent, setBoardContent] = useState({}); // Change to object
+  const [boardContent, setBoardContent] = useState({});
+  // const { csrfToken } = useAuth();
 
+
+  // 게시판 상세 글 받아오기
   function getBoardContent() {
-    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
+    axios.get(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}`)
       .then((response) => {
-        setBoardContent(response.data); // Update state with fetched data
+        setBoardContent(response.data);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -23,10 +27,11 @@ const Board2View = () => {
       });
   }
 
+  // 게시판 댓글 받아오기
   function getcomment() {
-    axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
+    axios.get(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}/comment`)
       .then((response) => {
-        setComments(response.data); // Update state with fetched data
+        setComments(response.data);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -34,22 +39,23 @@ const Board2View = () => {
       });
   }
 
+
+  // 페이지에 게시판 상세 글과 댓글 받아오는 함수 실행
   useEffect(() => {
     getBoardContent();
     getcomment();
-  }, [post_num]); // Include post_num as a dependency
+  }, [post_num]);
 
+  // 댓글 POST 통신
   const handleCommentInput = () => {
     console.log(comment)
     const {contents} = comment;
-    axios.post(`http://subdomain.storeaivle.com/board/postlist/${post_num}/createcomment`, {
+    axios.post(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}/createcomment`, {
       contents: contents,
-      user: name,
-      board:post_num
+      user: username
     })
       .then(function (response) {
         console.log(response);
-        // Consider using a redirect method here
         navigate(`/board2View/${post_num}`)
       })
       .catch(function (error) {
@@ -57,8 +63,9 @@ const Board2View = () => {
       });
   };
 
+  // 댓글 Del 통신
   const handleCommentDelete = (commentId) => {
-    axios.delete(`http://subdomain.storeaivle.com/board/postlist/deletecomment/${commentId}`)
+    axios.delete(`http://subdomain.storeaivle.com/consultboard/postlist/deletecomment/${commentId}`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
@@ -70,8 +77,9 @@ const Board2View = () => {
       });
   };
 
+  // 글 삭제 통신
   const handleDelete = () => {
-    axios.delete(`http://subdomain.storeaivle.com/board/postlist/${post_num}/deletepost`)
+    axios.delete(`http://subdomain.storeaivle.com/consultboard/postlist/${post_num}/deletepost`)
       .then((response) => {
         console.log(response.data);
         // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
@@ -109,13 +117,21 @@ const Board2View = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" href={`/board2Mod/${post_num}`} sx={{ mb: 2, mr : 2}}>
-          글 수정
-        </Button>
-        <Button  variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2}}>
-          글 삭제
-        </Button>
-        <Button variant="contained" href="/board2" sx={{ mb: 2}}>
+      {boardContent.length > 0 ? boardContent[0].name && (
+          <>
+            {boardContent[0].name === username && (
+              <>
+                <Button variant="contained" href={`/Board1Mod/${post_num}`} sx={{ mb: 2, mr: 2 }}>
+                  글 수정
+                </Button>
+                <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2, color: '#FFFFFF' }}>
+                  글 삭제
+                </Button>
+              </>
+            )}
+          </>
+        ) : "Loading..."}
+        <Button  variant="contained" href="/Board1" sx={{ mb: 2 }}>
           글 목록
         </Button>
       </Box>

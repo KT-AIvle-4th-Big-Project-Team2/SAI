@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/system';
-import { Button, TextField, Box, Link } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
 
@@ -16,18 +16,36 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const Board2Write = () => {
-  const name = 'Marie85'
-  const [text, setText] = useState({ title: '', contents: '' });
+// 창업 게시판 글 쓰기
 
-  const handleFileUpload = () => {
-    // Implement file upload functionality here
-    console.log('File upload functionality to be implemented.');
+const Board2Write = () => {
+  const name = 'jinwon97'
+  const [text, setText] = useState({ title: '', contents: '' });
+  const [uploadedFileName, setUploadedFileName] = useState('');
+
+
+
+  // 파일 업로드 관련 통신 <<< 백엔드 요청으로 각각 통신
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // axios.post("http://subdomain.storeaivle.com/consultboard/postlist/uploadfile", formData)
+    //   .then(function (response) {
+    //     console.log(response);
+    //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
+  // 글쓰기 관련 통신
   const handleTextInput = () => {
     const { title, contents } = text;
-    axios.post("http://subdomain.storeaivle.com/board/postlist/createpost", {
+    axios.post("http://subdomain.storeaivle.com/consultboard/postlist/createpost", {
       title:title,
       contents:contents,
       user:9,
@@ -44,15 +62,19 @@ const Board2Write = () => {
   return (
     <div className="container">
     <Box sx={{ height: '100%', mt: 5, mb: 5, width: 'fit-content' }}>
-        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 게시판</span>
+        <span style={{fontSize : 30, fontWeight : 'bold', color : '#012A5B'}}>창업 정보</span>
     </Box>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
+        <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
             Upload file
             <VisuallyHiddenInput type="file" />
           </Button>
-          {/* Add your picture upload button here */}
+          {uploadedFileName && (
+            <div>
+              Uploaded File: {uploadedFileName}
+            </div>
+          )}
         </div>
         <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>
@@ -79,10 +101,10 @@ const Board2Write = () => {
         </div>
         <p></p>
         <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', marginBottom : 20 }}>
-          <Button variant="contained" sx={{ mr: 2 }} href='/board1' onClick={handleTextInput}>
+          <Button variant="contained" sx={{ mr: 2 }} href='/board2' onClick={handleTextInput}>
             글쓰기
           </Button>
-          <Button variant="contained" href="/Board1">
+          <Button variant="contained" href="/Board2">
             취소
           </Button>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Box, Typography } from "@mui/material/";
+import {Typography} from "@mui/material/";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,6 +10,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
+// 개인정보 처리 방침 컴포넌트
 
 const PrivacyPolicy = ({open, onClose}) => {
   return (
