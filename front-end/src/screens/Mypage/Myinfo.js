@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button, CssBaseline, TextField, Grid, Box, Typography, Container } from '@mui/material';
 import Withdrawal from './WithDrawal';
 import logo from '../../assets/SAI_logo_slogan.png'
@@ -6,10 +6,30 @@ import logo from '../../assets/SAI_logo_slogan.png'
 const Myinfo = () => {
 
   // 내 정보 예시로 받아오기
-  const name = '홍길동';
+  const [userdata, setUserdata] = useState({})
+
+  const name = '오진원';
   const sex = '남성';
-  const age = 25;
+  const age = 28;
   const email = 'asdf@Google.com';
+
+  // function getuserinfo() {
+  //   fetch("URL")
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setUserdata(...data);
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
+
 
   return (
     <Container component="main" maxWidth="xs">

@@ -12,7 +12,6 @@ import { ResponsivePie } from '@nivo/pie'
 import { ResponsiveBar } from '@nivo/bar'
 import { ResponsiveLine } from '@nivo/line'
 import { styled } from '@mui/system';
-import { useTheme } from '@mui/material/styles';
 
 const createGradientStyle = (theme) => ({
   background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
@@ -23,7 +22,8 @@ const StyledPaper = styled(Paper)(({ theme }) => createGradientStyle(theme));
 
 
 const SimulReport2 = () => {
-  const theme = useTheme();
+
+// 데이터 임시 설정
 
   const da = {
     "자치구" : "강남구",
@@ -106,6 +106,8 @@ const SimulReport2 = () => {
     "소비트렌드_텍스트 ": "음식"
 }
 
+
+// 점포수 관련 BarGraph
   const stores = [
     { id: '2022년 3분기', value: da['20223_점포수'], color: '#9B9B9B' },
     { id: '2022년 4분기', value: da['20224_점포수'], color: '#9B9B9B' },
@@ -136,6 +138,8 @@ const SimulReport2 = () => {
       />
     </div>
   );
+
+// 개업수 관련 BarGraph
 
   const opens = [
     { id: '2022년 3분기', value: da['20223_개업점포수'], color: '#9B9B9B' },
@@ -168,6 +172,8 @@ const SimulReport2 = () => {
     </div>
   );
 
+  // 폐업수 관련 BarGraph
+
   const closes = [
     { id: '2022년 3분기', value: da["20223_폐업점포수"], color: '#9B9B9B' },
     { id: '2022년 4분기', value: da["20224_폐업점포수"], color: '#9B9B9B' },
@@ -199,6 +205,8 @@ const SimulReport2 = () => {
     </div>
   );
 
+// 거주 인구 관련 Graph
+
   const risidals = [
     { id: '2022년 3분기', value: da["20223_주거인구"], color: '#9B9B9B' },
     { id: '2022년 4분기', value: da["20224_주거인구"], color: '#9B9B9B' },
@@ -229,6 +237,8 @@ const SimulReport2 = () => {
       />
     </div>
   );
+
+  // 주변 업종 관련 Graph
 
   const sectordata = [
     { id: '관공서', value: da.관공서, color: '#236cff' },
@@ -264,6 +274,8 @@ const SimulReport2 = () => {
     </div>
   );
 
+// 인구수 비교 Graph
+
   const peopledata = [
     {
         id: '서울시',
@@ -298,51 +310,7 @@ const SimulReport2 = () => {
     }
   ];
 
-
-  
-const BumpGraph = () => (
-    <div style={{ height: '300px' }}>
-    <Box sx={{display : 'flex', justifyContent : 'space-between', mt : 2, ml : 2, mr : 10}}>
-        <Typography sx={{fontSize : 20, fontWeight : 'bold'}}>주거 공간 추이</Typography>
-        <Typography sx={{fontSize : 18}}>단위 : 1ha 당 명</Typography>
-    </Box>
-    <ResponsiveLine
-      data={peopledata}
-      margin={{ top: 40, right: 100, bottom: 70, left: 60 }}
-      colors={['#6474C8', '#FF6B00', 'gray']}
-      lineWidth={3}
-      pointSize={10}
-      pointColor={{ theme: 'background' }}
-      pointBorderWidth={3}
-      pointBorderColor={{ from: 'serieColor' }}
-      enablePoints={true}
-      enableGridX={true}
-      enableGridY={true}
-      curve="monotoneX"
-      axisTop={null}
-      axisRight={null}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-      }}
-      legends={[
-        {
-          anchor: 'bottom',
-          direction: 'row',
-          translateY: 50,
-          itemsSpacing: 20,
-          itemWidth: 80,
-          itemHeight: 20,
-          itemTextColor: '#999',
-          symbolSize: 12,
-          symbolShape: 'circle',
-        }
-          ]}
-      
-    />
-  </div>
-);
+// 소비트랜드 관련 PieGraph
 
     const consume = [
         { id: '음식', label: '음식', value: da.소비트렌드_음식 },
@@ -404,6 +372,8 @@ const BumpGraph = () => (
 
 
   const user = 'jinwon97'
+
+// Typography 관련 속성 컴포넌트
 
   const TitleType = ({children}) => {
     const fontSize = 30;

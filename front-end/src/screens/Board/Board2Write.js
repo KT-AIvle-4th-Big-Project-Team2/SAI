@@ -25,14 +25,14 @@ const Board2Write = () => {
 
 
 
-  // 파일 업로드 관련 통신 <<< 백엔드 요청으로 각각 통신
+  // 파일 업로드 관련 로직
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
+  // const handleFileUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append('file', file);
 
-    // axios.post("http://subdomain.storeaivle.com/consultboard/postlist/uploadfile", formData)
+    // axios.post("http://subdomain.storeaivle.com/consultboardboard/postlist/URL", formData)
     //   .then(function (response) {
     //     console.log(response);
     //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
@@ -40,7 +40,7 @@ const Board2Write = () => {
     //   .catch(function (error) {
     //     console.log(error);
     //   });
-  };
+  // };
 
   // 글쓰기 관련 통신
   const handleTextInput = () => {
@@ -66,10 +66,10 @@ const Board2Write = () => {
     </Box>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-        <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
-            Upload file
-            <VisuallyHiddenInput type="file" />
-          </Button>
+        {/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}> */}
+            {/* Upload file */}
+            {/* <VisuallyHiddenInput type="file" /> */}
+          {/* </Button> */}
           {uploadedFileName && (
             <div>
               Uploaded File: {uploadedFileName}

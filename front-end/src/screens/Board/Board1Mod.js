@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, TextField, Box } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import axios from 'axios';
@@ -35,6 +35,8 @@ const Board1Mod = () => {
         // 오류 발생 시 처리
       });
   };
+
+  // 수정할 글을 받아온 다음 변수로 설정
 
   useEffect(() => {
     axios

@@ -16,6 +16,8 @@ import { ResponsiveLine } from '@nivo/line';
 import { styled } from '@mui/system';
 import LoadingPage from '../../components/LoadingPage';
 
+// 커스텀 페이퍼 테마 설정
+
 const createGradientStyle = (theme) => ({
   background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
 });
@@ -28,15 +30,16 @@ const SimulReport = () => {
 
   const [loading, setLoading] = useState(true);
 
+  // 로딩창 임시 구현
+
   useEffect(() => {
-    // 3초 후에 로딩 상태 변경
     const timeoutId = setTimeout(() => {
       setLoading(false);
     }, 3000);
-
-    // 컴포넌트가 언마운트될 때 타이머 클리어
     return () => clearTimeout(timeoutId);
-  }, []); // 빈 배열을 전달하여 componentDidMount와 같이 동작하게 함
+  }, []);
+
+  // 데이터 임시 설정
 
   const da = 
   {
@@ -99,6 +102,7 @@ const SimulReport = () => {
     "user": 12
     }
 
+  // circlepacking 그래프 관련 부분
 
   const circle1 = {
     "name": "",
@@ -181,7 +185,7 @@ const CircleGraph2 = () => (
   </div>
 );
 
-
+// BulletChart 관련 부분
   const data2 = [
     {
       "id": '',
@@ -190,6 +194,8 @@ const CircleGraph2 = () => (
       "markers": [null], // markers는 필요에 따라 추가
     },
   ];
+
+  // BarGraph 관련 부분
 
   const data3 = [
     { id: da.simil_area_name_1, value: da.simil_area_esti_1, color: '#236cff' },
@@ -220,6 +226,8 @@ const CircleGraph2 = () => (
     </div>
   );
   
+// BumpGraph 관련 부분
+
   const data4 = [
     {
       id: '선택상권',
@@ -275,7 +283,7 @@ const CircleGraph2 = () => (
   </div>
   );
 
-
+  // Typography 속성 컴포넌트
 
   const user = 'jinwon97'
 
@@ -335,8 +343,8 @@ const CircleGraph2 = () => (
                 data={data2}
                 margin={{left : 10, right : 10, top: 30, bottom: 30}}
                 title="Bullet Chart Example"
-                rangeColors={['#ffd9d3']} // 옅은 분홍색
-                measureColors={['#236cff']} // 파란색
+                rangeColors={['#ffd9d3']}
+                measureColors={['#236cff']}
                 measureBorderWidth={5}
                 rangeBorderWidth={5}
               />

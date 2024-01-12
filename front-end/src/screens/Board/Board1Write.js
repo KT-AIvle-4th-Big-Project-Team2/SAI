@@ -20,28 +20,29 @@ const Board1Write = () => {
   const name = 'jinwon97'
   const [text, setText] = useState({ title: '', contents: '' });
 
+  // 임시 파일 업로드
   const handleFileUpload = () => {
-    // Implement file upload functionality here
     console.log('File upload functionality to be implemented.');
   };
 
-  //파일 업로드 관련 통신
+  // 파일 업로드 관련 로직
 
   // const handleFileUpload = (e) => {
   //   const file = e.target.files[0];
   //   const formData = new FormData();
   //   formData.append('file', file);
 
-  // axios.post("http://subdomain.storeaivle.com/board/postlist/uploadfile", formData)
-  //   .then(function (response) {
-  //     console.log(response);
-  //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
+    // axios.post("http://subdomain.storeaivle.com/consultboardboard/postlist/URL", formData)
+    //   .then(function (response) {
+    //     console.log(response);
+    //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   // };
 
+  // 게시판 글쓰기 POST 통신
   const handleTextInput = () => {
     const { title, contents } = text;
     console.log("이름",name);
@@ -53,7 +54,6 @@ const Board1Write = () => {
     })
       .then(function (response) {
         console.log(response);
-        // Consider using a redirect method here
       })
       .catch(function (error) {
         console.log(error);
@@ -71,7 +71,6 @@ const Board1Write = () => {
             Upload file
             <VisuallyHiddenInput type="file" />
           </Button>
-          {/* Add your picture upload button here */}
         </div>
         <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>
@@ -88,7 +87,7 @@ const Board1Write = () => {
           <TextField
             fullWidth
             multiline
-            rows={20} // Adjust the number of rows as needed
+            rows={20}
             id='board1Contents'
             label='Contents'
             name='board1Contents'

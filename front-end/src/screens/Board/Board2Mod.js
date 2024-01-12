@@ -29,12 +29,12 @@ const Board2Mod = () => {
 
   // 파일 업로드 관련 로직
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
+  // const handleFileUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append('file', file);
 
-    // axios.post("http://subdomain.storeaivle.com/consultboardboard/postlist/uploadfile", formData)
+    // axios.post("http://subdomain.storeaivle.com/consultboardboard/postlist/URL", formData)
     //   .then(function (response) {
     //     console.log(response);
     //     setUploadedFileName(response.data.filename);  // 서버에서 파일 이름을 받아옴
@@ -42,7 +42,7 @@ const Board2Mod = () => {
     //   .catch(function (error) {
     //     console.log(error);
     //   });
-  };
+  // };
 
   const handleTextInput = () => {
     const { title, content } = text;
@@ -86,10 +86,10 @@ const Board2Mod = () => {
     </Box>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}>
-            Upload file
+          {/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} onClick={handleFileUpload}> */}
+            {/* Upload file */}
             {/* ... (VisuallyHiddenInput remains the same) */}
-          </Button>
+          {/* </Button> */}
         </div>
         <p></p>
         <div style={{ width: '100%', marginBottom: '10px' }}>

@@ -18,7 +18,6 @@ import {
   IconButton
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 10;
@@ -26,26 +25,14 @@ const ITEMS_PER_PAGE = 10;
 const Board1 = () => {
 
   const navigate = useNavigate();
-
-  const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  /*
-  function getBoard() {12
-    axios.get("https://subdomain.storeaivle.com/board/postlist/")
-      .then((response) => {
-        setBoardList([...response.data]);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-  */
+  // 게시판 글 조회 함수
+
   function getBoard() {
     fetch("http://subdomain.storeaivle.com/board/postlist/")
       .then((response) => {
@@ -63,20 +50,8 @@ const Board1 = () => {
       });
   }
   
-  /*
-  function getBoard() {
-    axios.get("https://subdomain.storeaivle.com/board/postlist/")
-      .then((response) => {
-        setBoardList([...response.data]);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-*/
   useEffect(() => {
-    getBoard(); // 1) 게시글 목록 조회 함수 호출
+    getBoard();
   }, []);
 
   console.log(boardList);
@@ -86,7 +61,6 @@ const Board1 = () => {
   };
 
   const handleSearch = () => {
-    // Perform search based on searchTarget and searchKeyword
     console.log("Search Target:", searchTarget);
     console.log("Search Keyword:", searchKeyword);
   
@@ -100,18 +74,14 @@ const Board1 = () => {
     console.log("Encoded Search Target:", encodedSearchTarget);
     console.log("Encoded Search Keyword:", encodedSearchKeyword);
   
-    // React Router의 history 객체를 사용하여 페이지 이동
     navigate(searchUrl);
   };
 
-  // Calculate the index range for the current page
+  // 페이지 관련 변수들
+  
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // Get the current page items using the slice method
   const currentItems = boardList.slice(startIndex, endIndex);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
 
