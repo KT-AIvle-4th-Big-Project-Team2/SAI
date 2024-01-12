@@ -11,7 +11,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-sensitiveDataPath = ('/home/ubuntu/setting/djangoSecretKey_info.txt')
+#"C:\bigproject\sensitiveDatas\DB_info.txt"
+#/home/ubuntu/setting/djangoSecretKey_info.txt
+
+sensitiveDataPath = ("/home/ubuntu/key/DB_info.txt")
 sensitiveData = open(sensitiveDataPath, 'r')
 django_secretKey = sensitiveData.readline()
 sensitiveData.close()
@@ -68,6 +71,7 @@ INSTALLED_APPS = [
     'userPage',
     'adminPage',
     'analysis',
+    'fileupload',
     
     # rest API
     "rest_framework",
@@ -78,7 +82,7 @@ INSTALLED_APPS = [
     #'rest_framework_simplejwt'
 ]
 
-sensitiveDataPath = ('C:/home/ubuntu/setting/frontURL_info.txt')
+sensitiveDataPath = ('/home/ubuntu/key/frontURL_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 frontURL = sensitiveData.readline()
 sensitiveData.close()
@@ -137,7 +141,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dev.wsgi.application"
 
-sensitiveDataPath = ('/home/ubuntu/setting/DB_info.txt')
+sensitiveDataPath = ('/home/ubuntu/key/DB_info.txt')
 sensitiveData = open(sensitiveDataPath, 'r')
 sensitiveDataList = []
 
@@ -264,6 +268,10 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 ################################

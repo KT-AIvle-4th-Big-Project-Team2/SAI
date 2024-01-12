@@ -62,16 +62,16 @@ class BoardPostCreateSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['title', 'contents', 'username']
 
-class BoardPostUpdateSerializer(serializers.Serializer):
+class BoardPostUpdateSerializer(serializers.ModelSerializer):
 
-    title = serializers.CharField()
-    contents = serializers.CharField()
-    username = serializers.CharField()
+    title = serializers.CharField(required=False, allow_blank  = True)
+    contents = serializers.CharField(required=False, allow_blank  = True)
+    username = serializers.CharField(max_length = 30)
+    class Meta:
+        model = Comments
+        fields = ["title", "contents", "username"]
         
 class BoardPostcommentCreateSerializer(serializers.ModelSerializer):
-
-    contents = serializers.CharField()
-    username = serializers.CharField()
     class Meta:
         model = Comments
         fields = ('contents','username')
@@ -83,7 +83,7 @@ class BoardPostCommentUpdateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Comments
-        fields = ('contents',)
+        fields = ('contents')
         
         
 # class GetUserData(serializers.ModelSerializer):

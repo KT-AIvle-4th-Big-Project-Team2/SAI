@@ -125,18 +125,17 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
             
         instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
         
-
-        # if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        if  serializer.is_valid() != True: return Response({'input format error'}, status.HTTP_400_BAD_REQUEST)
         
-        # else:
-        #     instance.title = serializer.validated_data['title']
-        #     instance.contents = serializer.validated_data['contents']
-
-        #     instance.save()
-        # return Response({'success': 'update post success'}, status.HTTP_201_CREATED)
-        instance.title = serializer.validated_data['title']
-        instance.contents = serializer.validated_data['contents']
-
+        if instance.user__username != serializer.validated_data['username']:
+            return Response({'user not correct'}, status.HTTP_403_FORBIDDEN)
+        
+        
+        if serializer.validated_data['title'] != "":
+            instance.name = serializer.validated_data['title']
+        if serializer.validated_data['contents'] != "":
+            instance.password = serializer.validated_data['contents']
+        
         instance.save()
         return Response({'success': 'update post success'}, status.HTTP_201_CREATED)
         
@@ -146,19 +145,45 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
 class BoardPostDeleteView(generics.DestroyAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
     queryset = Board.objects.all()
-    serializer_class = BoardPostSerializer
     
     def delete(self, request, *args, **kwargs):
         # username = self.request.user.username
-        username = "jinwon97"
+        # username = "jinwon97"
         instance = self.get_object()
-        if instance.user != UserCustom.objects.get(username = "jinwon97"):  
-            return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
-        else:
-            instance.delete()
-            
-            return Response({'success':'delte success'}, status.HTTP_200_OK)
+        
+        # if instance.user__username != self.request.data("username")  
+            # return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        # else:
+        #     instance.delete()
+        instance.delete()
+        
+        return Response({'success':'delte success'}, status.HTTP_200_OK)
+    
         # if instance.user != self.request.user:  
+        #     return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        # else:
+        #     instance.delete()
+            
+        #     return Response({'success':'delte success'}, status.HTTP_200_OK)
+        
+# @method_decorator(csrf_protect, name='dispatch')
+# class BoardPostDeleteView(APIView):
+#     # permission_classes = (permissions.IsAuthenticated,)
+#     queryset = Board.objects.all()
+#     serializer_class = BoardPostSerializer
+    
+#     def delete(self, request, *args, **kwargs):
+#         # username = self.request.user.username
+#         username = self.request.data.get("username")
+#         instance = self.get_object()
+#         instance.delete()
+        # if instance.user != UserCustom.objects.get(username = "username"):  
+        #     return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
+        # else:
+        #     instance.delete()
+            
+        #     return Response({'success':'delte success'}, status.HTTP_200_OK)
+        # # if instance.user != self.request.user:  
         #     return Response({'error':'wrong user error'}, status = status.HTTP_403_FORBIDDEN)
         # else:
         #     instance.delete()
