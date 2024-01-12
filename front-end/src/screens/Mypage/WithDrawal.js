@@ -9,6 +9,8 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useAuth } from '../../components/Auth/AuthContext';
 
+// 회원 탈퇴 관련 컴포넌트
+
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -22,9 +24,11 @@ const Withdrawal = () => {
     setModalOpen(true);
   };
 
+
+
   const handleConfirmWithdrawal = () => {
     // 여기에서 실제 회원 탈퇴 로직을 수행할 수 있습니다.
-    // ...
+    // 백엔드 준비 실패
 
     // 회원 탈퇴가 완료되면 알림을 띄우고 모달을 닫습니다.
     setSnackbarOpen(true);

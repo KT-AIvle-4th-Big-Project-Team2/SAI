@@ -17,6 +17,9 @@ function NavBarElements() {
   const name = 'test'
   const { isLogin, logoutHandler } = useAuth();
 
+
+  // 개선 의견 보내기
+
   const handleOpenFeedback = () => {
     setOpenFeedback(true);
   };

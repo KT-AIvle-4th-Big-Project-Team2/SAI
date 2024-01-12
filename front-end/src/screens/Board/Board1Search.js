@@ -23,6 +23,8 @@ import axios from 'axios';
 
 const ITEMS_PER_PAGE = 10;
 
+// 창업 정보 게시판 검색 글 검색
+
 const Board1Search = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
@@ -34,7 +36,8 @@ const Board1Search = () => {
   const {searchKeyword} = useParams();
 
 
-//검색에 맞는 게시글 호출
+// 검색에 맞는 게시글 호출
+
   function getBoard() {
     axios.get(`http://subdomain.storeaivle.com/board/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
@@ -51,7 +54,8 @@ const Board1Search = () => {
   }, []);
 
 
-  // URL 클릭 정리
+  // Post_num 관리
+
   const handleLinkClick = (postId) => {
     setPost_num(postId);
   };
@@ -67,7 +71,7 @@ const Board1Search = () => {
   };
 
 
-  //페이지 관련 변수
+  // 페이지 관련 변수
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentItems = boardList.slice(startIndex, endIndex);

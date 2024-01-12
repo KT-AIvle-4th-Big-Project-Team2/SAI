@@ -135,6 +135,7 @@ class KakaoMap extends Component {
             userDong:'',
             userMarket:'',
             userService:'',
+            // 지역구, 행정동 버튼 스타일
             buttonStyle: {
                 width: '6em', // Set the desired width
                 minWidth:'6em',
@@ -144,6 +145,7 @@ class KakaoMap extends Component {
                 fontSize:'103%',
                 // Add other common styles if needed
             },
+            // 상권 버튼 스타일
             buttonStyle2: {
                 minWidth: '7.1em', // Set the desired width
                 minHeight: '25%', // Set the desired height
@@ -168,7 +170,7 @@ class KakaoMap extends Component {
         this.codeServiceInfo=code_service;
         this.codeGuInfo=code_gu;
         this.codeDongInfo=code_dong;
-        
+        // 업종 리스트
         this.serviceList= ['미용실', '분식전문점',  '양식음식점','의약품', '일반의류', '일반학원', '일식음식점', '제과점','중식음식점', '커피-음료', '치킨전문점', '패스트푸드', '편의점', '한식음식점', '화장품', '호프-주점'];
         this.markers = [];  // 마커를 저장할 배열
         
@@ -345,7 +347,7 @@ class KakaoMap extends Component {
         
         return (
             <div className="map-container">
-            
+                {/* startbar - 분석 단위 선택하는 부분 */}
                 <nav className={this.state.selectedMenu === '' ? 'startbar' : 'startbar hidden'}>
                     {/* username */}
                     <div style={{marginLeft : '11%', marginTop : '13%'}}>
@@ -367,6 +369,8 @@ class KakaoMap extends Component {
                     </div>
                 </nav>
                 
+                {/* 행정동단위 선택시 sidebar1 진행, sidebar2 숨기기 */}
+                {/*   상권단위 선택시 sidebar2 진행, sidebar1 숨기기 */}
 
                 {/* 행정동 단위 - sidebar1 */}
                 {this.state.selectedMenu === 'sidebar1' && (
@@ -414,6 +418,7 @@ class KakaoMap extends Component {
                             </div>
                         )}
                         {this.state.Gu === '' && (<br/>)}
+                        {/*  지역구 버튼 생성 */}
                         {this.state.Gu === '' && this.uniqueGuArray.map((gu) => (
                             
                             <button
@@ -442,7 +447,8 @@ class KakaoMap extends Component {
                                     <strong style={{fontSize:'155%'}}>에서<br/>창업하시는지 알려주세요.</strong>
                                 </div>
                             )}
-                            {this.state.selectedDong==='' &&this.state.isMenu1Open && (<br/>)}
+                            {this.state.selectedDong==='' &&this.state.isMenu1Open1 && (<br/>)}
+                            {/*  행정동 버튼 생성 */}
                             {this.state.selectedDong==='' &&this.state.isMenu1Open && this.dongData
                                 .filter(item => item.시군구명 === this.state.Gu)
                                 .map(item => item.읍면동명)
@@ -476,6 +482,7 @@ class KakaoMap extends Component {
                             </div>
                         )}
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)}
+                        {/* 서비스 업종 버튼 생성 */}
                         {this.state.selectedDong && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div style={{ display: 'flex', flexWrap: 'wrap'}}>
                                 {this.serviceList.map((service) => (
@@ -609,6 +616,7 @@ class KakaoMap extends Component {
                             </div>
                         )}
                         {this.state.Gu === ''&&(<br/>)}
+                        {/* 지역구 버튼 생성 */}
                         {this.state.Gu === ''&&  this.uniqueGuArray2.map((gu) => (
                             <button
                                 key={gu}
@@ -638,6 +646,7 @@ class KakaoMap extends Component {
                                 </div>
                             )}
                             {this.state.selectedDong === '' && this.state.isMenu1Open && (<br />)}
+                            {/*  행정동 버튼 생성 */}
                             {this.state.selectedDong === '' && this.state.isMenu1Open && (
                                 <div>
                                     {this.uniqueGuArray2
@@ -680,6 +689,7 @@ class KakaoMap extends Component {
                                 </div>
                             )}
                             {this.state.selectedmarket === '' && this.state.isMenu2Open && (<br/>)}
+                            {/* 상권 버튼 생성 */}
                             {this.state.selectedmarket === '' && this.state.isMenu2Open && this.marketinfo
                                 .filter(item => item.행정동_코드_명 === this.state.selectedDong)
                                 .map(item => item.상권_코드_명)
@@ -713,6 +723,7 @@ class KakaoMap extends Component {
                             </div>
                         )}
                         {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (<br/>)}
+                        {/* 서비스 업종 버튼 생성 */}
                         {this.state.selectedmarket && this.state.selectedservice === '' && this.state.isMenu3Open && (
                             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                                 {this.serviceList.map((service) => (
@@ -803,28 +814,28 @@ class KakaoMap extends Component {
     };
 
     handleBackButtonClick2 = () => {
-        // 뒤로가기 버튼 클릭 시, 지역구 선택으로 돌아가기
+        // 뒤로가기 버튼2 클릭 시, 지역구 선택으로 돌아가기
         this.setState({
             Gu: '',
             isMenu1Open:false,
         });
     };
     handleBackButtonClick3 = () => {
-        // 뒤로가기 버튼 클릭 시, 행정동 선택으로 돌아가기
+        // 뒤로가기 버튼3 클릭 시, 행정동 선택으로 돌아가기
         this.setState({
             selectedDong: '',
             isMenu2Open:false
         });
     };
     handleBackButtonClick4 = () => {
-        // 뒤로가기 버튼 클릭 시, 상권 선택으로 돌아가기
+        // 뒤로가기 버튼4 클릭 시, 상권 선택으로 돌아가기
         this.setState({
             selectedmarket: '',
             isMenu3Open:false,
         });
     };
     handleBackButtonClick5 = () => {
-        // 뒤로가기 버튼 클릭 시, 업종 선택으로 돌아가기
+        // 뒤로가기 버튼 클릭5 시, 업종 선택으로 돌아가기
         this.setState({
             selectedservice: '',
             isMenu4Open: false,
@@ -833,7 +844,7 @@ class KakaoMap extends Component {
 
     // 행정동 단위분석 전용 뒤로가기버튼
     handleBackButtonClick6 = () => {
-        // 업종선택화면에서 뒤로가기 버튼 클릭 시,  헹정동선택으로 돌아가기
+        // 업종선택화면에서 뒤로가기6 버튼 클릭 시,  헹정동선택으로 돌아가기
         this.setState({
             selectedDong: '',
             isMenu2Open:false
@@ -871,6 +882,8 @@ class KakaoMap extends Component {
         
     //     this.setState({ capital: '' });
     // };
+
+    // 코드_명을 코드로 변환하고 출력하는 함수
     handleCapitalSubmit = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);
@@ -888,7 +901,7 @@ class KakaoMap extends Component {
             // 나머지 코드들...
         });
     };
-
+    // 코드_명을 코드로 변환하고 출력하는 함수2
     handleCapitalSubmit2 = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);

@@ -1,5 +1,7 @@
 import React from "react";
 
+// 최초 보여지는 화면
+
 export const Header = (props) => {
 
   return (

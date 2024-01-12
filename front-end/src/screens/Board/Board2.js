@@ -18,7 +18,6 @@ import {
   IconButton
 } from '@mui/material/';
 import SearchIcon from '@mui/icons-material/Search';
-import DivLine from '../../components/Styles/DivLine';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -28,13 +27,14 @@ const Board2 = () => {
 
   const navigate = useNavigate();
 
-  const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
 
+
+    // 서버에서 게시판 목록을 받아오는 통신
   function getBoard() {
     axios.get("http://subdomain.storeaivle.com/consultboard/postlist/")
       .then((response) => {
@@ -47,14 +47,18 @@ const Board2 = () => {
   };
 
   useEffect(() => {
-    getBoard(); // 1) 게시글 목록 조회 함수 호출
+    getBoard();
   }, []);
 
   console.log(boardList);
 
+  // Post_Id 관리
+
   const handleLinkClick = (postId) => {
     setPost_num(postId);
   };
+
+  // 게시판 글 검색
 
   const handleSearch = () => {
     // Perform search based on searchTarget and searchKeyword
@@ -71,21 +75,14 @@ const Board2 = () => {
     console.log("Encoded Search Target:", encodedSearchTarget);
     console.log("Encoded Search Keyword:", encodedSearchKeyword);
   
-    // React Router의 history 객체를 사용하여 페이지 이동
     navigate(searchUrl);
   };
 
-  // Calculate the index range for the current page
+  // 페이지 계산 관련 변수
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // Get the current page items using the slice method
   const currentItems = boardList.slice(startIndex, endIndex);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
-
-
 
   return (
     <div className="container">      

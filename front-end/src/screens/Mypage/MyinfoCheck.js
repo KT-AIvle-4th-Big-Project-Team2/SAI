@@ -1,13 +1,12 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import logo from '../../assets/SAI_logo_slogan.png'
 
+// 내 정보 수정 페이지 접근 전 확인
 
 export default function MyinfoCheck() {
   const handleSubmit = (event) => {

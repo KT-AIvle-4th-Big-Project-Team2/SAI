@@ -4,12 +4,15 @@ import { Box, Button, Paper, Typography, Divider } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
 
+// 공지사항 글 상세 보기
+
 const NoticeView = () => {
-  const [name, setName] = useState();
   const { post_num } = useParams();
   const navigate = useNavigate();
-  const [boardContent, setBoardContent] = useState({}); // Change to object
+  const [boardContent, setBoardContent] = useState({});
 
+
+  // 공지사항 글 상세 받아오기
   function getBoardContent() {
     axios.get(`http://subdomain.storeaivle.com/announcement/announcementlist/${post_num}`)
       .then((response) => {
@@ -25,17 +28,15 @@ const NoticeView = () => {
     getBoardContent();
   }, [post_num]); // Include post_num as a dependency
 
-
+  // 공지사항 삭제 버튼
   const handleDelete = () => {
     axios.delete(`http://subdomain.storeaivle.com/announcement/announcementlist/deletepost/${post_num}`)
       .then((response) => {
         console.log(response.data);
-        // 삭제 성공 시 리다이렉트 또는 필요한 동작 수행
         navigate('/notice');
       })
       .catch((error) => {
         console.error(error);
-        // 오류 발생 시 처리
       });
   };
 
@@ -66,12 +67,12 @@ const NoticeView = () => {
         </Typography>
       </Paper>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="contained" href={`/noticeMod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
+        {/* <Button variant="contained" href={`/noticeMod/${post_num}`} sx={{ mb: 2, mr : 2 }}>
           글 수정
         </Button>
         <Button variant="contained" onClick={handleDelete} sx={{ mb: 2, mr: 2}}>
           글 삭제
-        </Button>
+        </Button> */}
         <Button variant="contained" href="/Notice" sx={{ mb: 2 }}>
           글 목록
         </Button>

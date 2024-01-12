@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Grid,
   Box,
   Typography,
   Container,
 } from '@mui/material/';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth } from '../../components/Auth/AuthContext';
 import axios from 'axios';
@@ -26,9 +22,9 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
+
 //const [cookies, setCookie, removeCookie] = useCookies(['my-cookie']);
 
 /*
@@ -74,10 +70,15 @@ export default function SignIn() {
   */
  // 예시: CSRF 토큰을 가져오는 함수
 
+// 회원 가입 관련 페이지
 
     export default function SignIn() {
+
+      // 로그인 관리 Auth 변수 호출
       const { loginHandler, setUserInfo, setCsrfTokenHandler } = useAuth();
     
+      // 로그인 제출 관련 함수 정리
+
       const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -171,6 +172,7 @@ export default function SignIn() {
         }
       }
     };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -216,7 +218,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={loginHandler}
-              href = '/Home'
+              href = '/Home'  // 임시로 링크 설정
             >
               로그인
             </Button>

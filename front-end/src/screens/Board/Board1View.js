@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography, Divider, TextField } from '@mui/material';
 import axios from 'axios';
 import DivLine from '../../components/Styles/DivLine';
-import { useAuth } from '../../components/Auth/AuthContext';
-//
+// import { useAuth } from '../../components/Auth/AuthContext';
+
+// 창업 정보 게시판 글 자세히 보기
 
 const Board1View = () => {
   const username = 'jinwon97'
@@ -12,13 +13,14 @@ const Board1View = () => {
   const [comments, setComments] = useState([]);
   const { post_num } = useParams();
   const navigate = useNavigate();
-  const [boardContent, setBoardContent] = useState({}); // Change to object
-  const { csrfToken } = useAuth();
+  const [boardContent, setBoardContent] = useState({});
+  // const { csrfToken } = useAuth();
 
+  // 게시판 상세 글 받아오기
   function getBoardContent() {
     axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}`)
       .then((response) => {
-        setBoardContent(response.data); // Update state with fetched data
+        setBoardContent(response.data);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -26,10 +28,11 @@ const Board1View = () => {
       });
   }
 
+  // 게시판 댓글 받아오기
   function getcomment() {
     axios.get(`http://subdomain.storeaivle.com/board/postlist/${post_num}/comment`)
       .then((response) => {
-        setComments(response.data); // Update state with fetched data
+        setComments(response.data);
         console.log(response.data);
       })
       .catch(function (error) {
@@ -37,11 +40,15 @@ const Board1View = () => {
       });
   }
 
+
+  // 페이지에 게시판 상세 글과 댓글 작동
   useEffect(() => {
     getBoardContent();
     getcomment();
-  }, [post_num]); // Include post_num as a dependency
+  }, [post_num]);
 
+
+  // 댓글 POST 통신
   const handleCommentInput = () => {
     console.log(comment)
     const {contents} = comment;
@@ -51,7 +58,6 @@ const Board1View = () => {
     })
       .then(function (response) {
         console.log(response);
-        // Consider using a redirect method here
         navigate(`/Board1View/${post_num}`)
       })
       .catch(function (error) {
@@ -59,6 +65,8 @@ const Board1View = () => {
       });
   };
 
+
+  // 댓글 Del 통신
   const handleCommentDelete = (commentId) => {
     axios.delete(`http://subdomain.storeaivle.com/board/postlist/deletecomment/${commentId}`)
       .then((response) => {
@@ -72,6 +80,8 @@ const Board1View = () => {
       });
   };
 
+
+  // 글 삭제 통신
   const handleDelete = () => {
     axios.delete(`http://subdomain.storeaivle.com/board/postlist/${post_num}/deletepost`)
       .then((response) => {

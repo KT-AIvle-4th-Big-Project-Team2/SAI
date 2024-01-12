@@ -23,8 +23,9 @@ import axios from 'axios';
 
 const ITEMS_PER_PAGE = 10;
 
+// 창업 게시판 글 검색
+
 const Board2Search = () => {
-  const [rows, setRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [boardList, setBoardList] = useState([]);
   const [post_num, setPost_num] = useState('');
@@ -34,8 +35,9 @@ const Board2Search = () => {
   const {searchTarget} = useParams();
   const {searchKeyword} = useParams();
 
+// 검색에 맞는 게시글 호출
 
-  function getNotice() {
+  function getBoard() {
     axios.get(`http://subdomain.storeaivle.com/consultboard/postlist/searchpost/${searchTarget}/${searchKeyword}`)
       .then((response) => {
         setBoardList([...response.data]);
@@ -47,36 +49,28 @@ const Board2Search = () => {
   };
 
   useEffect(() => {
-    getNotice(); // 1) 게시글 목록 조회 함수 호출
+    getBoard();
   }, []);
 
-  console.log(boardList);
+
+  // Post_Num 관리
 
   const handleLinkClick = (postId) => {
     setPost_num(postId);
   };
 
   const handleSearch = () => {
-    // Perform search based on searchTarget and searchKeyword
     const encodedSearchTarget = encodeURIComponent(Target);
     const encodedSearchKeyword = encodeURIComponent(Keyword);
 
-
-    // URL을 동적으로 생성하여 이동
-    console.log("Encoded Search Target:", encodedSearchTarget);
-    console.log("Encoded Search Keyword:", encodedSearchKeyword);
-    navigate(`/Board1Search/${encodedSearchTarget}/${encodedSearchKeyword}`)
+    navigate(`/Board2Search/${encodedSearchTarget}/${encodedSearchKeyword}`)
     window.location.reload();
   };
 
-  // Calculate the index range for the current page
+  //페이지 관련 변수
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  // Get the current page items using the slice method
   const currentItems = boardList.slice(startIndex, endIndex);
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(boardList.length / ITEMS_PER_PAGE);
 
   return (

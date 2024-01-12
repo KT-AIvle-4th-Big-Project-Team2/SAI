@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -18,7 +17,6 @@ import {
   RadioGroup,
   FormLabel,
 } from '@mui/material/';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
 import TermsModal from '../../components/TermsModal';
 import logo from '../../assets/SAI_logo_slogan.png'
@@ -35,6 +33,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+// 회원가입 통신 테스트
 
 async function sendSignUpRequest() {
   try {
@@ -66,9 +65,13 @@ async function sendSignUpRequest() {
   }
 }
 
+
+// 회원가입 관련 페이지
+
 export default function SignUp() {
 
-  
+  // 회원가입 관련 변수 조정
+
   const [checked, setChecked] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordState, setPasswordState] = useState('');
@@ -76,6 +79,8 @@ export default function SignUp() {
   const [nameError, setNameError] = useState('');
   const [registerError, setRegisterError] = useState('');
 
+
+  // 데이터 제출 관련 정리
 
   const handleSubmit = async (event) => {
     // 함수 호출
@@ -131,6 +136,8 @@ export default function SignUp() {
     } catch (error) {
       console.error("네트워크 오류:", error);
     }
+
+    // 이메일 유효성 체크
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     if (!emailRegex.test(email)) {
@@ -271,7 +278,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <FormControl>
-                  <FormLabel id="demo-row-radio-buttons-group-label">성별 *</FormLabel>
+                  <FormLabel id="demo-row-radio-buttons-group-label">성별</FormLabel>
                   <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
@@ -284,7 +291,6 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   id="age"
                   label="나이"
@@ -306,7 +312,7 @@ export default function SignUp() {
                 </span>
               </Grid>
               {!isChecked && (
-                <TermsModal open={isTermsModalOpen} onClose={handleCloseTermsModal} />
+                <TermsModal open={isTermsModalOpen} onClose={handleCloseTermsModal} />  // 가입 약관 모달 띄우기
               )}
             </Grid>
             </Grid>

@@ -10,7 +10,10 @@ const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };
+  
 
+  // 서비스 약관, 개인정보 처리 방침 모달
+  
   const [isServiceModalOpen, setServiceModalOpen] = useState(false);
   const [isPrivacyModalOpen, setPrivacyModalOpen] = useState(false);
 
