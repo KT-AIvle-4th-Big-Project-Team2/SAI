@@ -19,8 +19,11 @@ from pycaret.regression import *
 #프랜차이즈 함수
 
 
+# 유저가 입력한 자본금 내에서 창업가능한 가장 매출이 높은 프랜차이즈 브랜드 제공
+
 def get_franchise_data_dong(dongname, sectors, seedmoney):
     
+    # 각 행정동 별 상권들의 평균 임대료 
     rentcost = rent_cost_data(dongname)
     
     # if rentcost == -1: return None
@@ -50,7 +53,6 @@ def get_franchise_data_dong(dongname, sectors, seedmoney):
     }
     
     
-    
     queryset_franch1 = FranchiseData.objects.filter(중분류서비스 = original_dict[sectors], 합계금액__lte = seedmoney).order_by('평균매출금액').values(*franchise_col)
     
     franchise_sort_data = queryset_franch1[::-1]
@@ -62,6 +64,8 @@ def get_franchise_data_dong(dongname, sectors, seedmoney):
     else:
         fran_response_last =   [rentcost, len(franchise_sort_data), franchise_sort_data[0], franchise_sort_data[1]]
     
+    
+    # 같은 브랜드가 중복되어 출력되는 것을 방지
     i=1
     if fran_response_last[2]['브랜드명'] == fran_response_last[3]['브랜드명']:
         for i in range(len(franchise_sort_data)):
@@ -76,7 +80,8 @@ def get_franchise_data_dong(dongname, sectors, seedmoney):
     
     
     
-    
+
+# 입력을 행정동이 아닌 상권으로 할 경우 행정동으로 바꾸는 작업
 def get_franchise_data_market(marketname, sectors, seedmoney):
     
     dongname = MarketSortedDbFin.objects.filter(상권_구분_코드_명 = marketname).first().행정동_코드_명
@@ -91,32 +96,29 @@ def get_franchise_data_market(marketname, sectors, seedmoney):
 
 
 
-# 행정동
+# 행정동 단위 AI
 
 class dong_ai(generics.GenericAPIView):
     serializer_class = AIReportSerializer
     
+    # 자치구, 행정동, 업종, 자본금을 입력받아 AI 리포트의 데이터를 작성
+    
     def get(self, request, *args, **kargs):
-        # username = unquote(self.kwargs['username'])
-        # goo = self.kwargs['goo'].upper()
-        # dong = self.kwargs['dong'].upper()
-        # business = self.kwargs['business'].upper()
-        # funds = self.kwargs['funds']
         
-        #username = unquote(self.kwargs['username'])
+        # 입력받은 한글 데이터를 디코딩
         goo_name = unquote(self.kwargs['goo'])
         dong_name = unquote(self.kwargs['dong'])
         business_name = unquote(self.kwargs['business'])
         funds = self.kwargs['funds']
         
-        # goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
-        # dong_name = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드=dong).first().행정동_코드_명
-        # business_name = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
 
+        # 코드 명을 코드로 변경
         goo= MarketSortedDbFin.objects.filter(자치구_코드_명=goo_name).first().자치구_코드
-        dong = DongServiceDataEstimateTestFullFin.objects.filter(행정동_코드_명=dong_name).first().행정동_코드
-        business = DongServiceDataEstimateTestFullFin.objects.filter(서비스_업종_코드_명 = business_name).first().서비스_업종_코드
+        dong = MarketSortedDbFin.objects.filter(행정동_코드_명=dong_name).first().행정동_코드
+        business = MarketSortedDbFin.objects.filter(서비스_업종_코드_명 = business_name).first().서비스_업종_코드
         
+        
+        # 예측에 쓰이는 Feature 목록
         
         x_cols = ['행정동_코드', '서비스_업종_코드', '관공서_수', '은행_수', '종합병원_수', '일반_병원_수', '약국_수',
        '유치원_수', '초등학교_수', '중학교_수', '고등학교_수', '대학교_수', '백화점_수', '슈퍼마켓_수',
@@ -159,6 +161,7 @@ class dong_ai(generics.GenericAPIView):
         predict_result = prediction['prediction_label']
         
         
+        # 미리 계산해둔 shap 값 존재 여부 확인
         
         try:
             shapValue = DongServiceEstimateShapValues.objects.filter(행정동_코드 = dong, 서비스_업종_코드 = business).first()
@@ -188,11 +191,13 @@ class dong_ai(generics.GenericAPIView):
                 if count == 5:
                     break
         except:
+            
+            # shap 값이 없을 시 None처리
             shapValueOutputTop5 = None
             shapValueOutputBottom5 = None    
             
             
-            
+        # 기준 년분기의 서울시 내 동일 업종의 점포별 평균 매출 금액을 계산
         goo = goo_name
         queryset_avg_seoul = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business).values("점포별_평균_매출_금액")
         avg_zero = 0
@@ -207,15 +212,26 @@ class dong_ai(generics.GenericAPIView):
         
         seoul_diff = (estimate_result.values/seoul_avg)*100
         
+        # 서울 전체 평균 매출을 기준으로 창업 지수 결정
         
+        if seoul_diff >= 150:
+            analysis = "양호"
+        
+        elif seoul_diff <= 50:
+            analysis = "위험"
+        else:
+            analysis = "보통"
+            
+        if seoul_diff > 200:
+            seoul_diff = 200
         
         jachigu = MarketSortedDbFin.objects.filter(행정동_코드 = dong).values('자치구_코드', '자치구_코드_명').first()
         
         
-        
+        # 해당 자치구 1, 2분기 점포별 평균 매출 금액 계산
         queryset_avg_1qb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business, 자치구_코드 = jachigu['자치구_코드']).values("점포별_평균_매출_금액")
         queryset_avg_2qb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20231, 서비스_업종_코드 = business, 자치구_코드 = jachigu['자치구_코드']).values("점포별_평균_매출_금액")
-
+        
         avg_zero = 0
         count = 0
         for i in queryset_avg_1qb:
@@ -230,9 +246,15 @@ class dong_ai(generics.GenericAPIView):
             count += 1
         avg_2qb = avg_zero/count   
         
+        # 해당 자치구 1, 2 분기 점포별 평균 매출 금액을 활용 AI리포트 내용 생성
+        # 지역별 활성화 여부
+        
         analysis_avg_diff = "증가" if (avg_2qb - avg_1qb) > 0 else "감소"
         analysis_active = "활성화" if (avg_2qb - avg_1qb) > 0 else "비활성화"
         
+        
+        
+        # 작년 동분기와 현재의 창업 수 비교 발달 쇠퇴 여부
         queryset_opening = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20233, 행정동_코드 = dong, 서비스_업종_코드 = business).values('점포_수')
         opening = queryset_opening[0]['점포_수']
         
@@ -244,6 +266,7 @@ class dong_ai(generics.GenericAPIView):
         analysis_growth = "발달" if (opening - opening_lyb) > 0 else "쇠퇴"
         
         
+        # 작년 동분기와 현재의 유동인구 수 비교
         queryset_mp_1yb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20223, 행정동_코드 = dong, 서비스_업종_코드 = business).values('총_유동인구_수')
         mp_1yb = queryset_mp_1yb[0]['총_유동인구_수']
         
@@ -254,18 +277,9 @@ class dong_ai(generics.GenericAPIView):
         analysis_mp = "증가" if (mp - mp_1yb) > 0 else "감소"
         
         
-        if seoul_diff >= 150:
-            analysis = "양호"
         
-        elif seoul_diff <= 50:
-            analysis = "위험"
-        else:
-            analysis = "보통"
-            
-        if seoul_diff > 200:
-            seoul_diff = 200
-        
-        queryset_similar = DongServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('행정동_코드', 'prediction_label') # 4분기?
+        # 매출이 비슷한 주변 지역 두 곳 선정
+        queryset_similar = DongServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('행정동_코드', 'prediction_label') 
         
         for i in queryset_similar:
             num = i['prediction_label']
@@ -275,6 +289,7 @@ class dong_ai(generics.GenericAPIView):
         sortedList = sorted(queryset_similar, key=lambda x: x['diff'], reverse=True)
         num1 = sortedList[0]
         num2 = sortedList[1]
+        
         
         similar_dongs1 = DongSortedDbFin.objects.filter(행정동_코드 = num1['행정동_코드']).values('행정동_코드_명').first()
         similar_dongs2 = DongSortedDbFin.objects.filter(행정동_코드 = num2['행정동_코드']).values('행정동_코드_명').first()
@@ -298,11 +313,15 @@ class dong_ai(generics.GenericAPIView):
         avg_target_1qb = avg_zero/count  
         
         
+        # 자본금 내 가능한 매출이 가장 높은 프랜차이즈 두 곳 검색
         franchise = get_franchise_data_dong(dong_name, business_name, funds)
-        # if franchise == None: franchise = [None, None, None]
+        
+        # 매출에 긍정적 영향 최고 5개 와 부정적 영향 최고 5개를 선정
         
         shapValueOutputTop5 = {key: int(value) for key, value in shapValueOutputTop5.items()}
         shapValueOutputBottom5 = {key: int(value) for key, value in shapValueOutputBottom5.items()}
+        
+        # 프랜차이즈 창업 비용 항목들을 10000원 단위로 맞춤
         
         if franchise[2] != None:
             franchise[2] = {key: int(int(value) / 10) if key != '브랜드명' else value for key, value in franchise[2].items()}
@@ -310,6 +329,8 @@ class dong_ai(generics.GenericAPIView):
             franchise[3] = {key: int(int(value) / 10) if key != '브랜드명' else value for key, value in franchise[3].items()}
         
         # print(franchise)
+        
+        # 리포트 내용 전송
         
         output_data = {"AI":"행정동",
                        "region":goo, 
@@ -341,14 +362,6 @@ class dong_ai(generics.GenericAPIView):
                         "franchise_rec_2": franchise[3]
                     }
 
-        # user_id = UserCustom.objects.get(username = username).user_id
-        
-        # save_data = output_data
-        # save_data["user"] = user_id
-        
-        # serialised = AIReportSerializer(data = save_data)
-        # if serialised.is_valid(): serialised.save()
-        # else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(output_data, status=status.HTTP_200_OK)
 
 
@@ -362,28 +375,23 @@ class dong_ai(generics.GenericAPIView):
 # 23 상권
 class market_ai(APIView):
     def get(self, request, *args, **kwargs):        
-        # goo = self.kwargs['goo'].upper()
-        # market = self.kwargs['market']
-        # business = self.kwargs['business'].upper()
-        # funds = self.kwargs['funds']
         
+        
+        # 입력받은 한글 데이터를 디코딩
         goo_name = unquote(self.kwargs['goo'])
         market_name = unquote(self.kwargs['market'])
         business_name = unquote(self.kwargs['business'])
         funds = self.kwargs['funds']
         
-        # goo_name = MarketSortedDbFin.objects.filter(자치구_코드=goo).first().자치구_코드_명
-        # market_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
-        # dong_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().행정동_코드_명
         
-        # business_name = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드 = business).first().서비스_업종_코드_명
-        
+        # 코드 명을 코드로 변경
         goo = MarketSortedDbFin.objects.filter(자치구_코드_명=goo_name).first().자치구_코드
         market = MarketServiceDataEstimateTestFull.objects.filter(상권_코드_명=market_name).first().상권_코드
         dong_name = MarketServiceDataEstimateTestFull.objects.filter(상권_코드_명=market_name).first().행정동_코드_명
 
         business = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드_명 = business_name).first().서비스_업종_코드
-    
+
+        # 상권 단위 예측, 추정 feature
         x_cols = ['상권_코드', '서비스_업종_코드', '관공서_수', '은행_수', '종합병원_수', '일반_병원_수', '약국_수',
        '유치원_수', '초등학교_수', '중학교_수', '고등학교_수', '대학교_수', '백화점_수', '슈퍼마켓_수',
        '극장_수', '숙박_시설_수', '공항_수', '철도_역_수', '버스_터미널_수', '지하철_역_수', '버스_정거장_수',
@@ -404,15 +412,16 @@ class market_ai(APIView):
        '연령대_50_상주인구_수', '연령대_60_이상_상주인구_수', '아파트_가구_수', '비_아파트_가구_수', '분기',
        '코로나_여부', '주중_평균_유동인구', '주말_평균_유동인구', '전년도_점포별_평균_매출_금액']
         
-        
+        # 상권 단위 추정
         queryset_estimate = MarketServiceDataEstimateTestFull.objects.filter(기준_년분기_코드 = 20233, 상권_코드 = market, 서비스_업종_코드 = business).values(*x_cols)
         queryset_estimate = queryset_estimate[0]
         
+        # 상권 단위 예측
         queryset_predict = MarketServiceDataPredictTestFull.objects.filter(기준_년분기_코드 = 20233, 상권_코드 = market, 서비스_업종_코드 = business).values(*x_cols)
         queryset_predict= queryset_predict[0]
         
         
-        
+        # AI 실행, 예측과 추정 수행
         data_pd = pd.DataFrame(queryset_estimate, index=[0])
         
         final_model = load_model("analysis/aimodel/market_service_estimate_model2")
@@ -428,6 +437,7 @@ class market_ai(APIView):
        
         
         
+        # shap 값이 있는 지역일 경우 shap 값 로드
         
         try:
             shapValue = MarketServiceEstimateShapValues.objects.filter(상권_코드 = market, 서비스_업종_코드 = business).first()
@@ -460,14 +470,18 @@ class market_ai(APIView):
                     break
                 
         except:
+            
+            # 없을 경우 shap 값은 None
             shapValueOutputTop5 = None
             shapValueOutputBottom5 = None
             
             
+        # 가장 영향력이 높은 긍정적, 부정적 요소들을 5개 씩 shap 값으로 선정
         shapValueOutputTop5 = {key: int(value) for key, value in shapValueOutputTop5.items()}
         shapValueOutputBottom5 = {key: int(value) for key, value in shapValueOutputBottom5.items()}
             
-            
+        
+        # 기준 년분기의 서울시 내 동일 업종의 점포별 평균 매출 금액으로 창업지수 계산
         queryset_avg_seoul = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business).values("점포별_평균_매출_금액")
         avg_zero = 0
         count = 0
@@ -479,9 +493,21 @@ class market_ai(APIView):
         seoul_diff = (estimate_result.values/seoul_avg)*100
         
         
+        if seoul_diff > 150:
+            analysis = "양호"
+        
+        elif seoul_diff < 50:
+            analysis = "위험"
+        else:
+            analysis = "보통"
+        
+        if seoul_diff > 200:
+            seoul_diff = 200
+        
         jachigu = MarketSortedDbFin.objects.filter(상권_코드 = market).values('자치구_코드', '자치구_코드_명').first()
 
-
+        # 해당 상권 1, 2 분기 점포별 평균 매출 금액을 활용 AI리포트 내용 생성
+        # 지역별 활성화 여부      
         queryset_avg_1qb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business, 자치구_코드 = jachigu['자치구_코드']).values("점포별_평균_매출_금액")
         queryset_avg_2qb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20231, 서비스_업종_코드 = business, 자치구_코드 = jachigu['자치구_코드']).values("점포별_평균_매출_금액")
 
@@ -504,6 +530,8 @@ class market_ai(APIView):
         analysis_avg_diff = "증가" if (avg_2qb - avg_1qb) > 0 else "감소"
         analysis_active = "활성화" if (avg_2qb - avg_1qb) > 0 else "비활성화"
         
+        
+         # 작년 동분기와 현재의 창업 수 비교 발달, 쇠퇴 여부 표시
         queryset_opening = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20233, 상권_코드 = market, 서비스_업종_코드 = business).values('점포_수')
         opening = queryset_opening[0]['점포_수']
         
@@ -514,7 +542,7 @@ class market_ai(APIView):
         analysis_opening = "증가" if (opening - opening_lyb) > 0 else "감소"
         analysis_growth = "발달" if (opening - opening_lyb) > 0 else "쇠퇴"
         
-        
+        # 작년 동분기와 현재의 유동인구 수 비교
         queryset_mp_1yb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20223, 상권_코드 = market, 서비스_업종_코드 = business).values('총_유동인구_수')
         mp_1yb = queryset_mp_1yb[0]['총_유동인구_수']
         
@@ -525,19 +553,8 @@ class market_ai(APIView):
         analysis_mp = "증가" if (mp - mp_1yb) > 0 else "감소"
         
         
-        if seoul_diff > 150:
-            analysis = "양호"
-        
-        elif seoul_diff < 50:
-            analysis = "위험"
-        else:
-            analysis = "보통"
-        
-        if seoul_diff > 200:
-            seoul_diff = 200
-        
-        queryset_similar = MarketServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('상권_코드', 'prediction_label') # 4분기?
-        
+        # 매출이 비슷한 주변 지역 두 곳 선정
+        queryset_similar = MarketServiceEstimateY.objects.filter(서비스_업종_코드 = business).values('상권_코드', 'prediction_label') 
         
         for i in queryset_similar:
             num = i['prediction_label']
@@ -559,6 +576,7 @@ class market_ai(APIView):
         similar_market2_pred = num2['prediction_label']
         similar_market2_diff = estimate_result.values - similar_market2_pred
         
+        
         queryset_target_avg_1qb = MarketSortedDbFin.objects.filter(기준_년분기_코드 = 20232, 서비스_업종_코드 = business, 상권_코드 = market).values("점포별_평균_매출_금액")
         
         avg_zero = 0
@@ -568,16 +586,17 @@ class market_ai(APIView):
             count += 1
         avg_target_1qb = avg_zero/count  
         
+        # 자본금 기준 프랜차이즈 추천
         franchise = get_franchise_data_dong(dong_name, business_name, funds)
-        #if franchise == None: franchise = [None, None, None]
+
         
-        
-        
+        # 프랜차이즈 비용 int화 및 단위 통일
         if franchise[2] != None:
             franchise[2] = {key: int(int(value) / 10) if key != '브랜드명' else value for key, value in franchise[2].items()}
         if franchise[3] != None:
             franchise[3] = {key: int(int(value) / 10) if key != '브랜드명' else value for key, value in franchise[3].items()}
         
+        # 10000원 단위로 바꿔 리포트 데이터 전달
         output_data = {
                 "AI": "상권",
                 "region": goo,
@@ -609,74 +628,16 @@ class market_ai(APIView):
                 "franchise_rec_2": franchise[3]
             }
  
-        # username = unquote(kwargs['username'])
-        # user_id = UserCustom.objects.get(username = username).user_id
-        
-        # save_data = output_data
-        # save_data["user"] = user_id
-        # serialised = AIReportSerializer(data = save_data)
-        # if serialised.is_valid(): serialised.save()
-        # else: return Response({"report save failed" : serialised.errors}, status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(output_data, status=status.HTTP_200_OK)
-    
 
-class AIReportListView(generics.ListAPIView):
-
-    serializer_class = AIReportList
-    def get_queryset(self):
-        username = unquote(self.kwargs['username'])
-        queryset = AiReport.objects.filter(user__username=username)
-        return queryset
-
-
-class AIReportView(APIView):
-    
-    def get(self, request, *args, **kwargs):
         
-        report_id = kwargs['num']
-        username = unquote(kwargs['username'])
-        
-        try:
-            queryset = AiReport.objects.get(report_id = report_id)
-        except:
-            return Response({'no matching report found'}, status.HTTP_404_NOT_FOUND)
-             
-        if queryset.user.username != username: raise ValidationError({'wrong user no auth'}, status.HTTP_401_UNAUTHORIZED)
-        
-        serializer = AIReportSerializer(queryset)
-       
-        serializer.data
-        
-        return Response(serializer.data, status.HTTP_200_OK)
-class AIReportDeleteView(APIView):
-    
-    def delete(self, request, *args, **kwargs):
-        
-        report_id = kwargs['num']
-        username = unquote(kwargs['username'])
-        
-        try:
-            queryset = AiReport.objects.get(report_id = report_id)
-        except:
-            return Response({'no matching report found'}, status.HTTP_404_NOT_FOUND)
-             
-        if queryset.user.username != username: return Response({'wrong user no auth'}, status.HTTP_403_FORBIDDEN)
-        
-        queryset.delete()
-        
-        return Response('Report deleted', status.HTTP_200_OK)
-
-# 임대료 계산 함수
 def rent_cost_data(name_dong):
         rent_cost_last_data =1
         
-        # 해당 동이 어느 지명을 포함하고 있는지
         queryset_estimate = SeoulRent.objects.filter(dong_name=name_dong).values("area_name")
-        
         
         vacancy_data = ["임대료","평균임대면적"]
 
-        # 해당 동이 가진 임대료데이터의 수
         area_name = len(queryset_estimate)
 
         #임대료 데이터가 존재하거나 하나일 경우
@@ -685,7 +646,6 @@ def rent_cost_data(name_dong):
             temp_data = queryset_estimate[0]["area_name"]
             
             # temp = "" 이면 임대료 정보 x
-            # 임대료 정보가 있을시 해당 지역 임대료 데이터 계산
             if temp_data != "":
                 rent_cost = Vacancyrate.objects.filter(상세지역 = temp_data).values(*vacancy_data)
                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
@@ -696,65 +656,17 @@ def rent_cost_data(name_dong):
         else :
             rent_cost_last_data = len(queryset_estimate) 
     
-            # 임대료 데이터의 총합을 구함
+             
             for i in range(len(queryset_estimate) ):
                 temp_data = queryset_estimate[i]["area_name"]
                 rent_cost = Vacancyrate.objects.filter(상세지역 = temp_data).values(*vacancy_data)
                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
                 print(rent_cost_last_data)
 
-            # 해당 지역이 가진 임대료 데이터의 평균
             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
         
         return rent_cost_last_data
            
-        
-# # 프랜차이즈 작업 더 필요
-# class franchisedata(APIView):
     
-    
-#     def get(self, request):
-        
-#         dongname = "미아동"
-#         Sectors = "치킨"
-#         rentcost = rent_cost_data(dongname)
-        
-#         seedmoney = 50000
-        
-#         print(rentcost)
-#         franchise_col = ["브랜드명","평균매출금액","가맹금액","교육금액","보증금액","기타금액","합계금액"]
-        
-#         #queryset_franch1 = franchise_data.objects.filter(합계금액__lte = seedmoney).all()
-#         # 시드 머니에 임대료 +  보증금 (임대료 *10) 제외
-#         seedmoney = seedmoney - (rentcost*11)
-        
-#         queryset_franch1 = FranchiseData.objects.filter(중분류서비스 = "치킨",합계금액__lte = seedmoney).order_by('평균매출금액').values(*franchise_col)
-        
-#         franchise_sort_data = queryset_franch1[::-1]
-#         #franchise_data[0]
-#         response_data= {
-#             "임대료" : rentcost
-#         }
-        
-#         fran_response_last =   [rentcost, franchise_sort_data[0], franchise_sort_data[1]]
-        
-       
-       
-       
-       
-        # print(fran_response_last)
-        # return  Response({"testing"}) 
-        # return Response({"임대료" : rent_cost , "프랜차이즈 1 브랜드" : franchise_sort_data[0]["브랜드명"],
-        #                  "프랜차이즈 1 평균매출금액" : franchise_sort_data[0]["평균매출금액"],"프랜차이즈 1 가맹금액" : franchise_sort_data[0]["가맹금액"],
-        #                  "프랜차이즈 1 교육금액" : franchise_sort_data[0]["교육금액"],"프랜차이즈 1 보증금액" : franchise_sort_data[0]["보증금액"],
-        #                  "프랜차이즈 1 기타금액" : franchise_sort_data[0]["기타금액"],"프랜차이즈 1 합계금액" : franchise_sort_data[0]["합계금액"],
-        #                  "프랜차이즈 2 브랜드" : franchise_sort_data[1]["브랜드명"],
-        #                  "프랜차이즈 2 평균매출금액" : franchise_sort_data[1]["평균매출금액"],"프랜차이즈 2 가맹금액" : franchise_sort_data[1]["가맹금액"],
-        #                  "프랜차이즈 2 교육금액" : franchise_sort_data[1]["교육금액"],"프랜차이즈 2 보증금액" : franchise_sort_data[1]["보증금액"],
-        #                  "프랜차이즈 2 기타금액" : franchise_sort_data[1]["기타금액"],"프랜차이즈 2 합계금액" : franchise_sort_data[1]["합계금액"],
-                         
-        #                  }, status=status.HTTP_200_OK)
-        
-        
     
 

@@ -1,60 +1,27 @@
-# from rest_framework import permissions
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
-# from django.views.decorators.csrf import csrf_exempt
 from .models import UserCustom
 from .serializers import *
-
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-
-# from django.contrib import auth
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth import authenticate
 from urllib.parse import unquote
-from account.customlibs.checkLogin import *
 
 
-#logger = logging.getLogger(__name__)  # 로그를 남길 로거 객체 생성
+# 계정 및 로그인 관련 기능
 
-# @method_decorator(ensure_csrf_cookie, name='dispatch') # 바로 아래의 View를 호출하면 CSRF 토큰을 전달하도록 설정        
-# class GetCSRFToken(APIView):
-
-#     def get(self, request, format = None):
-#         return Response({'success' : 'CSRF Cookie set'})
-
-
-# @method_decorator(csrf_protect, name='dispatch')
-# class CheckAuthenticatedView(APIView):
-#     permission_classes = (permissions.IsAuthenticated,)
-    
-#     def get(self, request, format = None):
-#         try:
-#             isAuthenticated = request.user.is_authenticated
-            
-#             if isAuthenticated:
-#                 return Response({'isAuthenticated':'sucess'})
-#             else:
-#                 return Response({'isAuthenticated':'error'})
-#         except:
-#             return Response({'error': 'Something went wrong during checking authentication status'})
-
-
-
-# @method_decorator(csrf_protect, name='dispatch')
+# 회원가입 기능 View
 class SignInView(APIView):
     serializer_class = SignInSerializer
     
     def post(self, request):
-        # input_data = self.request.data
-        # passwordAgain = input_data.get("password_again")
-        # input_data.pop("password_again")
+
         serializer = self.serializer_class(data = self.request.data)
         
-        if serializer.is_valid():
+        # 유저 테이블인 UserCustom ModelSerializer로 유효성 검사
+        if serializer.is_valid(): 
             username = serializer.validated_data['username']
             name = serializer.validated_data['name']
             password = serializer.validated_data['password'] 
@@ -63,40 +30,40 @@ class SignInView(APIView):
             age = serializer.validated_data['age']
             gender = serializer.validated_data['gender']
             
+            # 유효성 검사 실패시 에러 내용과 400을 상태로 보냄
         else:
             raise ValidationError({'error':serializer.errors}, status.HTTP_400_BAD_REQUEST)
         
-        # if len(passwordAgain) > 25:
-        #     raise ValidationError({'error':'input value format error'}) 
-        
-        # if password != passwordAgain: return Response({'error' : 'two passwords doesnt match'})
-        
-        if UserCustom.objects.filter(username=username).exists():
-            return Response({'error':'username already exists'})
-        
-        else:
-            user = UserCustom.objects.create_user(username = username, password = password, name = name, email = email, 
-                                            phonenumber = phonenumber, age = age, gender = gender)
-            user.save()
-            return Response({'success': "User created successfully"})
+        # 유효성 검사 성공시 create_user를 사용해 password 암호화 및 유저를 DB에 추가
+        user = UserCustom.objects.create_user(username = username, password = password, name = name, email = email, 
+                                        phonenumber = phonenumber, age = age, gender = gender)
+        user.save()
+        return Response({'success': "User created successfully"})
 
 
-
-# @method_decorator(csrf_protect, name='dispatch')
+# 로그인 기능 View
 class LoginView(APIView):
     serializer_class = LoginSerializer
     
+
     def post(self, request, format = None):
+        
+        # 유저의 입력 값을 serializer에 입력
         serialized = self.serializer_class(data = request.data)
+        
+        # serialzier 입력 유효성검사
         if serialized.is_valid():
             email = serialized.validated_data['email']
             password = serialized.validated_data['password']
             
+            # 유효한 email로 username 조회
             username = UserCustom.objects.get(email = email).username
             
+            # authenticate로 username과 암호화 된 비밀번호 일치 확인
             user_info = authenticate(username = username, password=password)
+            
+            # authenticate 실패, 메시지 반환
             if user_info != None:
-                # auth.login(request, user_info)
                 return Response({'success' : 'login successful', 'username' : username}, status=status.HTTP_200_OK)
             else:
                   return Response({'error' : 'wrong user info'})
@@ -104,24 +71,23 @@ class LoginView(APIView):
             return Response({'error':'input value error'})
 
 
+# 로그아웃 기능
 class LogoutView(APIView):
-#     # serializer_class = LoginSerializer
-    def get(self, request, format = None):
+    def post(self, request, format = None):
         
         try:
-            # UserCustom.objects.get(username = self.request.data.get(username)).is_login = False
-            
             return Response({'success':'logout success'})
         except:
             return Response({'error':'logout failed'})
 
 
-class UpdateUserInfo(generics.GenericAPIView): # 수정
+# 유저정보 수정
+class UpdateUserInfo(generics.GenericAPIView):
     serializer_class = UpdateUserSerializer
 
     def patch(self, request, *args, **kwargs):
         
-        username = unquote(kwargs['username']) #유저 닉네임은 업데이트 대상이 아님!
+        username = unquote(kwargs['username'])
         instance = UserCustom.objects.get(username = username)
         
         serializer = self.serializer_class(data = self.request.data, partial = True)
@@ -144,259 +110,96 @@ class UpdateUserInfo(generics.GenericAPIView): # 수정
             return Response({'user update success'}, status.HTTP_200_OK)
 
 
+# password 찾기
 class findPWView(generics.GenericAPIView):
     serializer_class =FindPwSerialzer
+    
+    # 입력 데이터 serializer 입력
     def post(self, request):
         serialized = self.serializer_class(data =request.data)
+        
+        # 입력 데이터 유효성 확인
         if serialized.is_valid():
             
-            try:
+            # 입력 id, email로 계정확인
+            try: 
                 UserCustom.objects.get(username = serialized.validated_data['username'], email = serialized.validated_data['email'])
+                
+                # 계정확인 시 password 초기화 페이지 링크 전송
                 return Response({'matchig user found email sent'}, status.HTTP_200_OK)
             except:
-                return Response(serialized.errors, status.HTTP_404_NOT_FOUND)
+                
+                # 유저 검색 실패 시 에러 메시지 전송
+                return Response(["no matching user found"], status.HTTP_404_NOT_FOUND)
         else:
+            # 데이터 유효성 검사 실패 시 에러 메시지 전송
             return Response(serialized.errors,status.HTTP_400_BAD_REQUEST)
 
+
+# password 확인
 class CheckPWView(APIView):
     
     def post(self, request):
-        # username = self.request.user.username
-        #username = "jinwon97"
         
+        # serializer 입력
         serialized = PasswordCheckSerializer(data = request.data)
         
         if serialized.is_valid():
             try:
+                # username으로 DB에서 유저 정보 조회
                 instance = UserCustom.objects.get(username = serialized.validated_data["username"])
             except:
+                # 유저 정보 조회 실패, 에러 메시지 반환
                 return Response({"error":"user info error"})
             
+            # 입력한 비밀번호와 암호화된 비밀번호 비교 검사
             if check_password(serialized.validated_data['password'], instance.password ):
+                
+                # 일치 확인, 메시지 전송
                 return Response({'success':'password check success'}, status.HTTP_200_OK)
             else:
+                # 불일치 확인, 메시지 전송
                 return Response({'error':'password is wrong'}, status.HTTP_403_FORBIDDEN)
         else:
+            # 입력 데이터 유효성 검사 실패, 메시지 전송
             return Response({"error":"user info error"}, status.HTTP_400_BAD_REQUEST)
 
+
+# 유저 정보 조회
 class GetUserView(APIView):
-    # permission_classes = (permissions.IsAuthenticated,)
     serializer_class = GetUserData 
 
     def get(self, *args, **kwargs):
         
-        try:
+        try: # 입력 username으로 유저 정보 조회
             user_data = UserCustom.objects.get(username = unquote(kwargs['username']))
+            
+            # 유저 정보 확인, 유저 데이터 전송
             if user_data:
                 serializer = self.serializer_class(user_data)
                 return Response(serializer.data)
+            
+            # 유저 정보 확인 실패, 메시지 전송
             else:
                 return Response({"error": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # 입력 데이터 유효성 실패, 메시지 전송
         except:
             return Response({"error": "Username is required"}, status=status.HTTP_400_BAD_REQUEST)
         
-        
+
+
+# 유저 계정 삭제
 class DeleteAccountView(APIView):
     def delete(self, *args, **kwargs):
+        
+        # username 입력 조회
         try:
-            UserCustom.objects.get(username = unquote(kwargs["username"]))
+            userinfo = UserCustom.objects.get(username = unquote(kwargs["username"]))
+                
+                # 조회 성공, 유저 삭제
+            userinfo.delete()           
             return Response({f"user deleted success"}, status.HTTP_200_OK)
         except:
-            return Response({"no username matched"}, status=status.HTTP_400_BAD_REQUEST)        
-
-
-# @method_decorator(csrf_protect, name='dispatch')        
-# class LogoutView(APIView):
-#     # serializer_class = LoginSerializer
-#     def post(self, request, format = None):
-        
-#         try:
-#             # UserCustom.objects.get(username = self.request.data.get(username)).is_login = False
-            
-#             return Response({'success':'logout success'})
-#         except:
-#             return Response({'error':'logout failed'})
-
-
-
-
-
-# @method_decorator(csrf_protect, name = 'dispatch')
-# class DeleteAccountView(APIView):
-#     # permission_classes = (permissions.IsAuthenticated,)
-#     serializer_class = PasswordCheckSerializer
-    
-#     def delete(self, request):
-#         serializer = self.serializer_class(data = request.data)
-        
-#         if serializer.is_valid():
-#             try:
-#                 instance = UserCustom.objects.get(username = UserCustom.objects.get(username = "jinwon97").username)
-                
-#             except:
-#                 return Response({"error":"user doesn't exists error"})
-            
-#             if check_password(serializer.validated_data['password'], instance.password ):
-#                 instance.delete()
-#                 return Response({"success":"user deleted"})
-            
-#             else:
-#                 return Response({'error':'password is wrong'})
-            
-#         else:
-#             return Response(serializer.errors)
-        
-
-
-
-        
-        
-                
-# @method_decorator(csrf_protect, name='dispatch')       
-# class GetUserView(APIView):
-#     # permission_classes = (permissions.IsAuthenticated,)
-#     serializer_class = GetUserData 
-
-#     def post(self, request, format=None):
-#         # username = self.request.data.pop("username")
-#         username = UserCustom.objects.get(username = self.request.data.get("username"))
-        
-#         try:
-#             user_data = UserCustom.objects.get(username = username)
-#             if user_data:
-#                 serializer = self.serializer_class(user_data)
-#                 return Response(serializer.data)
-#             else:
-#                 return Response({"error": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
-#         except:
-#             return Response({"error": "Username is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-# @method_decorator(csrf_protect, name='dispatch')
-# class UpdatePWView(generics.UpdateAPIView):
-#     # permission_classes = (permissions.IsAuthenticated,)
-#     # serializer_class = UpdatePWSerializer
-    
-#     def patch(self, request, *args, **kwargs):
-        
-#         # user = self.request.user
-#         user = UserCustom.objects.get(username = "jinwon97")
-        
-#         try:
-#             userIstance = UserCustom.objects.get(username = user.username)
-#         except:
-#             return Response({'error':'user not exists'}, status=status.HTTP_400_BAD_REQUEST)
-        
-#         serializer = UpdatePWSerializer(data = request.data)
-#         if serializer.is_valid():
-#             try:
-#                 userIstance.set_password(serializer.validated_data['password'])
-#             except:
-#                 return Response({'error':'pw input failed'}, status.HTTP_400_BAD_REQUEST)
-#             userIstance.save()
-#             return Response({'success':'pw update success'}, status.HTTP_200_OK)
-        
-#         else:
-#             return Response({serializer.errors}, status.HTTP_400_BAD_REQUEST)
-
-
-# class UpdatePWView(generics.UpdateAPIView):
-#     # permission_classes = (permissions.IsAuthenticated,)
-#     # serializer_class = UpdatePWSerializer
-    
-#     def patch(self, request, *args, **kwargs):
-        
-#         # user = self.request.user
-#         user = UserCustom.objects.get(username = "jinwon97")
-        
-#         try:
-#             userIstance = UserCustom.objects.get(username = user.username)
-#         except:
-#             return Response({'error':'user not exists'}, status=status.HTTP_400_BAD_REQUEST)
-        
-#         serializer = UpdatePWSerializer(data = request.data)
-#         if serializer.is_valid():
-#             try:
-#                 userIstance.set_password(serializer.validated_data['password'])
-#             except:
-#                 return Response({'error':'pw input failed'}, status.HTTP_400_BAD_REQUEST)
-#             userIstance.save()
-#             return Response({'success':'pw update success'}, status.HTTP_200_OK)
-        
-#         else:
-#             return Response({serializer.errors}, status.HTTP_400_BAD_REQUEST)
-
-
-
-
-    
-
-        
-        
-# @method_decorator(csrf_protect, name = 'dispatch')
-# class FindIDView(APIView):
-#     queryset = UserCustom.objects.all()
-#     serializer_class = FindIDInputSerializer
-    
-#     def post(self, request):
-#         serializer_data = self.serializer_class(data=request.data)
-        
-#         if serializer_data.is_valid():
-#             inputs = serializer_data.validated_data
-#             email = inputs['email']
-#             phonenumber = inputs['phonenumber']
-            
-#             try:
-#                 # print(email)
-#                 # print(phonenumber)
-#                 matchingUser = UserCustom.objects.get(email = email, phonenumber = phonenumber)
-                
-#                 return Response({"success" : "ID found", "ID" : matchingUser.username}, 
-#                                 status=status.HTTP_200_OK)
-#             except:
-#                 raise ValidationError({'message':'matching user not found!'})
-#         return  Response({'message':'input error'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-
-# @method_decorator(csrf_protect, name = 'dispatch')
-# class ResetPW(APIView):
-#     serializer_class = ResetPasswordInput
-
-#     def post(self, request):
-#         # try:
-#         #     # password_again = self.request.data.pop('password_again')
-#         # except:
-#         #     raise ValidationError({'error':'input error'}, status.HTTP_400_BAD_REQUEST)
-        
-#         input_data = self.serializer_class(data = request.data)
-        
-#         if not input_data.is_valid(): 
-
-#             return Response({"error":"input data error"})
-#         username = input_data.validated_data['username']
-#         new_password = input_data.validated_data['password']
-#         email = input_data.validated_data['email']
-#         phonenumber = input_data.validated_data['phonenumber']
-        
-        
-
-
-
-# class DeleteAccountView(APIView): # 회원탈퇴
-    
-#     def delete(self, request, *args, **kwargs):
-#         username = kwargs['username']
-        
-#         # if new_password != password_again: raise ValidationError({'error':'password not match'}, status.HTTP_400_BAD_REQUEST)
-#         try:
-#             instance = UserCustom.objects.get(username = username, phonenumber = phonenumber, email = email)
-#             instance.set_password(new_password)
-#             instance.save()
-#             return Response({'success':'password change success'})
-#         except:
-#             return Response({'error':'matching user not found'})
+            # 조회 실패, 실패 메시지 전송
+            return Response({"no username matched"}, status=status.HTTP_400_BAD_REQUEST)

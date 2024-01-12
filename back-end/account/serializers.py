@@ -1,5 +1,4 @@
 from rest_framework import serializers
-# from .models import Admin, User
 from .models import UserCustom
 
 class SignInSerializer(serializers.ModelSerializer):
@@ -7,41 +6,28 @@ class SignInSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
         fields = ['username', 'name', 'password', 'email', 'phonenumber', 'age', 'gender']
+        
+        
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
         fields = ['email', 'password']
 
+
+
 class LogoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCustom
         fields = ['username']
-        
+
+
+  
 class FindPwSerialzer(serializers.Serializer):
     username = serializers.CharField(max_length = 30)
     email = serializers.CharField(max_length = 254)
     
-        
-# class FindIDInputSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserCustom
-#         fields = ['email', 'phonenumber']
-# class FindIDOutputSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserCustom
-#         fields = ['username']
-        
-# class FindPasswordInputSerializer(serializers.Serializer):
-#     name = serializers.CharField(max_length=75)
-#     email = serializers.CharField(max_length=254)
-#     phonenumber = serializers.CharField(max_length=11)
-#     gender = serializers.CharField(max_length=1)
-    
-                                   
-# class FindPasswordOutputSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserCustom
-#         fields = ['username', 'password', 'email', 'phonenumber', 'age', 'gender']
+
+
         
 class UpdateUserSerializer(serializers.ModelSerializer):
     

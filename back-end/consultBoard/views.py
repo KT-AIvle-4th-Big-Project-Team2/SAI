@@ -1,8 +1,4 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-# from rest_framework import permissions
 from urllib.parse import unquote
 
 from .models import *
@@ -10,16 +6,14 @@ from .serializers import *
 
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
-from rest_framework.views import APIView
 
 from .serializers import *
 
-#******************************************************************************************************************************************************************
-# 게시글 기능
-#******************************************************************************************************************************************************************
+
+# 게시판 2 관련 기능
 
 
+# 게시글을 고를 수 있도록 제목을 포함한 일부 데이터들 전달
 class BoardPostListView(generics.ListAPIView):
     def get_queryset(self):
         board_contents = BoardConsult.objects.values(
@@ -34,6 +28,7 @@ class BoardPostListView(generics.ListAPIView):
     
     serializer_class = BoardPostListSerializer
     
+# 게시글 구분ID(pk)를 입력, 해당하는 게시글의 본문 내용 포함 전달
 class BoardPostView(generics.ListAPIView):
     
     def get_queryset(self):
@@ -51,9 +46,14 @@ class BoardPostView(generics.ListAPIView):
 
     serializer_class = BoardPostSerializer
 
+
+# 게시글 검색
+# 입력받은 대상과 항목을 입력받아 해당하는 게시글들을 전달
 class BoardSearchView(generics.ListAPIView):
     
     def get_queryset(self):
+        
+        # 대상이 제목일 경우
         if self.kwargs['searchfield'] == 'title':
             
             queryset = BoardConsult.objects.filter(title__contains=unquote(self.kwargs['searchkeyword'])).values(
@@ -63,6 +63,7 @@ class BoardSearchView(generics.ListAPIView):
                 'user__username',
             )
             
+        # 대상이 내용일 경우
         elif self.kwargs['searchfield'] == 'contents':
             
             queryset = BoardConsult.objects.filter(contents__contains=unquote(self.kwargs['searchkeyword'])).values(
@@ -72,6 +73,7 @@ class BoardSearchView(generics.ListAPIView):
                 'user__username',
             )
             
+        # 대상이 작성자일 경우
         elif self.kwargs['searchfield'] == 'name':
             
             queryset = BoardConsult.objects.filter(user__username__contains=unquote(self.kwargs['searchkeyword'])).values(
@@ -91,9 +93,10 @@ class BoardSearchView(generics.ListAPIView):
     
     
     
-# @method_decorator(csrf_protect, name='dispatch')
+# 게시글 작성 기능
+# 게시글 구분ID로 대상 선택, 게시글 형식에 맞는 데이터를 입력받아 DB에 저장, 게시글 생성
 class BoardPostCreateView(generics.CreateAPIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+
     serializer_class = BoardPostCreateSerializer
         
     def perform_create(self, serializer):
@@ -106,16 +109,15 @@ class BoardPostCreateView(generics.CreateAPIView):
         
         
         
-# @method_decorator(csrf_protect, name='dispatch')
-class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
-    # permission_classes = (permissions.IsAuthenticated,)
+# 게시글 수정 기능
+# 게시글 구분ID로 대상 선택, 형식에 맞는 새 데이터를 입력받아 기존 내용 교체
+class BoardPostUpdateView(generics.UpdateAPIView):
+
     serializer_class = BoardPostUpdateSerializer
     queryset = BoardConsult.objects.all()
     
     def perform_update(self, serializer):                
-        instance = self.get_object() # 입력(pk) 값으로 필터링해 대상 설정. 기본 대상은 테이블의 PK. 두 개 이상 또는 PK말고 다른 걸로 할 시 get_object 함수를 오버라이딩해야함.
-        
-        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
+        instance = self.get_object() 
         
         instance.title = serializer.validated_data['title']
         instance.contents = serializer.validated_data['contents']
@@ -125,7 +127,8 @@ class BoardPostUpdateView(generics.UpdateAPIView):#PATCH method
     
     
     
-# @method_decorator(csrf_protect, name='dispatch')
+# 게시글 삭제 기능
+# 게시글 구분ID로 대상 선택, 대상 게시글을 삭제
 class BoardPostDeleteView(generics.DestroyAPIView):
     queryset = BoardConsult.objects.all()
     serializer_class = BoardPostSerializer
@@ -133,32 +136,13 @@ class BoardPostDeleteView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         instance = self.get_object()
         
-        # if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'})
         
         instance.delete()
         
         return Response({'success':'delte success'})
-    
-# @method_decorator(csrf_protect, name='dispatch')
-class BoardPostDeleteView(generics.DestroyAPIView):
-    # permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = BoardPostSerializer
-    queryset = BoardConsult.objects.all()
-    
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        
-        # if instance.user != self.request.user:  raise ValidationError({'error':'wrong user error'}, status.HTTP_401_UNAUTHORIZED)
-        
-        
-        instance.delete()
-        
-        return Response({'success':'delete success'}, status.HTTP_200_OK)
 
-#******************************************************************************************************************************************************************
-# 댓글 기능
-#******************************************************************************************************************************************************************
-
+# 댓글 조회 기능
+# 게시글 구분ID로 대상 선택, 해당 게시글의 댓글들을 전달
 class BoardPostCommentView(generics.ListAPIView):
     
     def get_queryset(self):
@@ -177,9 +161,10 @@ class BoardPostCommentView(generics.ListAPIView):
     
     
     
-# @method_decorator(csrf_protect, name='dispatch')
+# 댓글 생성 기능
+# 게시글 구분ID(pk)에 형식에 맞는 입력을 받아 새 댓글을 생성
 class BoardPostCommentCreateView(generics.CreateAPIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+
     serializer_class = BoardPostcommentCreateSerializer
         
     def perform_create(self, serializer):
@@ -193,30 +178,31 @@ class BoardPostCommentCreateView(generics.CreateAPIView):
 
 
 
-# @method_decorator(csrf_protect, name='dispatch')
-class BoardPostCommentUpdateView(generics.UpdateAPIView):#PATCH method
-    # permission_classes = (permissions.IsAuthenticated,)
+# 댓글 수정 기능
+# 댓글 구분ID(pk)와 내용입력, 대상 댓글의 내용 교체
+class BoardPostCommentUpdateView(generics.UpdateAPIView):
+
     serializer_class = BoardPostCommentUpdateSerializer
     queryset = CommentsConsult.objects.all()
     
     def perform_update(self, serializer):
         instance = self.get_object()
         
-        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_401_UNAUTHORIZED)
+
         instance.contents = serializer.validated_data['contents']
         instance.save()
         return Response({'success' : 'update comment success'}, status.HTTP_200_OK)
     
-    
-# @method_decorator(csrf_protect, name='dispatch')
+
+# 댓글 삭제 기능
+# 댓글 구분ID(pk) 입력, 대상 댓글 삭제
 class BoardPostCommentDeleteView(generics.DestroyAPIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+
     queryset = CommentsConsult.objects.all()
     
     def delete(self, reqeust, *args, **kwags):
         instance = self.get_object()
         
-        # if instance.user != self.request.user: raise ValidationError({'error':'wrong user error'}, status.HTTP_403_FORBIDDEN)
         
         instance.delete()
         return Response({'success' : 'delete comment success'}, status.HTTP_200_OK)
