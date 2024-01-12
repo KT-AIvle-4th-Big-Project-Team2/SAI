@@ -349,7 +349,7 @@ class KakaoMap extends Component {
                 <nav className={this.state.selectedMenu === '' ? 'startbar' : 'startbar hidden'}>
                     {/* username */}
                     <div style={{marginLeft : '11%', marginTop : '13%'}}>
-                    <span style={{fontWeight : 'bold',fontSize:'25.8px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>오진원님, 반가워요!<br/></span> 
+                    <span style={{fontWeight : 'bold',fontSize:'25.8px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>jinwon97님, 반가워요!<br/></span> 
                     <span style={{fontWeight : 'bold',fontSize:'25.8px',fontFamily: 'Pretendard Black, Pretendard, sans-serif'}}>창업을 고민하시는 <br/></span> 
                     <span style={{fontWeight : 'bold',fontSize:'25.8px',color: '#0500FF'}}>분석 단위</span> 
                     <span style={{fontWeight : 'bold',fontSize:'25.8px'}}>를 선택해 주세요. <br/></span> 

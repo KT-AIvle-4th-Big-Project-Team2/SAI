@@ -64,18 +64,18 @@ const SimulReport = () => {
     "시간대_14_17_유동인구_수": -1379407
     },
     "sim_result": "양호",
-    "avg_sale_comp": 166,
+    "avg_sale_comp": 112,
     "sale_updown": "증가",
     "market_active": "활성화",
     "opening_updown": "감소",
     "area_growth": "쇠퇴",
     "fpeople_updown": "증가",
     "simil_area_name_1": "남영동 먹자골목",
-    "simil_area_esti_1": 28670,
-    "simil_area_diff_1": -14358,
+    "simil_area_esti_1": 14200,
+    "simil_area_diff_1": 112,
     "simil_area_name_2": "사당역 11번(사당역먹자골목)",
-    "simil_area_esti_2": 1863,
-    "simil_area_diff_2": 12449,
+    "simil_area_esti_2": 13830,
+    "simil_area_diff_2": 512,
     "rent_fee": 285,
     "posi_fran_num": 597,
     "franchise_rec_1": {
@@ -92,9 +92,9 @@ const SimulReport = () => {
     "평균매출금액": 144201,
     "가맹금액": 550,
     "교육금액": 330,
-    "보증금액": 1000,
-    "기타금액": 8690,
-    "합계금액": 10570
+    "보증금액": 2000,
+    "기타금액": 51965,
+    "합계금액": 58000
     },
     "user": 12
     }

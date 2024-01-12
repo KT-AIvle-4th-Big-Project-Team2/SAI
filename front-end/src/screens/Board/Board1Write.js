@@ -33,7 +33,7 @@ const Board1Write = () => {
       
       title:title,
       contents:contents,
-      user:58,
+      user:72,
     })
       .then(function (response) {
         console.log(response);
