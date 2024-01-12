@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Suggestions, User
+from .models import Suggestions, user
 
 class SuggestionListSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()

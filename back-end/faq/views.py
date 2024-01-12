@@ -1,12 +1,18 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from urllib.parse import unquote
-
-from rest_framework import generics
-from rest_framework.exceptions import ValidationError
 from .models import *
 from .serializers import *
-from account.customlibs.checkLogin import *
+from account.models import UserCustom
+# from rest_framework import permissions
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
+from rest_framework.views import APIView
+from rest_framework import generics
+
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.csrf import csrf_protect
+
+from urllib.parse import unquote
 #******************************************************************************************************************************************************************
 # 게시글 기능
 #******************************************************************************************************************************************************************
@@ -45,7 +51,6 @@ class FaqView(generics.ListAPIView):
 class FaqSearchView(generics.ListAPIView):
     
     def get_queryset(self):
-        board_id = self.kwargs['searchfield']
         if self.kwargs['searchfield'] == 'title':
             
             queryset = Faq.objects.filter(title__contains=unquote(self.kwargs['searchkeyword'])).values(
@@ -65,58 +70,62 @@ class FaqSearchView(generics.ListAPIView):
             )
             
         else:
-            return HttpResponse("ERROR")
+            raise ValidationError({'error' : 'input error'}, status.HTTP_404_NOT_FOUND)
         
-        
-        print(queryset)
         return queryset
 
     serializer_class = FaqSearchSerializer
-
+# @method_decorator(csrf_protect, name='dispatch')
 class FaqCreateView(generics.CreateAPIView):
+    #permission_classes = (permissions.IsAdminUser,)
     serializer_class = FaqCreateSerializer
         
     def perform_create(self, serializer):
         
-        key = self.request.data.get("key")
-        # self.request.data.pop("key")
-        if not LoginCheck(key, True): 
-            raise ValidationError({"error":"user info error"})
-        
-        admin_instance = Admin.objects.get(username=serializer.validated_data.get('username', ''))
         Faq.objects.create(
             title=serializer.validated_data['title'],
             contents=serializer.validated_data['contents'],
-            admin = admin_instance,
+            admin = UserCustom.objects.get(username = "jinwon97")
         )
         
+
+# @method_decorator(csrf_protect, name='dispatch')
 class FaqUpdateView(generics.UpdateAPIView):#PATCH method
+    #permission_classes = (permissions.IsAdminUser,)
     serializer_class = FaqUpdateSerializer
     queryset = Faq.objects.all()
+    
     def perform_update(self, serializer):    
-        
-        key = self.request.data.get("key")
-        # self.request.data.pop("key")
-        if not LoginCheck(key, True): raise ValidationError({"error":"user info error"})
-        
-        user_instance = Admin.objects.get(username = key)
         instance = self.get_object()
-        if instance.admin_id != user_instance.user_id: raise ValidationError({'error':'wrong user error'})
         
-        instance.title = serializer.validated_data['title']
-        instance.contents = serializer.validated_data['contents']
+        # if serializer.is_valid() != True : raise ValidationError({'error' : 'update announcement failed'}, status.HTTP_400_BAD_REQUEST)
+        
+        if 'title' in serializer.validated_data:
+            
+            if serializer.validated_data['title'] != '':
+                instance.title = serializer.validated_data['title']
+        
+        if 'contents' in serializer.validated_data:
+            
+            if serializer.validated_data['contents'] != '':
+                instance.contents = serializer.validated_data['contents']
 
         instance.save()
+        
+        return Response({'success':'update faq success'}, status.HTTP_200_OK)
 
+
+
+
+# @method_decorator(csrf_protect, name='dispatch')
 class FaqDeleteView(generics.DestroyAPIView):
+    #permission_classes = (permissions.IsAdminUser,)
     queryset = Faq.objects.all()
     serializer_class = FaqSerializer
+    
     def delete(self, request, *args, **kwargs):
-        key = request.data.get("key")
-        if not LoginCheck(key, True) : raise ValidationError({"error":"user info error"})
-
-        user_instance = Admin.objects.get(username = key)
+        
         instance = self.get_object()
-        if instance.admin_id != user_instance.user_id: raise ValidationError({'error':'wrong user error'})
         instance.delete()
-        return Response({'success':'delte success'})
+        
+        return Response({'success':'delete success'})

@@ -4,6 +4,14 @@ from django.urls import path
 app_name = 'report'
 
 urlpatterns = [
-    path("", views.inquire),
-    path("recommendation/<business>/<seedMoney>", views.recommendation, name = "recommendation"),
-]
+    path("dongreport/<str:dong>/<str:business>", views.dong_report.as_view()),
+    path("marketreport/<str:market>/<str:business>", views.market_report.as_view()),
+    
+    
+    #path("dongreport/", views.rent_cost.as_view()),
+    
+    
+    #path("dongreport/", views.dong_report.as_view()),
+    # path("dongreport/", views.franchisedata.as_view()),
+    
+    ]

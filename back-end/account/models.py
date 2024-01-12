@@ -13,6 +13,7 @@ class Admin(models.Model):
 class UserCustom(AbstractUser):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(unique=True, max_length=75)
+    name = models.CharField(max_length = 25,  default = "Unknown")
     password = models.CharField(max_length=128)
     email = models.CharField(max_length=254)
     phonenumber = models.CharField(max_length=11)

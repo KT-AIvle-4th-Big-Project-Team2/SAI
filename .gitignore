@@ -1,0 +1,9 @@
+apitest.rest
+back-end/logs.log
+back-end/requirements.txt
+back-end/analysis/aimodel/dong_service_estimate_model1.pkl
+back-end/analysis/aimodel/dong_service_pred_model1.pkl
+back-end/analysis/aimodel/market_service_estimate_model2.pkl
+back-end/analysis/aimodel/market_service_pred_model2.pkl
+back-end/board/__pycache__/views.cpython-311.pyc
+back-end/board/__pycache__/views.cpython-311.pyc

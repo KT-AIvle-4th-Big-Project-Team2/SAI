@@ -44,6 +44,9 @@ class AnnouncementCreateSerializer(serializers.ModelSerializer):
         fields = ('title', 'contents')
 
 class AnnouncementUpdateSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=50)
+    contents = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=45)
+    
     class Meta:
         model = Announcements
         fields = ('title', 'contents')
