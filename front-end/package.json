@@ -32,7 +32,7 @@
     "react-dom": "^18.0.0",
     "react-redux": "^9.0.4",
     "react-router": "^6.21.0",
-    "react-router-dom": "^6.21.0",
+    "react-router-dom": "^6.21.2",
     "react-scripts": "^5.0.1",
     "redux": "^5.0.1",
     "smooth-scroll": "^16.1.3",

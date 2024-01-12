@@ -847,21 +847,29 @@ class KakaoMap extends Component {
             Gu: event.target.value,
             selectedDong: '',
         });
+        localStorage.setItem('gu', event.target.value);
+        console.log("로컬스토리지 저장 gu");
     };
 
     // 행정동 선택 이벤트 핸들러
     handleDongChange = (event) => {
         this.setState({ selectedDong: event.target.value });
+        localStorage.setItem('dong', event.target.value);
+        console.log("로컬스토리지 저장 dong");
     };
 
     // 상권 선택 이벤트 핸들러
     handleMarketChange = (event) => {
         this.setState({ selectedmarket: event.target.value });
+        localStorage.setItem('market', event.target.value);
+        console.log("로컬스토리지 저장 market");
     };
 
     // 서비스 업종 선택 이벤트 핸들러
     handleServiceChange = (service) => {
         this.setState({selectedservice:service});
+        localStorage.setItem('dong', service);
+        console.log("로컬스토리지 저장 service");
     };
     // 자본금 입력 폼 제출 이벤트 핸들러
     // handleCapitalSubmit = (event) => {
@@ -874,7 +882,9 @@ class KakaoMap extends Component {
     handleCapitalSubmit = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);
-    
+        localStorage.setItem('fund', capitalValue);
+        console.log("로컬스토리지 저장 fund");
+
         this.setState((prevState) => ({
             capital: capitalValue,
             userGu: this.codeGuInfo[prevState.Gu],

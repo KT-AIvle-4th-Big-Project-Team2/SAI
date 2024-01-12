@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom';
 import {
   Box,
   Paper,
@@ -301,10 +302,11 @@ const CircleGraph2 = () => (
     );
   };
   
-
+  const myVariable = 'exampleVariable';
 
   return (
     <>
+    
     {loading ? (
       // 로딩 중일 때 표시할 내용
       < LoadingPage />
@@ -509,6 +511,7 @@ const CircleGraph2 = () => (
                 justifyContent: 'center',
                 }}
             >
+                
                 <Button variant='contained' href = '/SimulReport2' sx={{ mt: 8, width: '300px', height : '50px', bgcolor : '#012A5B', color : '#FFFFFF', borderRadius:3 }}>
                 <Typography sx={{fontSize : 20}}>분석 보고서 보러가기</Typography>
                 </Button>

@@ -9,7 +9,11 @@ const NoticeView = () => {
   const { post_num } = useParams();
   const navigate = useNavigate();
   const [boardContent, setBoardContent] = useState({}); // Change to object
-
+  const username = localStorage.getItem('gu');
+  const email = localStorage.getItem('dong');
+  
+  
+  
   function getBoardContent() {
     axios.get(`http://subdomain.storeaivle.com/announcement/announcementlist/${post_num}`)
       .then((response) => {

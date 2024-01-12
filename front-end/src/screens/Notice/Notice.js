@@ -53,12 +53,19 @@ const Notice = () => {
   const [post_num, setPost_num] = useState('');
   const [searchTarget, setSearchTarget] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
+  
+  const username = localStorage.getItem('gu');
+  const email = localStorage.getItem('dong');
 
+  
   function getNotice() {
     axios.get("http://subdomain.storeaivle.com/announcement/announcementlist/")
       .then((response) => {
         setNoticeList([...response.data]);
         console.log(response.data);
+        console.log("이건 되냐?");
+        console.log(`gu: ${username}`);
+        console.log(`dong: ${email}`);
       })
       .catch(function (error) {
         console.log(error);
