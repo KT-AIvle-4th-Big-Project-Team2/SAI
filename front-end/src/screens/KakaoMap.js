@@ -38,7 +38,8 @@ import cosmeticsIcon from '../assets/serviceicon/화장품.png';
 import medicineIcon from '../assets/serviceicon/의약품.png';
 import privateSchoolIcon from '../assets/serviceicon/일반학원.png';
 import beautySalonIcon from '../assets/serviceicon/미용실.png';
-
+import { setGlobalData } from './globals';
+import { getAllGlobalData } from './globals';
 
 const convertGuToCode = (guName) => {
     const guInfo = Data3.find(item => item['자치구_코드_명'] === guName);
@@ -421,6 +422,7 @@ class KakaoMap extends Component {
                                 onClick={() => {
                                     this.handleGuChange({ target: { value: gu } });
                                     this.setState({ isMenu1Open: true });
+                                
                                 }}
                                 style={this.state.buttonStyle}
                             >
@@ -539,7 +541,7 @@ class KakaoMap extends Component {
                                 }}
                             />
                             {/* SAI 창업 도우미 시작하기 버튼 */}
-                            <button type="submit" className="sai-button" href="/SimulReport2" style={{marginTop:'20px',fontSize:'16px'}}>
+                            <button type="submit" className="sai-button" href="/Simulreport2" style={{marginTop:'20px',fontSize:'16px'}}>
                                 SAI 창업 도우미 시작하기
                             </button>
                         </form>
@@ -846,22 +848,28 @@ class KakaoMap extends Component {
         this.setState({
             Gu: event.target.value,
             selectedDong: '',
+            
         });
+        setGlobalData('selectedGu', event.target.value);
     };
 
     // 행정동 선택 이벤트 핸들러
     handleDongChange = (event) => {
         this.setState({ selectedDong: event.target.value });
+        setGlobalData('selectedDong', event.target.value);
     };
 
     // 상권 선택 이벤트 핸들러
     handleMarketChange = (event) => {
         this.setState({ selectedmarket: event.target.value });
+        setGlobalData('selectedmarket', event.target.value);
     };
 
     // 서비스 업종 선택 이벤트 핸들러
     handleServiceChange = (service) => {
         this.setState({selectedservice:service});
+        setGlobalData('selectedmarket', service);
+        
     };
     // 자본금 입력 폼 제출 이벤트 핸들러
     // handleCapitalSubmit = (event) => {
@@ -874,7 +882,7 @@ class KakaoMap extends Component {
     handleCapitalSubmit = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);
-    
+        setGlobalData('funds',capitalValue);
         this.setState((prevState) => ({
             capital: capitalValue,
             userGu: this.codeGuInfo[prevState.Gu],
@@ -886,13 +894,15 @@ class KakaoMap extends Component {
             console.log('업종:', this.state.userService);
             console.log('자본금:', this.state.capital);
             // 나머지 코드들...
+            console.log(getAllGlobalData());
         });
     };
 
     handleCapitalSubmit2 = (event) => {
         event.preventDefault();
         const capitalValue = parseInt(this.state.capital, 10);
-    
+
+        setGlobalData('funds',capitalValue);
         this.setState((prevState) => ({
             capital: capitalValue,
             userGu: this.codeGuInfo[prevState.Gu],
@@ -906,6 +916,7 @@ class KakaoMap extends Component {
             console.log('업종:', this.state.userService);
             console.log('자본금:', this.state.capital);
             // 나머지 코드들...
+            
         });
     };
     

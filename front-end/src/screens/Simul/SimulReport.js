@@ -15,6 +15,8 @@ import { ResponsiveBar } from '@nivo/bar'
 import { ResponsiveLine } from '@nivo/line';
 import { styled } from '@mui/system';
 import LoadingPage from '../../components/LoadingPage';
+import axios from 'axios';
+import { getGlobalData } from '../globals';
 
 const createGradientStyle = (theme) => ({
   background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
@@ -25,23 +27,90 @@ const StyledPaper = styled(Paper)(({ theme }) => createGradientStyle(theme));
 
 
 const SimulReport = () => {
-
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [useda, setDa] = useState(null); // da 객체의 상태를 관리하기 위한 useState
   const [loading, setLoading] = useState(true);
+  
 
+  useEffect(() => {
+
+    //URL생성
+    const baseApiUrl = 'http://subdomain.storeaivle.com/analysis/marketai/';
+    const location = getGlobalData('selectedGu');
+    const category = getGlobalData('selectedmarket');
+    const capital = getGlobalData('funds');
+    const station = getGlobalData('selectedDong');
+
+    const apiUrl = `${baseApiUrl}${location}/${category}/${capital}/${station}`;
+
+    // API 호출 주소는 환경에 맞게 설정해주세요.
+    //const apiUrl = 'http://subdomain.storeaivle.com/analysis/marketai/강남구/한식음식점/100000/삼성역';
+    
+    // URL 인코딩이 필요할 수 있습니다. 실제 요청에 맞게 조정해주세요.
+    const encodedUrl = encodeURI(apiUrl);
+    setLoading(true);
+
+    console.log(location);
+    axios.get(apiUrl)
+      .then(response => {
+        console.log(location);
+        console.log("되냐?");
+        setData(response.data); // 응답 데이터를 state에 저장합니다.
+        setDa({
+          "AI": response.data.AI,
+          "region": response.data.region,
+          "area_1": response.data.area_1,
+          "area_2": response.data.area_2,
+          "business": response.data.business,
+          "funds": response.data.funds,
+          "sales_23_2q": response.data.sales_23_2q,
+          "esti_23_3q": response.data.esti_23_3q,
+          "pred_23_4q": response.data.pred_23_4q,
+          "top_influ": response.data.top_influ,
+          "bottom_influ": response.data.bottom_influ,
+          "sim_result": response.data.sim_result,
+          "avg_sale_comp": response.data.avg_sale_comp,
+          "sale_updown": response.data.sale_updown,
+          "market_active": response.data.market_active,
+          "opening_updown": response.data.opening_updown,
+          "area_growth": response.data.area_growth,
+          "fpeople_updown": response.data.fpeople_updown,
+          "simil_area_name_1": response.data.simil_area_name_1,
+          "simil_area_esti_1": response.data.simil_area_esti_1,
+          "simil_area_diff_1": response.data.simil_area_diff_1,
+          "simil_area_name_2": response.data.simil_area_name_2,
+          "simil_area_esti_2": response.data.simil_area_esti_2,
+          "simil_area_diff_2": response.data.simil_area_diff_2,
+          "rent_fee": response.data.rent_fee,
+          "posi_fran_num": response.data.posi_fran_num,
+          "franchise_rec_1": response.data.franchise_rec_1,
+          "franchise_rec_2": response.data.franchise_rec_2
+        });
+        setLoading(false);
+        console.log("테스트",response.data.region);
+      })
+      .catch(error => {
+        console.log("안되냐?");
+        setError(error); // 오류가 발생하면 state에 저장합니다.
+      });
+  }, []);
+
+/*
   useEffect(() => {
     // 3초 후에 로딩 상태 변경
     const timeoutId = setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 30000);
 
     // 컴포넌트가 언마운트될 때 타이머 클리어
     return () => clearTimeout(timeoutId);
   }, []); // 빈 배열을 전달하여 componentDidMount와 같이 동작하게 함
-
+*/
   const da = 
   {
     "AI": "상권",
-    "region": "강남구",
+    "region": "data.dongname",
     "area_1": "삼성역",
     "area_2": "대치2동",
     "business": "한식음식점",
@@ -99,34 +168,36 @@ const SimulReport = () => {
     "user": 12
     }
 
-
+/*
   const circle1 = {
     "name": "",
     "children" : [
     {
-      "name": Object.keys(da.top_influ)[0],
-      "loc": da.top_influ[Object.keys(da.top_influ)[0]]
+      "name": Object.keys(useda.top_influ)[0],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[0]]
     },
     {
-      "name": Object.keys(da.top_influ)[1],
-      "loc": da.top_influ[Object.keys(da.top_influ)[1]]
+      "name": Object.keys(useda.top_influ)[1],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[1]]
     },
     {
-      "name": Object.keys(da.top_influ)[2],
-      "loc": da.top_influ[Object.keys(da.top_influ)[2]]
+      "name": Object.keys(useda.top_influ)[2],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[2]]
     },
     {
-      "name": Object.keys(da.top_influ)[3],
-      "loc": da.top_influ[Object.keys(da.top_influ)[3]]
+      "name": Object.keys(useda.top_influ)[3],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[3]]
     },
     {
-      "name": Object.keys(da.top_influ)[4],
-      "loc": da.top_influ[Object.keys(da.top_influ)[4]]
+      "name": Object.keys(useda.top_influ)[4],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[4]]
     }
   ]
   }
-  
+  */
+  /*
   const CircleGraph1 = () => (
+    
     <div style={{ height: '500px'}}>
     <ResponsiveCirclePacking
       data={circle1}
@@ -139,30 +210,79 @@ const SimulReport = () => {
     />
   </div>
 );
+*/
+const CircleGraph1 = () => {
+  // useda가 유효한지 확인
+  if (!useda || !useda.top_influ) {
+    // useda가 로드되지 않았다면 로딩 메시지 또는 대체 UI 표시
+    return <div>Loading...</div>;
+  }
 
+  // useda가 유효하면, 여기서 circle1 데이터를 구성
+  const circle1 = {
+    "name": "",
+    "children" : [
+    {
+      "name": Object.keys(useda.top_influ)[0],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[0]]
+    },
+    {
+      "name": Object.keys(useda.top_influ)[1],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[1]]
+    },
+    {
+      "name": Object.keys(useda.top_influ)[2],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[2]]
+    },
+    {
+      "name": Object.keys(useda.top_influ)[3],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[3]]
+    },
+    {
+      "name": Object.keys(useda.top_influ)[4],
+      "loc": useda.top_influ[Object.keys(useda.top_influ)[4]]
+    }
+  ]
+  }
 
+  return (
+    <div style={{ height: '500px'}}>
+      <ResponsiveCirclePacking
+        data={circle1}
+        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        id="name"
+        value="loc"
+        enableLabels={true}
+        colors={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, ' + (70 - 20 * depth) + '%)')}
+        borderColor={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, 50%)')}
+      />
+    </div>
+  );
+};
+
+/*
 const circle2 = {
   "name": "",
   "children" : [
   {
-    "name": Object.keys(da.bottom_influ)[0],
-    "loc": Math.abs(da.bottom_influ[Object.keys(da.bottom_influ)[0]])
+    "name": Object.keys(useda.bottom_influ)[0],
+    "loc": Math.abs(useda.bottom_influ[Object.keys(useda.bottom_influ)[0]])
   },
   {
-    "name": Object.keys(da.bottom_influ)[1],
-    "loc": Math.abs(da.bottom_influ[Object.keys(da.bottom_influ)[1]])
+    "name": Object.keys(useda.bottom_influ)[1],
+    "loc": Math.abs(useda.bottom_influ[Object.keys(useda.bottom_influ)[1]])
   },
   {
-    "name": Object.keys(da.bottom_influ)[2],
-    "loc": Math.abs(da.bottom_influ[Object.keys(da.bottom_influ)[2]])
+    "name": Object.keys(useda.bottom_influ)[2],
+    "loc": Math.abs(useda.bottom_influ[Object.keys(useda.bottom_influ)[2]])
   },
   {
-    "name": Object.keys(da.bottom_influ)[3],
-    "loc": Math.abs(da.bottom_influ[Object.keys(da.bottom_influ)[3]])
+    "name": Object.keys(useda.bottom_influ)[3],
+    "loc": Math.abs(useda.bottom_influ[Object.keys(useda.bottom_influ)[3]])
   },
   {
-    "name": Object.keys(da.bottom_influ)[4],
-    "loc": Math.abs(da.bottom_influ[Object.keys(da.bottom_influ)[4]])
+    "name": Object.keys(useda.bottom_influ)[4],
+    "loc": Math.abs(useda.bottom_influ[Object.keys(useda.bottom_influ)[4]])
   }
 ]
 }
@@ -180,6 +300,38 @@ const CircleGraph2 = () => (
     />
   </div>
 );
+*/
+
+const CircleGraph2 = () => {
+  // useda가 유효한지 확인
+  if (!useda || !useda.bottom_influ) {
+    // useda가 로드되지 않았다면 로딩 메시지 또는 대체 UI 표시
+    return <div>Loading...</div>;
+  }
+
+  // useda가 유효하면, 여기서 circle2 데이터를 구성
+  const circle2 = {
+    "name": "",
+    "children": Object.keys(useda.bottom_influ).map(key => ({
+      "name": key,
+      "loc": Math.abs(useda.bottom_influ[key])
+    }))
+  };
+
+  return (
+    <div style={{ height: '500px'}}>
+      <ResponsiveCirclePacking
+        data={circle2}
+        margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+        id="name"
+        value="loc"
+        enableLabels={true}
+        colors={({ depth }) => (depth === 0 ? 'white' : 'hsl(0, 70%, 60%)')}
+        borderColor={({ depth }) => (depth === 0 ? 'white' : 'hsl(200, 70%, 50%)')}
+      />
+    </div>
+  );
+};
 
 
   const data2 = [
@@ -191,11 +343,19 @@ const CircleGraph2 = () => (
     },
   ];
 
+  /*
   const data3 = [
-    { id: da.simil_area_name_1, value: da.simil_area_esti_1, color: '#236cff' },
-    { id: da.simil_area_name_2, value: da.simil_area_esti_2, color: '#FF6B00' },
-    { id: da.area_1, value: da.esti_23_3q, color: '#9B9B9B' },
+    { id: useda.simil_area_name_1, value: useda.simil_area_esti_1, color: '#236cff' },
+    { id: useda.simil_area_name_2, value: useda.simil_area_esti_2, color: '#FF6B00' },
+    { id: useda.area_1, value: useda.esti_23_3q, color: '#9B9B9B' },
   ];
+  */
+  const data3 = [
+    { id: useda?.new_simil_area_name_1 || 'Default Name 1', value: useda?.new_simil_area_esti_1 || 0, color: '#236cff' },
+    { id: useda?.new_simil_area_name_2 || 'Default Name 2', value: useda?.new_simil_area_esti_2 || 0, color: '#FF6B00' },
+    { id: useda?.new_area_1 || 'Default Area 1', value: useda?.new_esti_23_3q || 0, color: '#9B9B9B' },
+  ];
+  
   
   const BarGraph = () => (
     <div style={{ height: '450px' }}>
@@ -224,12 +384,13 @@ const CircleGraph2 = () => (
     {
       id: '선택상권',
       data: [
-        { x: '2023년 2분기', y: da.sales_23_2q },
-        { x: '2023년 3분기', y: da.esti_23_3q },
-        { x: '2023년 4분기', y: da.pred_23_4q },
+        { x: '2023년 2분기', y: useda?.sales_23_2q || 0 },
+        { x: '2023년 3분기', y: useda?.esti_23_3q || 0 },
+        { x: '2023년 4분기', y: useda?.pred_23_4q || 0 },
       ],
     },
   ];
+  
   
   const BumpGraph = () => (
     <div style={{ height: '450px', padding : 10, mt : 15}}>
@@ -304,11 +465,13 @@ const CircleGraph2 = () => (
 
 
   return (
+    
     <>
     {loading ? (
       // 로딩 중일 때 표시할 내용
       < LoadingPage />
     ) : (
+      
     <div className="container">  
     
     <Button variant='contained' href= '/SimulReport2' sx={{mt : 4, color: '#ffffff', paddingY: 1, borderRadius: 0, width : '150px', bgcolor:"#C5C1C1"}}><span style={{fontSize : 18}}>분석 보고서</span></Button>
@@ -322,14 +485,14 @@ const CircleGraph2 = () => (
             <TitleType> {user} 님 매장의 추정 / 예상 매출이에요.</TitleType>
             <DivLine />
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 10, marginBottom : 20 }}>
-            <Typography fontSize={24} sx={{ml : 20, mt : 5, fontWeight : 'bold'} }>지역 <span style={{ color : '#6474C8', fontWeight : 'bold'}}>{da.region} {da.area_2} {da.area_1}</span></Typography>
-            <Typography fontSize={24} sx={{mt : 5, fontWeight : 'bold'}}>업종 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.business}</span></Typography>
-            <Typography fontSize={24} sx={{mt : 5, mr : 20, fontWeight : 'bold'}}>창업준비금 <span style={{ color : '#6474C8', fontWeight : 'bold'}}>{da.funds.toLocaleString()}만원</span></Typography>
+            <Typography fontSize={24} sx={{ml : 20, mt : 5, fontWeight : 'bold'} }>지역 <span style={{ color : '#6474C8', fontWeight : 'bold'}}>{useda.region} {useda.area_2} {useda.area_1}</span></Typography>
+            <Typography fontSize={24} sx={{mt : 5, fontWeight : 'bold'}}>업종 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.business}</span></Typography>
+            <Typography fontSize={24} sx={{mt : 5, mr : 20, fontWeight : 'bold'}}>창업준비금 <span style={{ color : '#6474C8', fontWeight : 'bold'}}>{useda.funds.toLocaleString()}만원</span></Typography>
             </div>
             <BumpGraph />
 
             <Box>
-              <Typography fontSize={30} sx={{ml : 1, mt : 10, mr : 10, fontWeight : 'bold'}}>창업 전망 : <span style={{ color : '#236cff', fontWeight : 'bold' }}>{da.sim_result}</span> </Typography>
+              <Typography fontSize={30} sx={{ml : 1, mt : 10, mr : 10, fontWeight : 'bold'}}>창업 전망 : <span style={{ color : '#236cff', fontWeight : 'bold' }}>{useda.sim_result}</span> </Typography>
               <Box bgcolor={'primary.gray'} sx={{ display: 'flex', justifyContent: 'center', height: '12vh', marginTop:5,  }}>
               <ResponsiveBullet
                 data={data2}
@@ -342,26 +505,26 @@ const CircleGraph2 = () => (
               />
               </Box>
               <Box sx={{ mt : 2, mb : 14, bgcolor : '#F5F5F5', padding : 3, borderRadius : 3}}>
-              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.region} {da.area_2}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.business}</span> 업종 창업은 <span style={{ fontWeight: 'bold' }}>서울시 내 동종 업종의 평균 추정 매출 대비</span> {da.avg_sale_comp}%입니다.</ContentsType>
-              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.region} {da.area_2}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.business}</span> 업종 창업은 자치구에 비해 <span style={{ fontWeight: 'bold' }}>매출</span>이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.sale_updown}</span> 추세예요. 인근 지역에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.market_active}</span> 된 상권이에요. 경쟁 관계에 유의하세요.</ContentsType>
-              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.region} {da.area_2}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.business}</span> 업종의 <span style={{ fontWeight: 'bold' }}>점포수</span>가 전년 동기에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.opening_updown}</span>하고 있어요. 상권이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.area_growth}</span>하는 시기인 경우 입지 선정에 신중하셔야 해요.</ContentsType>
-              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{da.region} {da.area_2}</span>은 전년 동분기에 비해 <span style={{ fontWeight: 'bold' }}>유동인구</span>가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{da.fpeople_updown}</span>하고 있는 지역이에요. 마케팅이 중요한 상권이에요.</ContentsType>
+              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.region} {useda.area_2}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.business}</span> 업종 창업은 <span style={{ fontWeight: 'bold' }}>서울시 내 동종 업종의 평균 추정 매출 대비</span> {useda.avg_sale_comp}%입니다.</ContentsType>
+              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.region} {useda.area_2}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.business}</span> 업종 창업은 자치구에 비해 <span style={{ fontWeight: 'bold' }}>매출</span>이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{useda.sale_updown}</span> 추세예요. 인근 지역에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{useda.market_active}</span> 된 상권이에요. 경쟁 관계에 유의하세요.</ContentsType>
+              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.region} {useda.area_2}</span>에서 <span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.business}</span> 업종의 <span style={{ fontWeight: 'bold' }}>점포수</span>가 전년 동기에 비해 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{useda.opening_updown}</span>하고 있어요. 상권이 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{useda.area_growth}</span>하는 시기인 경우 입지 선정에 신중하셔야 해요.</ContentsType>
+              <ContentsType><span style={{ color : '#6474C8', fontWeight : 'bold' }}>{useda.region} {useda.area_2}</span>은 전년 동분기에 비해 <span style={{ fontWeight: 'bold' }}>유동인구</span>가 <span style={{ fontWeight: 'bold', color:'#236cff'}}>{useda.fpeople_updown}</span>하고 있는 지역이에요. 마케팅이 중요한 상권이에요.</ContentsType>
               </Box>
             </Box>
             <Grid container spacing={2}>
              <Grid item xs={6}>
               <TitleType>비슷한 지역 추천</TitleType>
               <br></br>
-              <Typography style={{ fontSize: '22px'}}><span style={{ color : '#6474C8', fontWeight : 'bold'}}>{da.region} {da.area_2} {da.business}</span> 업종과 비슷한 추정 매출을 보이는 곳은 <span style={{ color : '#FF6B00', fontWeight : 'bold'  }}>{da.simil_area_name_1}, {da.simil_area_name_2}</span>이 있어요.</Typography>
+              <Typography style={{ fontSize: '22px'}}><span style={{ color : '#6474C8', fontWeight : 'bold'}}>{useda.region} {useda.area_2} {useda.business}</span> 업종과 비슷한 추정 매출을 보이는 곳은 <span style={{ color : '#FF6B00', fontWeight : 'bold'  }}>{useda.simil_area_name_1}, {useda.simil_area_name_2}</span>이 있어요.</Typography>
               <br></br>
-              <ContentsType><span style={{ fontWeight : 'bold', fontSize: '24px'}}>{da.simil_area_name_1}</span></ContentsType>
+              <ContentsType><span style={{ fontWeight : 'bold', fontSize: '24px'}}>{useda.simil_area_name_1}</span></ContentsType>
               <ContentsType><span style={{ color : '#9B9B9B'}}>2023년도 3,4분기 평균 추정 매출</span></ContentsType>
-              <ContentsType><span style={{ color : '#FF6B00', fontWeight : 'bold'}}>{da.simil_area_esti_1.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}>차이 : {da.simil_area_diff_1.toLocaleString()}만원</span></ContentsType>
+              <ContentsType><span style={{ color : '#FF6B00', fontWeight : 'bold'}}>{useda.simil_area_esti_1.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}>차이 : {useda.simil_area_diff_1.toLocaleString()}만원</span></ContentsType>
               <br></br>
               <br></br>
-              <ContentsType><span style={{ fontWeight : 'bold', fontSize: '24px'}}>{da.simil_area_name_2}</span></ContentsType>
+              <ContentsType><span style={{ fontWeight : 'bold', fontSize: '24px'}}>{useda.simil_area_name_2}</span></ContentsType>
               <ContentsType><span style={{ color : '#9B9B9B'}}>2023년도 3,4분기 평균 추정 매출</span></ContentsType>
-              <ContentsType><span style={{ color : '#FF6B00', fontWeight : 'bold'}}>{da.simil_area_esti_2.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}>차이 : {da.simil_area_diff_2.toLocaleString()}만원</span></ContentsType>
+              <ContentsType><span style={{ color : '#FF6B00', fontWeight : 'bold'}}>{useda.simil_area_esti_2.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}>차이 : {useda.simil_area_diff_2.toLocaleString()}만원</span></ContentsType>
               </Grid>
               <Grid item xs={6}>
                 <BarGraph />
@@ -391,30 +554,30 @@ const CircleGraph2 = () => (
             <Box sx={{mt : 14, mb : 10}}>
                 <Typography fontSize={30} sx={{fontWeight : 'bold'}}>프랜차이즈 창업 비용</Typography>
                 <br />
-                <Typography style={{ fontSize: '23px'}}>비슷한 창업 비용으로 가능한 <span style={{ color : '#647AC5', fontWeight : 'bold'}}>{da.business}</span> 업종 프랜차이즈 목록이에요.</Typography>
+                <Typography style={{ fontSize: '23px'}}>비슷한 창업 비용으로 가능한 <span style={{ color : '#647AC5', fontWeight : 'bold'}}>{useda.business}</span> 업종 프랜차이즈 목록이에요.</Typography>
               <Box sx = {{bgcolor:'primary.gray', mt : 5, mb : 5, padding : 3}}>
                 <Typography fontSize={23}>💡 <span style={{ fontWeight : 'bold'}}>참고 도움말</span></Typography>
                 <ContentsType><span style={{ color : '#5F5F5F' }}>추천된 목록은 입력하신 자본금으로 창업 가능한 브랜드 중 매출이 가장 높은 곳이에요.</span></ContentsType>
                 <ContentsType><span style={{ color : '#5F5F5F' }}>좋은 자리라면 평균 임대료에 권리금이 추가로 더 발생할 수 있어요.</span></ContentsType>
-                <ContentsType><span style={{ color : '#647AC5', fontWeight : 'bold'}}>{da.region} {da.area_2}</span> <span style={{ color : '#5F5F5F' }}>의 평균 임대 면적은 </span><span style={{ color : '#647AC5',fontWeight : 'bold'}}>58.7m^2</span><span style={{ color : '#5F5F5F' }}>이고, 평균 임대료는 ^2 당</span> <span style={{ color : '#647AC5',fontWeight : 'bold'}}>{da.rent_fee}만원</span><span style={{ color : '#5F5F5F' }}>이에요.</span> </ContentsType>
+                <ContentsType><span style={{ color : '#647AC5', fontWeight : 'bold'}}>{useda.region} {useda.area_2}</span> <span style={{ color : '#5F5F5F' }}>의 평균 임대 면적은 </span><span style={{ color : '#647AC5',fontWeight : 'bold'}}>58.7m^2</span><span style={{ color : '#5F5F5F' }}>이고, 평균 임대료는 ^2 당</span> <span style={{ color : '#647AC5',fontWeight : 'bold'}}>{useda.rent_fee}만원</span><span style={{ color : '#5F5F5F' }}>이에요.</span> </ContentsType>
               </Box>
               <Box sx={{marginTop : 5}}>
-                <Typography fontSize={23} sx = {{fontWeight : 'bold', fontSize: '26px'}}>{da.franchise_rec_1.브랜드명}</Typography>
+                <Typography fontSize={23} sx = {{fontWeight : 'bold', fontSize: '26px'}}>{useda.franchise_rec_1.브랜드명}</Typography>
                 <Typography fontSize={23}>예상 창업 비용<span style={{color : '#9B9B9B'}}>(임대료 및 보증금 포함)</span></Typography>
-                <Typography fontSize={23} sx = {{fontWeight : 'bold'}}><span style={{color : '#FF6B00'}}>{da.franchise_rec_1.합계금액.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}></span></Typography>
+                <Typography fontSize={23} sx = {{fontWeight : 'bold'}}><span style={{color : '#FF6B00'}}>{useda.franchise_rec_1.합계금액.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}></span></Typography>
                 <br />
                 <hr></hr>
                 <Grid container spacing={10}>
                   <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>가입비</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_1.가맹금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_1.가맹금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                     <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>교육비</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_1.교육금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_1.교육금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                 </Grid>
@@ -423,13 +586,13 @@ const CircleGraph2 = () => (
                   <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>보증금</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_1.보증금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_1.보증금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                     <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>기타비용</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_1.기타금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_1.기타금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                 </Grid>
@@ -438,34 +601,34 @@ const CircleGraph2 = () => (
                   <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>첫 월 임대료</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.rent_fee}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.rent_fee}만원</Typography>
                     </Box>
                     </Grid>
                     <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>임대 보증금(월 보증금 X 10개월)</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.rent_fee}0만 원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.rent_fee}0만 원</Typography>
                     </Box>
                     </Grid>
                 </Grid>
               </Box>
               <Box sx={{mt : 10, mb : 5}}>
-              <Typography fontSize={23} sx = {{fontWeight : 'bold', fontSize: '26px'}}>{da.franchise_rec_2.브랜드명}</Typography>
+              <Typography fontSize={23} sx = {{fontWeight : 'bold', fontSize: '26px'}}>{useda.franchise_rec_2.브랜드명}</Typography>
                 <Typography fontSize={23}>예상 창업 비용<span style={{color : '#9B9B9B'}}>(임대료 및 보증금 포함)</span></Typography>
-                <Typography fontSize={23} sx = {{fontWeight : 'bold'}}><span style={{color : '#FF6B00'}}>{da.franchise_rec_2.합계금액.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}></span></Typography>
+                <Typography fontSize={23} sx = {{fontWeight : 'bold'}}><span style={{color : '#FF6B00'}}>{useda.franchise_rec_2.합계금액.toLocaleString()}만원</span> <span style={{fontSize:'15px', fontWeight : 'bold', backgroundColor:'#FFCCA7'}}></span></Typography>
                 <br />
                 <hr></hr>
                 <Grid container spacing={10}>
                   <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>가입비</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_2.가맹금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_2.가맹금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                     <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>교육비</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_2.교육금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_2.교육금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                 </Grid>
@@ -474,13 +637,13 @@ const CircleGraph2 = () => (
                   <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>보증금</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_2.보증금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_2.보증금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                     <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>기타비용</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.franchise_rec_2.기타금액.toLocaleString()}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.franchise_rec_2.기타금액.toLocaleString()}만원</Typography>
                     </Box>
                     </Grid>
                 </Grid>
@@ -489,13 +652,13 @@ const CircleGraph2 = () => (
                   <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>첫 월 임대료</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.rent_fee}만원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.rent_fee}만원</Typography>
                     </Box>
                     </Grid>
                     <Grid item xs={6}>
                     <Box sx={{display : 'flex', justifyContent : 'space-between', marginLeft : 5, marginRight : 5}}>
                       <Typography>임대 보증금(월 보증금 X 10개월)</Typography>
-                      <Typography sx={{fontWeight : 'bold'}}>{da.rent_fee}0만 원</Typography>
+                      <Typography sx={{fontWeight : 'bold'}}>{useda.rent_fee}0만 원</Typography>
                     </Box>
                     </Grid>
                 </Grid>

@@ -13,7 +13,7 @@ import { ResponsiveBar } from '@nivo/bar'
 import { ResponsiveLine } from '@nivo/line'
 import { styled } from '@mui/system';
 import { useTheme } from '@mui/material/styles';
-
+import { getAllGlobalData } from '../globals';
 const createGradientStyle = (theme) => ({
   background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.grey[100]} 30%,  ${theme.palette.grey[100]} 30%, ${theme.palette.grey[100]} 100%)`,
 });
@@ -25,6 +25,9 @@ const StyledPaper = styled(Paper)(({ theme }) => createGradientStyle(theme));
 const SimulReport2 = () => {
   const theme = useTheme();
 
+  console.log("제발 좀 도와줘롸");
+  console.log(getAllGlobalData());
+  
   const da = {
     "자치구" : "강남구",
     "행정동" : "대치2동",
