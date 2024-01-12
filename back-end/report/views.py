@@ -15,10 +15,14 @@ from analysis.models import DongServiceDataEstimateTestFullFin, MarketServiceDat
 # Create your views here.
 
 
+# 동 보고서 api 
 class dong_report(APIView):
     
+    
+    # get 입력시
     def get(self, request, *args, **kwargs):
         
+        #해당 인자로 동과 업종 입력
         dong = unquote(kwargs['dong'])
         business = unquote(kwargs['business'])
         
@@ -75,7 +79,7 @@ class dong_report(APIView):
                     
                     ]
         
-        
+        # 20223 ~ 20233년도 데이터 가져옴 
         queryset_dong_20233 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_dong_20232 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_dong_20231 = DongSortedDbFin.objects.filter(행정동_코드_명 = dong,기준_년분기_코드 = 20231 ,서비스_업종_코드_명 = business).values(*col_data)
@@ -87,8 +91,6 @@ class dong_report(APIView):
         # 동 순위 계산
         queryset_dong_goo = SeoulRent.objects.filter(dong_name = dong).values("시군구명")
         queryset_dong_list = SeoulRent.objects.filter(시군구명 = queryset_dong_goo[0]["시군구명"]).values("dong_name")
-        
-        #return Response(queryset_dong_list)
         
         dong_count= len(queryset_dong_list)
 
@@ -104,21 +106,22 @@ class dong_report(APIView):
         # 빈리스트 제거
         dong_rank = [entry for entry in dong_rank if entry]
         
-        
-        #dong rank 데이터
+        #dong rank 데이터 넣기 위한 리스트
         dong_rank_data = []
 
+
+        # 해당 구에서 해당 동의 점포수 순위
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["점포_수"], reverse=True)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["행정동_코드_명"] == dong), None)
         dong_rank_data.append(index_of_dong+1)
         
-        
-
+        # 해당 구에서 해당 동의 매출금액 순위
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["당월_매출_금액"], reverse=True)
         total_sales = sum(entry[0]["당월_매출_금액"] for entry in sorted_data)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["행정동_코드_명"] == dong), None)
         dong_rank_data.append(index_of_dong+1)
         
+        # 해당 구에서 해당 동의 유동인구 순위
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["총_유동인구_수"], reverse=True)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["행정동_코드_명"] == dong), None)
         dong_rank_data.append(index_of_dong+1)
@@ -130,11 +133,10 @@ class dong_report(APIView):
         #전년도 분기 대비
         Sales_compared_to_the_same_quarter_last_year = int((queryset_dong_20233[0]["당월_매출_금액"] - queryset_dong_20223[0]["당월_매출_금액"])//10000//dong_count)
 
-        
         #현재 평균 매출
         now_sales = int(queryset_dong_20233[0]["당월_매출_금액"] //10000//dong_count)
         
-
+        #매출 증감 관련 텍스트
         if (total_sales / dong_count) > now_sales :
             sales_text = "감소"
         else :
@@ -154,13 +156,10 @@ class dong_report(APIView):
         now_floating_population = queryset_dong_20233[0]["총_유동인구_수"]
 
         #종합 의견
-
+        # 전분기,현재 ,전년도 분기 대비 (매출 금액 , 유동인구)
         general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year,now_sales ,Quarterly_floating_population ,
                            floating_population_compared_to_the_same_quarter_last_year ,now_floating_population ]
         
-        
-
-
 
         #1-1 best 매출
         #성별
@@ -182,15 +181,16 @@ class dong_report(APIView):
         time_max = max(time_ranges, key=lambda x: queryset_dong_20233[0][f"{x}_매출_금액"])
 
 
+        # best 매출 관련 텍스트 처리
         best_gender_age_group = gender_max +"/" + re.sub("[^0-9]", "", age_max) +"대"
         best_sales_day = day_max+f"({dat_percentages}%)"
         best_sales_time = re.sub("[^0-9]", "", time_max)
         best_sales_time = best_sales_time[:2] + "~" + best_sales_time[2:] + "시"
-
+        
+        # best 매출 그룹 =  성별+나이 , 요일 , 시간 
         sales_data = [best_gender_age_group , best_sales_day , best_sales_time  ]
 
         #유동인구
-        
         gender_max = "남성" if queryset_dong_20233[0]["남성_유동인구_수"] > queryset_dong_20233[0]["여성_유동인구_수"] else "여성"
 
         # 연령대 중 가장 인구이 많은 것 찾기
@@ -210,6 +210,8 @@ class dong_report(APIView):
         time_ranges = ["시간대_00_06", "시간대_06_11", "시간대_11_14", "시간대_14_17", "시간대_17_21", "시간대_21_24"]
         time_max = max(time_ranges, key=lambda x: queryset_dong_20233[0][f"{x}_유동인구_수"])
 
+        
+        # 유동인구 관련 텍스트 처리
         best_population_age_group =  re.sub("[^0-9]", "", age_max) +"대"+f"({age_percentages}%)"
         best_population_day = day_max+f"({dat_percentages}%)"
         best_population_time = re.sub("[^0-9]", "", time_max)
@@ -217,6 +219,7 @@ class dong_report(APIView):
 
 
         #유동인구
+        #best 유동인구 관련 텍스트 , 성별, 나이,요일,시간
         best_floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
 
 
@@ -229,6 +232,8 @@ class dong_report(APIView):
         # 전분기 대비
         compared_to_the_previous_quarter = queryset_dong_20233[0]["점포_수"] - queryset_dong_20232[0]["점포_수"]
         
+        
+        # 점포 관련 텍스트 
         if Compared_to_the_same_quarter_last_year > 0:
             status_of_business_districts = "증가"
             business_districts = "발달"
@@ -236,7 +241,7 @@ class dong_report(APIView):
             status_of_business_districts = "감소"
             business_districts = "쇠퇴"
             
-        
+        # 점포 관련 데이터 모음
         store_count = {
             "20223store_count" : queryset_dong_20223[0]["점포_수"],
             "20224store_count" : queryset_dong_20224[0]["점포_수"],
@@ -255,6 +260,8 @@ class dong_report(APIView):
         # 개업 점포수 
         op_Compared_to_the_same_quarter_last_year =  queryset_dong_20233[0]["개업_점포_수"] -  queryset_dong_20223[0]["개업_점포_수"]
         op_compared_to_the_previous_quarter = queryset_dong_20233[0]["개업_점포_수"] -  queryset_dong_20232[0]["개업_점포_수"]
+        
+        # 개업 관련 텍스트 
         if op_Compared_to_the_same_quarter_last_year > 0:
             op_status_of_business_districts = "증가"
             op_business_districts = "활발하"
@@ -262,6 +269,7 @@ class dong_report(APIView):
             op_status_of_business_districts = "감소"
             op_business_districts = "침체되"
             
+        # 개업 점포수 데이터 모음
         open_shop = {
             "20223openstore" : queryset_dong_20223[0]["개업_점포_수"],
             "20224openstore" : queryset_dong_20224[0]["개업_점포_수"],
@@ -280,6 +288,8 @@ class dong_report(APIView):
         # 폐업 점포수 
         cl_Compared_to_the_same_quarter_last_year =  queryset_dong_20233[0]["폐업_점포_수"] -  queryset_dong_20223[0]["폐업_점포_수"]
         cl_compared_to_the_previous_quarter = queryset_dong_20233[0]["폐업_점포_수"] -  queryset_dong_20232[0]["폐업_점포_수"]
+        
+        # 폐업 점포수 관련 증감 텍스트
         if cl_Compared_to_the_same_quarter_last_year > 0:
             cl_status_of_business_districts = "증가"
             cl_business_districts = "활발하"
@@ -287,6 +297,8 @@ class dong_report(APIView):
             cl_status_of_business_districts = "감소"
             cl_business_districts = "침체되"
         
+        
+        # 폐업 관련 데이터 정보 모음
         closed_shop = {
             "20223closestore" : queryset_dong_20223[0]["폐업_점포_수"],
             "20224closestore" : queryset_dong_20224[0]["폐업_점포_수"],
@@ -301,11 +313,7 @@ class dong_report(APIView):
         
         
         
-        
-        
-        #매출
-        
-        # 유동인구
+        # 2022년 3분기~ 2023년 3분기 유동인구  데이터 모음
         floating_population = {
             "20223floating_population" : int(queryset_dong_20223[0]["총_유동인구_수"]),
             "20224floating_population" : int(queryset_dong_20224[0]["총_유동인구_수"]),
@@ -315,13 +323,14 @@ class dong_report(APIView):
             
         }
 
+        # 유동인구 증감 텍스트
         if floating_population["20233floating_population"] - floating_population["20223floating_population"] > 0 :
             floating_population_text = "증가"
         else :
             floating_population_text = "감소"
         
         #주거 인구
-
+        # 2022년 3분기~ 2023년 3분기 주거인구  데이터 모음
         residential_population = {
             "20223residential_population" : queryset_dong_20223[0]["총_상주인구_수"],
             "20224residential_population" : queryset_dong_20224[0]["총_상주인구_수"],
@@ -352,7 +361,7 @@ class dong_report(APIView):
         Transportation_facilities = queryset_dong_20233[0].get("공항_수", 0) + queryset_dong_20233[0].get("철도_역_수", 0) + queryset_dong_20233[0].get("버스_터미널_수", 0) + queryset_dong_20233[0].get("지하철_역_수", 0) +queryset_dong_20233[0].get("버스_정거장_수", 0)
         
         
-        
+        # 배후지 인프라 갯수
         background = {
             "go" : int(government_office),
             "fi" : int(financial_institution),
@@ -364,11 +373,13 @@ class dong_report(APIView):
             "tf" : int(Transportation_facilities)
         }
         
+        # 배후지 인프라 개수 순으로 정렬
         sorted_background = sorted(background.items(), key=lambda x: x[1], reverse=True)
 
         # 상위 3개 항목을 추출
         top3 = sorted_background[:3]
 
+        # 상위 3개 항목을 관련 텍스트로 변환
         for i in range(len(top3)):
             if top3[i][0] == "go":
                 top3[i] = ("관공서", top3[i][1])
@@ -425,6 +436,7 @@ class dong_report(APIView):
                             Education_spending_total_amount + entertainment_spending_total_amount +
                                 Leisure_culture_spending_total_amount + Other_spending_total_amount + Food_spending_total_amount)
         
+        # 소비 트렌드 %로 변환후 저장
         consumption_trend = {
             "food" :  round(((groceries_total_amount+Food_spending_total_amount) / total_amount *100),1) ,
             "Clothing" : round(( Clothing_spending_total_amount / total_amount *100),1),
@@ -437,8 +449,11 @@ class dong_report(APIView):
             "Other" : round(( Other_spending_total_amount / total_amount *100),1),
         }
 
+        # 가장 큰 항목 비율 찾기
         max_value_key = max(consumption_trend, key=consumption_trend.get)
         
+        
+        # 가장 큰 항목의 비율의 항목을 텍스트로 저장
         if max_value_key == "food":
             most_trend ="음식"
         if max_value_key == "Clothing":
@@ -458,34 +473,44 @@ class dong_report(APIView):
         if max_value_key == "Other":
             most_trend ="기타"
         
+        
+        # 반환 데이터 모음
         response_data = {
+            # 동이름 , 해당 구의 동 개수
             "dongname" : dong,
             "dongcount" : dong_count,
 
+            #매출, 유동인구 관련 텍스트
             "saletext" : sales_text,
             "floatingpopulationtext" : floating_population_text,
 
+            #해당 동의 순위 데이터
             "storeranking" : dong_rank_data[0],
             "saleranking" : dong_rank_data[1],
             "Floating_population_ranking" : dong_rank_data[2],
+            
+            # 해당 동의 전분기,현재분기,전년도 대비 분기 매출데이터
             "Quarterlysales" : general_opinion[0],
             "nowsales" : general_opinion[2],
             "Salescomparedtothesamequarterlastyear" : general_opinion[1],
 
-            # 전분기 전년도대비 현재
+            # 해당 동의 전분기,현재분기,전년도 대비 분기 유동인구데이터
             "Quarterlyfloatingpopulation" : general_opinion[3],
             "nowfloatingpopulation" : general_opinion[5],
             "floatingpopulationcomparedtothesamequarterlastyear" : general_opinion[4],
 
+            # best 매출 텍스트 데이터
             "best_gender_age_group" : sales_data[0],
             "best_sales_day" : sales_data[1],
             "best_sales_time" : sales_data[2],
 
+            # best 유동인구 텍스트 데이터
             "bestgendermax" : best_floating_population[0],
             "bestpopulationagegroup" : best_floating_population[1],
             "bestpopulationday" : best_floating_population[2],
             "bestpopulationtime" : best_floating_population[3],
 
+            # 점포수 관련 데이터 및 안내 텍스트
             "20223store_count" : store_count["20223store_count"],
             "20224store_count" : store_count["20224store_count"],
             "20231store_count" : store_count["20231store_count"],
@@ -496,6 +521,7 @@ class dong_report(APIView):
             "sbd1text" : store_count["sbd1"],
             "bd1text" : store_count["bd1"],
 
+            # 개업수 관련 데이터 및 안내 텍스트
             "20223openstore" : open_shop["20223openstore"],
             "20224openstore" : open_shop["20224openstore"],
             "20231openstore" : open_shop["20231openstore"],
@@ -506,6 +532,7 @@ class dong_report(APIView):
             "sbd2text" : open_shop["sbd2"],
             "bd2text" : open_shop["bd2"],
 
+            # 폐업수 관련 데이터 및 안내 텍스트
             "20223closestore" : closed_shop["20223closestore"],
             "20224closestore" : closed_shop["20224closestore"],
             "20231closestore" : closed_shop["20231closestore"],
@@ -516,6 +543,7 @@ class dong_report(APIView):
             "sbd3text" : closed_shop["sbd3"],
             "bd3text" : closed_shop["bd3"],
 
+            #배후지 관련 시설 개수
             "Governmentoffices" : background["go"],
             "Financialinstitutions" : background["fi"],
             "hospital" : background["ho"],
@@ -528,19 +556,21 @@ class dong_report(APIView):
             "backgroundsecondtext" : top3[1][0],
             "backgroundthirdtext" : top3[2][0],
 
+            # 분기별 유동 인구 데이터
             "20223floating_population" : floating_population["20223floating_population"],
             "20224floating_population" : floating_population["20224floating_population"],
             "20231floating_population" : floating_population["20231floating_population"],
             "20232floating_population" : floating_population["20232floating_population"],
             "20233floating_population" : floating_population["20233floating_population"],
 
-            
+            # 분기별 주거 인구 데이터
             "20223residential_population" : residential_population["20223residential_population"],
             "20224residential_population" : residential_population["20224residential_population"],
             "20231residential_population" : residential_population["20231residential_population"],
             "20232residential_population" : residential_population["20232residential_population"],
             "20233residential_population" : residential_population["20233residential_population"],
 
+            # 소비 트렌드 데이터
             "trendfood" : consumption_trend["food"],
             "trendClothing" : consumption_trend["Clothing"],
             "trendHousehold" : consumption_trend["Household"],
@@ -551,34 +581,27 @@ class dong_report(APIView):
             "trendLeisure" : consumption_trend["Leisure"],
             "trendOther" : consumption_trend["Other"],
             
+            # 가장 많은 소비 텍스트
             "trendText": most_trend
         }
-
+            # 데이터 반환
         return Response(response_data, status=status.HTTP_200_OK)
         
-        
-        
-
-
-# class MarketReportView(APIView):
-#     def get(self, request):
-#         market_data = MarketSortedDbFin.objects.all()
-#         serializer = MarketReportDataSerializer(market_data, many=True)
-#         return Response(serializer.data)
-
-
+# 상권 보고서 API
 class market_report(APIView):
     
+    
+    # get 요청시
     def get(self, request, *args, **kwargs):
         
-
-        
+        # 받은 인자로 상권및 업종 구분
         market = unquote(kwargs["market"])
         business = unquote(kwargs["business"])
         
         # market = MarketServiceDataEstimateTestFull.objects.filter(상권_코드=market).first().상권_코드_명
         # business = MarketServiceDataEstimateTestFull.objects.filter(서비스_업종_코드=business).first().서비스_업종_코드_명
         
+        # db에서 꺼내올 데이터
         col_data = ["점포_수","개업_점포_수","폐업_점포_수",
                     "프랜차이즈_점포_수","점포별_평균_매출_금액",
                     
@@ -628,9 +651,8 @@ class market_report(APIView):
                     
                     ]
         
-        
+        # 분기별 해당 상권의 데이터를 가져옴
         queryset_market_20233 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20233 ,서비스_업종_코드_명 = business).values(*col_data)
-        
         queryset_market_20232 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20232 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_market_20231 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20231 ,서비스_업종_코드_명 = business).values(*col_data)
         queryset_market_20224 = MarketSortedDbFin.objects.filter(상권_코드_명 = market,기준_년분기_코드 = 20224 ,서비스_업종_코드_명 = business).values(*col_data)
@@ -639,25 +661,17 @@ class market_report(APIView):
         
         #1. 종합의견
 
-        # 상권 순위 계산
+        # 구에서 상권 순위 계산
         
         queryset_dong_goo = MarketSortedDbFin.objects.filter(상권_코드_명 = market).values("자치구_코드_명")
-
         queryset_dong_list = MarketSortedDbFin.objects.filter(자치구_코드_명 = queryset_dong_goo[0]["자치구_코드_명"]).values("상권_코드_명")
-        
-        
-
         unique_data = list({item['상권_코드_명']: item for item in queryset_dong_list}.values())
         
-        
-
-        
+        # 해당 상권 이름 모음
         dong_names = [entry["상권_코드_명"] for entry in unique_data]
 
-        #return Response(dong_names)
         market_count= len(dong_names)
 
-        
         # 점포 매출액 유동인구
         dong_col = ["상권_코드_명","점포_수","당월_매출_금액","총_유동인구_수"]
         dong_rank = []
@@ -667,19 +681,15 @@ class market_report(APIView):
 
         # 빈리스트 제거
         dong_rank = [entry for entry in dong_rank if entry]
+                
         
-        
-        
-        
-        #dong rank 데이터
+        #상권 rank 데이터 , 해당 상권의 점포수,매출,유동인구 계산
         dong_rank_data = []
 
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["점포_수"], reverse=True)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_코드_명"] == market), None)
         dong_rank_data.append(index_of_dong+1)
         
-        
-
         sorted_data = sorted(dong_rank, key=lambda x: x[0]["당월_매출_금액"], reverse=True)
         total_sales = sum(entry[0]["당월_매출_금액"] for entry in sorted_data)
         index_of_dong = next((index for index, entry in enumerate(sorted_data) if entry[0]["상권_코드_명"] == market), None)
@@ -690,9 +700,6 @@ class market_report(APIView):
         dong_rank_data.append(index_of_dong+1)
         
         
-        
-
-
         #전분기 평균 매출
         Quarterly_sales = int((queryset_market_20233[0]["당월_매출_금액"] - queryset_market_20232[0]["당월_매출_금액"])//10000//market_count)
 
@@ -702,7 +709,7 @@ class market_report(APIView):
         #현재 평균 매출
         now_sales = int(queryset_market_20233[0]["당월_매출_금액"] //10000//market_count)
         
-
+        # 매출 관련 텍스트
         if (total_sales / market_count) > now_sales :
             sales_text = "감소"
         else :
@@ -710,7 +717,6 @@ class market_report(APIView):
 
 
         #전분기 유동 인구 
-
         Quarterly_floating_population =  queryset_market_20233[0]["총_유동인구_수"] -  queryset_market_20232[0]["총_유동인구_수"]
 
         # 전년도 분기 대비 유동인구 
@@ -719,16 +725,11 @@ class market_report(APIView):
         #현재 유동 인구
         now_floating_population = queryset_market_20233[0]["총_유동인구_수"]
 
-        #종합 의견
-
+        #종합 의견 데이터 모음 
+        # 전분기 ,전년도대비 , 현재 순으로 매출,유동 인구  
         general_opinion = [Quarterly_sales,Sales_compared_to_the_same_quarter_last_year,now_sales ,Quarterly_floating_population ,
                            floating_population_compared_to_the_same_quarter_last_year ,now_floating_population ]
         
-        
-       
-
-        #general_opinion = [data]
-
 
         #1-1 best 매출
         #성별
@@ -749,16 +750,17 @@ class market_report(APIView):
         time_ranges = ["시간대_00_06", "시간대_06_11", "시간대_11_14", "시간대_14_17", "시간대_17_21", "시간대_21_24"]
         time_max = max(time_ranges, key=lambda x: queryset_market_20233[0][f"{x}_매출_금액"])
 
-
+        # 매출 관련 텍스트 처리
         best_gender_age_group = gender_max +"/" + re.sub("[^0-9]", "", age_max) +"대"
         best_sales_day = day_max+f"({dat_percentages}%)"
         best_sales_time = re.sub("[^0-9]", "", time_max)
         best_sales_time = best_sales_time[:2] + "~" + best_sales_time[2:] + "시"
 
+        # 매출 관련 텍스트 데이터 
+        # 성별나이 , 요일 , 시간
         sales_data = [best_gender_age_group , best_sales_day , best_sales_time  ]
 
         #유동인구
-        
         gender_max = "남성" if queryset_market_20233[0]["남성_유동인구_수"] > queryset_market_20233[0]["여성_유동인구_수"] else "여성"
 
         # 연령대 중 가장 인구이 많은 것 찾기
@@ -778,18 +780,17 @@ class market_report(APIView):
         time_ranges = ["시간대_00_06", "시간대_06_11", "시간대_11_14", "시간대_14_17", "시간대_17_21", "시간대_21_24"]
         time_max = max(time_ranges, key=lambda x: queryset_market_20233[0][f"{x}_유동인구_수"])
 
+        #유동인구 관련 텍스트 처리
         best_population_age_group =  re.sub("[^0-9]", "", age_max) +"대"+f"({age_percentages}%)"
         best_population_day = day_max+f"({dat_percentages}%)"
         best_population_time = re.sub("[^0-9]", "", time_max)
         best_population_time = best_population_time[:2] + "~" + best_population_time[2:] + "시"
 
 
-        #유동인구
+        #유동인구 
+        # 성별,나이,요일,시간
         best_floating_population = [gender_max , best_population_age_group ,best_population_day , best_population_time  ]
 
-
-
-        
         #2.점포
         
         # 전년 동분기 대비
@@ -797,6 +798,7 @@ class market_report(APIView):
         # 전분기 대비
         compared_to_the_previous_quarter = queryset_market_20233[0]["점포_수"] - queryset_market_20232[0]["점포_수"]
         
+        #점포 관련 텍스트 처리
         if Compared_to_the_same_quarter_last_year > 0:
             status_of_business_districts = "증가"
             business_districts = "발달"
@@ -804,6 +806,7 @@ class market_report(APIView):
             status_of_business_districts = "감소"
             business_districts = "쇠퇴"
             
+        # 점포관련 텍스트 모음
         
         store_count = {
             "20223store_count" : queryset_market_20223[0]["점포_수"],
@@ -823,6 +826,8 @@ class market_report(APIView):
         # 개업 점포수 
         op_Compared_to_the_same_quarter_last_year =  queryset_market_20233[0]["개업_점포_수"] -  queryset_market_20223[0]["개업_점포_수"]
         op_compared_to_the_previous_quarter = queryset_market_20233[0]["개업_점포_수"] -  queryset_market_20232[0]["개업_점포_수"]
+        
+        # 개업 점포 관련 텍스트 처리
         if op_Compared_to_the_same_quarter_last_year > 0:
             op_status_of_business_districts = "증가"
             op_business_districts = "활발하"
@@ -830,6 +835,7 @@ class market_report(APIView):
             op_status_of_business_districts = "감소"
             op_business_districts = "침체되"
             
+        # 개업 관련 텍스트 모음
         open_shop = {
             "20223openstore" : queryset_market_20223[0]["개업_점포_수"],
             "20224openstore" : queryset_market_20224[0]["개업_점포_수"],
@@ -848,6 +854,8 @@ class market_report(APIView):
         # 폐업 점포수 
         cl_Compared_to_the_same_quarter_last_year =  queryset_market_20233[0]["폐업_점포_수"] -  queryset_market_20223[0]["폐업_점포_수"]
         cl_compared_to_the_previous_quarter = queryset_market_20233[0]["폐업_점포_수"] -  queryset_market_20232[0]["폐업_점포_수"]
+        
+        # 폐업 관련 텍스트 처리
         if cl_Compared_to_the_same_quarter_last_year > 0:
             cl_status_of_business_districts = "증가"
             cl_business_districts = "활발하"
@@ -855,6 +863,8 @@ class market_report(APIView):
             cl_status_of_business_districts = "감소"
             cl_business_districts = "침체되"
         
+        
+        # 폐업 관련 데이터 모음
         closed_shop = {
             "20223closestore" : queryset_market_20223[0]["폐업_점포_수"],
             "20224closestore" : queryset_market_20224[0]["폐업_점포_수"],
@@ -870,27 +880,24 @@ class market_report(APIView):
         
         
         
-        
-        #매출
-        
-        # 유동인구 
+        # 분기별 유동인구 데이터 모음 
         floating_population = {
             "20223floating_population" : int(queryset_market_20223[0]["총_유동인구_수"]),
             "20224floating_population" : int(queryset_market_20224[0]["총_유동인구_수"]),
             "20231floating_population" : int(queryset_market_20231[0]["총_유동인구_수"]),
             "20232floating_population" : int(queryset_market_20232[0]["총_유동인구_수"]),
             "20233floating_population" : int(queryset_market_20233[0]["총_유동인구_수"]),
-            
         }
-
+        
+        
+        # 유동인구 증감 텍스트
         if floating_population["20233floating_population"] - floating_population["20223floating_population"] > 0 :
             floating_population_text = "증가"
         else :
             floating_population_text = "감소"
 
         
-        #주거 인구
-
+        #분기별 주거 인구 데이터 모음
         residential_population = {
             "20223residential_population" : int(queryset_market_20223[0]["총_상주인구_수"]),
             "20224residential_population" : int(queryset_market_20224[0]["총_상주인구_수"]),
@@ -901,7 +908,7 @@ class market_report(APIView):
 
 
         
-        #배후지
+        #상권 배후지 관련 인프라 개수 가져오기
         
         # 관공서
         government_office = queryset_market_20233[0].get("관공서_수", 0)
@@ -920,8 +927,7 @@ class market_report(APIView):
         # 교통시설
         Transportation_facilities = queryset_market_20233[0].get("공항_수", 0) + queryset_market_20233[0].get("철도_역_수", 0) + queryset_market_20233[0].get("버스_터미널_수", 0) + queryset_market_20233[0].get("지하철_역_수", 0) +queryset_market_20233[0].get("버스_정거장_수", 0)
         
-        
-        
+        # 배후지 인프라 개수 모음
         background = {
             "go" : int(government_office),
             "fi" : int(financial_institution),
@@ -933,12 +939,13 @@ class market_report(APIView):
             "tf" : int(Transportation_facilities)
         }
         
+        # 개수순의로 정렬
         sorted_background = sorted(background.items(), key=lambda x: x[1], reverse=True)
 
         # 상위 3개 항목을 추출
         top3 = sorted_background[:3]
 
-
+        # 상위 3개 항목 텍스트로 변환
         for i in range(len(top3)):
             if top3[i][0] == "go":
                 top3[i] = ("관공서", top3[i][1])
@@ -993,6 +1000,7 @@ class market_report(APIView):
                             Education_spending_total_amount + entertainment_spending_total_amount +
                                 Leisure_culture_spending_total_amount + Culture_spending_total_amount )
         
+        #소비 트렌드 모음
         consumption_trend = {
             "food" :  round(((groceries_total_amount) / total_amount *100),1) ,
             "Clothing" : round(( Clothing_spending_total_amount / total_amount *100),1),
@@ -1005,8 +1013,10 @@ class market_report(APIView):
             "Culture" : round(( Culture_spending_total_amount / total_amount *100),1),
         }
 
+        # 가장 많은 비율을 가진 소비액 항목 찾기
         max_value_key = max(consumption_trend, key=consumption_trend.get)
         
+        # 가장 많은 소비액을 가진 항목 텍스트를 저장
         if max_value_key == "food":
             most_trend ="음식"
         if max_value_key == "Clothing":
@@ -1026,34 +1036,43 @@ class market_report(APIView):
         if max_value_key == "Culture":
             most_trend ="문화"
         
+        # 반환 목록
         response_data = {
+            # 상권이름 , 해당 구의 상권 개수
             "marketname" : market,
             "marketcount" : market_count,
 
+            # 매출,유동인구 관련 텍스트
             "saletext" : sales_text,
             "floatingpopulationtext" : floating_population_text,
 
+            # 해당 상권의 해당 구에서의 순위
             "storeranking" : dong_rank_data[0],
             "saleranking" : dong_rank_data[1],
             "Floating_population_ranking" : dong_rank_data[2],
+            
+            # 전분기,현재,전년도 대비 에 대한 매출 
             "Quarterlysales" : general_opinion[0],
             "nowsales" : general_opinion[2],
             "Salescomparedtothesamequarterlastyear" : general_opinion[1],
 
-            # 전분기 전년도대비 현재
+            # 전분기 , 현재 , 전년도 대비에 대한 유동인구
             "Quarterlyfloatingpopulation" : general_opinion[3],
             "nowfloatingpopulation" : general_opinion[5],
             "floatingpopulationcomparedtothesamequarterlastyear" : general_opinion[4],
 
+            # best 매출 데이터 성별 요일 시간
             "best_gender_age_group" : sales_data[0],
             "best_sales_day" : sales_data[1],
             "best_sales_time" : sales_data[2],
 
+            # best 유동인구 순위 성별 , 나이,요일, 시간대
             "bestgendermax" : best_floating_population[0],
             "bestpopulationagegroup" : best_floating_population[1],
             "bestpopulationday" : best_floating_population[2],
             "bestpopulationtime" : best_floating_population[3],
 
+            # 해당 상권 점포수 관련 데이터
             "20223store_count" : store_count["20223store_count"],
             "20224store_count" : store_count["20224store_count"],
             "20231store_count" : store_count["20231store_count"],
@@ -1064,6 +1083,7 @@ class market_report(APIView):
             "sbd1text" : store_count["sbd1"],
             "bd1text" : store_count["bd1"],
 
+            # 해당 개업 점포 관련 데이터 
             "20223openstore" : open_shop["20223openstore"],
             "20224openstore" : open_shop["20224openstore"],
             "20231openstore" : open_shop["20231openstore"],
@@ -1074,6 +1094,7 @@ class market_report(APIView):
             "sbd2text" : open_shop["sbd2"],
             "bd2text" : open_shop["bd2"],
 
+            # 해당 폐업 점포관련 데이터
             "20223closestore" : closed_shop["20223closestore"],
             "20224closestore" : closed_shop["20224closestore"],
             "20231closestore" : closed_shop["20231closestore"],
@@ -1084,6 +1105,7 @@ class market_report(APIView):
             "sbd3text" : closed_shop["sbd3"],
             "bd3text" : closed_shop["bd3"],
 
+            # 배후지 인프라 개수 데이터
             "Governmentoffices" : background["go"],
             "Financialinstitutions" : background["fi"],
             "hospital" : background["ho"],
@@ -1096,19 +1118,21 @@ class market_report(APIView):
             "backgroundsecondtext" : top3[1][0],
             "backgroundthirdtext" : top3[2][0],
 
+            # 분기별 유동인구
             "20223floating_population" : floating_population["20223floating_population"],
             "20224floating_population" : floating_population["20224floating_population"],
             "20231floating_population" : floating_population["20231floating_population"],
             "20232floating_population" : floating_population["20232floating_population"],
             "20233floating_population" : floating_population["20233floating_population"],
 
-            
+            # 분기별 주거인구
             "20223residential_population" : residential_population["20223residential_population"],
             "20224residential_population" : residential_population["20224residential_population"],
             "20231residential_population" : residential_population["20231residential_population"],
             "20232residential_population" : residential_population["20232residential_population"],
             "20233residential_population" : residential_population["20233residential_population"],
 
+            #소비 트렌드 관련 데이터
             "trendfood" : consumption_trend["food"],
             "trendClothing" : consumption_trend["Clothing"],
             "trendHousehold" : consumption_trend["Household"],
@@ -1120,197 +1144,6 @@ class market_report(APIView):
             "trendCulture" : consumption_trend["Culture"],
             "trendText": most_trend
         }
-
+            # 데이터 반환
         return Response(response_data, status=status.HTTP_200_OK)
         
-                
-
-
-
-# class rent_cost(APIView):
-#     def get(self, request):
-#         #goo = unquote(self.kwargs['goo'])
-#         #dong = self.kwargs['dong'].upper()
-#         dong1 = "청운효자동" # null
-#         dong2 = "사직동" # one
-#         dong3 = "미아동" # two
-        
-#         #business = self.kwargs['business'].upper()
-#         #funds = self.kwargs['seedMoney']
-        
-        
-#         #dong_name = seoul_rent_db.objects.all()
-
-#         # 임대료 데이터 초기 설정 
-#         rent_cost_last_data = 0
-        
-#         queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
-        
-#         # 행정동 입력 →  seoul_rent ( dong_name → 지명 확인) 
-
-#         vacancy_data = ["임대료","평균임대면적"]
-
-#         area_name = len(queryset_estimate)
-
-#         #임대료 데이터가 존재하거나 하나일 경우
-#         if len(queryset_estimate) == 1 :
-#             # temp_data = vacancyrate 상세지역
-#             temp_data = queryset_estimate[0]["area_name"]
-            
-#             print(temp_data)
-            
-#             # temp = "" 이면 임대료 정보 x
-#             if temp_data != "":
-#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-#                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-#             else :
-#                 rent_cost_last_data = -1
-        
-#         # 임대료 데이터가 중복일 경우
-#         else :
-#             rent_cost_last_data = len(queryset_estimate) 
-    
-             
-#             for i in range(len(queryset_estimate) ):
-#                 temp_data = queryset_estimate[i]["area_name"]
-#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-#                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-#                 print(rent_cost_last_data)
-
-#             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
-                
-        
-#         return Response(rent_cost_last_data, status=status.HTTP_200_OK)
-        
-# # class rent_cost(APIView):
-    
-# #     def get(self, request):
-        
-# #         rent_cost_last_data = 0
-        
-# #         queryset_estimate = seoul_rent_db.objects.filter(dong_name = dong3).values("area_name")
-        
-# #         # 행정동 입력 →  seoul_rent ( dong_name → 지명 확인) 
-
-# #         vacancy_data = ["임대료","평균임대면적"]
-
-# #         area_name = len(queryset_estimate)
-
-# #         #임대료 데이터가 존재하거나 하나일 경우
-# #         if len(queryset_estimate) == 1 :
-# #             # temp_data = vacancyrate 상세지역
-# #             temp_data = queryset_estimate[0]["area_name"]
-            
-# #             print(temp_data)
-            
-# #             # temp = "" 이면 임대료 정보 x
-# #             if temp_data != "":
-# #                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-# #                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-# #             else :
-# #                 rent_cost_last_data = -1
-        
-# #         # 임대료 데이터가 중복일 경우
-# #         else :
-# #             rent_cost_last_data = len(queryset_estimate) 
-    
-             
-# #             for i in range(len(queryset_estimate) ):
-# #                 temp_data = queryset_estimate[i]["area_name"]
-# #                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-# #                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-# #                 print(rent_cost_last_data)
-
-# #             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
-                
-        
-# #         return Response(rent_cost_last_data, status=status.HTTP_200_OK)
-                
-# def rent_cost_data(name_dong):
-#         rent_cost_last_data =1
-        
-#         queryset_estimate = seoul_rent_db.objects.filter(dong_name=name_dong).values("area_name")
-        
-#         vacancy_data = ["임대료","평균임대면적"]
-
-#         area_name = len(queryset_estimate)
-
-#         #임대료 데이터가 존재하거나 하나일 경우
-#         if len(queryset_estimate) == 1 :
-#             # temp_data = vacancyrate 상세지역
-#             temp_data = queryset_estimate[0]["area_name"]
-            
-#             # temp = "" 이면 임대료 정보 x
-#             if temp_data != "":
-#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-#                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-#             else :
-#                 rent_cost_last_data = -1
-        
-#         # 임대료 데이터가 중복일 경우
-#         else :
-#             rent_cost_last_data = len(queryset_estimate) 
-    
-             
-#             for i in range(len(queryset_estimate) ):
-#                 temp_data = queryset_estimate[i]["area_name"]
-#                 rent_cost = vacancyrate_db.objects.filter(상세지역 = temp_data).values(*vacancy_data)
-#                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
-#                 print(rent_cost_last_data)
-
-#             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
-        
-#         return rent_cost_last_data
-           
-        
-# # 프랜차이즈 작업 더 필요
-# class franchisedata(APIView):
-    
-    
-#     def get(self, request):
-        
-#         dongname = "미아동"
-#         Sectors = "치킨"
-#         rentcost = rent_cost_data(dongname)
-        
-#         seedmoney = 50000
-        
-
-#         franchise_col = ["브랜드명","평균매출금액","가맹금액","교육금액","보증금액","기타금액","합계금액"]
-        
-#         #queryset_franch1 = franchise_data.objects.filter(합계금액__lte = seedmoney).all()
-#         # 시드 머니에 임대료 +  보증금 (임대료 *10) 제외
-#         seedmoney = seedmoney - (rentcost*11)
-        
-#         queryset_franch1 = franchise_data.objects.filter(중분류서비스 = "치킨",합계금액__lte = seedmoney).order_by('평균매출금액').values(*franchise_col)
-        
-#         franchise_sort_data = queryset_franch1[::-1]
-#         #franchise_data[0]
-#         response_data= {
-#             "임대료" : rent_cost
-#         }
-        
-#         fran_response_last =   [franchise_sort_data[0],franchise_sort_data[1],rent_cost]
-        
-#         #franchise_sort_data[0]["브랜드명"]
-#         #franchise_sort_data[0]["평균매출금액"]
-#         #franchise_sort_data[0]["가맹금액"]
-#         #franchise_sort_data[0]["교육금액"]
-#         #franchise_sort_data[0]["보증금액"]
-#         #franchise_sort_data[0]["기타금액"]
-#         #franchise_sort_data[0]["합계금액"]
-        
-        
-#         return Response({"임대료" : rent_cost , "프랜차이즈 1 브랜드" : franchise_sort_data[0]["브랜드명"],
-#                          "프랜차이즈 1 평균매출금액" : franchise_sort_data[0]["평균매출금액"],"프랜차이즈 1 가맹금액" : franchise_sort_data[0]["가맹금액"],
-#                          "프랜차이즈 1 교육금액" : franchise_sort_data[0]["교육금액"],"프랜차이즈 1 보증금액" : franchise_sort_data[0]["보증금액"],
-#                          "프랜차이즈 1 기타금액" : franchise_sort_data[0]["기타금액"],"프랜차이즈 1 합계금액" : franchise_sort_data[0]["합계금액"],
-#                          "프랜차이즈 2 브랜드" : franchise_sort_data[1]["브랜드명"],
-#                          "프랜차이즈 2 평균매출금액" : franchise_sort_data[1]["평균매출금액"],"프랜차이즈 2 가맹금액" : franchise_sort_data[1]["가맹금액"],
-#                          "프랜차이즈 2 교육금액" : franchise_sort_data[1]["교육금액"],"프랜차이즈 2 보증금액" : franchise_sort_data[1]["보증금액"],
-#                          "프랜차이즈 2 기타금액" : franchise_sort_data[1]["기타금액"],"프랜차이즈 2 합계금액" : franchise_sort_data[1]["합계금액"],
-                         
-#                          }, status=status.HTTP_200_OK)
-        
-#         #return  Response({franchise_sort_data[1]["평균매출금액"]}) 
-    

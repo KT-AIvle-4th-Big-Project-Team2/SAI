@@ -666,14 +666,17 @@ class AIReportDeleteView(APIView):
         
         return Response('Report deleted', status.HTTP_200_OK)
 
-        
+# 임대료 계산 함수
 def rent_cost_data(name_dong):
         rent_cost_last_data =1
         
+        # 해당 동이 어느 지명을 포함하고 있는지
         queryset_estimate = SeoulRent.objects.filter(dong_name=name_dong).values("area_name")
+        
         
         vacancy_data = ["임대료","평균임대면적"]
 
+        # 해당 동이 가진 임대료데이터의 수
         area_name = len(queryset_estimate)
 
         #임대료 데이터가 존재하거나 하나일 경우
@@ -682,6 +685,7 @@ def rent_cost_data(name_dong):
             temp_data = queryset_estimate[0]["area_name"]
             
             # temp = "" 이면 임대료 정보 x
+            # 임대료 정보가 있을시 해당 지역 임대료 데이터 계산
             if temp_data != "":
                 rent_cost = Vacancyrate.objects.filter(상세지역 = temp_data).values(*vacancy_data)
                 rent_cost_last_data = rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
@@ -692,13 +696,14 @@ def rent_cost_data(name_dong):
         else :
             rent_cost_last_data = len(queryset_estimate) 
     
-             
+            # 임대료 데이터의 총합을 구함
             for i in range(len(queryset_estimate) ):
                 temp_data = queryset_estimate[i]["area_name"]
                 rent_cost = Vacancyrate.objects.filter(상세지역 = temp_data).values(*vacancy_data)
                 rent_cost_last_data += rent_cost[0]["임대료"] * rent_cost[0]["평균임대면적"]
                 print(rent_cost_last_data)
 
+            # 해당 지역이 가진 임대료 데이터의 평균
             rent_cost_last_data = rent_cost_last_data / len(queryset_estimate) 
         
         return rent_cost_last_data
