@@ -1,4 +1,4 @@
-# AI를 활용한 창업 시뮬레이션 서비스. SAI
+# AI를 활용한 창업 시뮬레이션 서비스, SAI.
 **주관** : [KT](https://aivle.kt.co.kr/home/main/indexMain)　　　　　**소속** : KT 에이블스쿨 4기 수도권 1반 2조　　　　　**프로젝트 기간** : 2023-12-11 ~ 2024-01-12
 
 ![서비스 썸네일](https://github.com/KT-AIvle-4th-Big-Project-Team2/SAI/assets/69211032/caf7fc1f-3abc-4f3f-a303-5c4c6e7bb66d)
